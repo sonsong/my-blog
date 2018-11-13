@@ -1,8 +1,12 @@
 .layout-wrap{
-    width: 98%;
+    width: 90%;
+    height: 100%;
     margin: 0 auto;
+}
+.layout-wrap form{
+    height: 100%;
 }
 .layout-wrap .publish-btn{
     position: absolute;
-    right: 50px;    
+    right: 5%;    
 }

@@ -28,8 +28,8 @@ render(app, {
     debug: process.env.NODE_ENV !== 'production'
 });
 
-//处理post请求参数
-app.use(bodyParser());
+//处理post请求参数 formLimit 处理表单的数据最大限制  处理json数据的最大限制
+app.use(bodyParser({formLimit: '50mb', jsonLimit: '50mb'}));
 
 //处理静态文件
 app.use(static_server(path.join(__dirname, 'static')));

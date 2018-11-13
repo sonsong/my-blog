@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 //用户模块
 const router = require('koa-router')();
 const qs = require('qs');
@@ -43,7 +45,7 @@ router.get('artcle_list', async(ctx, next) =>{
 
     let blogArr = [];
     //查询数据库中的所有文章
-    await Blogs.find((err, docs) =>{
+    await Blogs.find({}, '_id type title publishTime', (err, docs) =>{
         if(!err){
             blogArr = docs;
         }
@@ -55,7 +57,7 @@ router.get('artcle_list', async(ctx, next) =>{
 //修改指定文章
 router.get('updateArtcle', async(ctx, next) =>{
     //解析参数
-    let id = ctx.params.id;
+    let id = mongoose.Types.ObjectId(ctx.query.id)
     //查询到的文章信息
     let blog = {};
 
@@ -73,13 +75,15 @@ router.get('updateArtcle', async(ctx, next) =>{
 //跳转到预览页面
 router.get('preViewArtcle', async(ctx, next) =>{
     //解析参数
-    let id = ctx.query.id;
+    /* let id = mongoose.Types.ObjectId(ctx.query.id.toString());
+    console.log(id); 
+    return*/
 
     //查询到的文章信息
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: '5be99511f9ead12dd8cc00c5'}, (err, doc) =>{
+    await Blogs.findById({_id: "5bea490075e0b54b84ab53fe"}, (err, doc) =>{
         if(!err){
             blog = doc;
         }
@@ -91,7 +95,7 @@ router.get('preViewArtcle', async(ctx, next) =>{
 //删除指定的文章
 router.get('delArtcle', async(ctx, next) =>{
     //获取文章编码
-    let id = ctx.query.id;
+    let id = mongoose.Types.ObjectId(ctx.query.id)
 
     //删除该文章
     Blogs.remove({_id: id}, (err) =>{
