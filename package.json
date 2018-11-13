@@ -1,0 +1,26 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "基于Koa2 + art-template模板的Blog系统",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "koa2",
+    "art-template"
+  ],
+  "author": "huangss",
+  "license": "ISC",
+  "dependencies": {
+    "art-template": "^4.13.1",
+    "koa": "^2.6.1",
+    "koa-art-template": "^1.1.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "moment": "^2.22.2",
+    "mongoose": "^5.3.11"
+  },
+  "devDependencies": {}
+}

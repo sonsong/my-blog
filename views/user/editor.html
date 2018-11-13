@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>写文章</title>
+        <link rel="stylesheet" href="/css/user/editor.css">
+        <link rel="stylesheet" href="/css/reset.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <link type="text/css" href="/editor.md/lib/codemirror/codemirror.min.css">
+        <link rel="stylesheet" href="/editor.md/css/editormd.css">
+    </head>
+<body>
+    <div class="layout-wrap">
+        <form action="/publish" method="post" class="publish">
+            <input type="hidden" name="htmlContent" class="htmlContent">
+            <button class="warning-btn publish-btn">发表</button>
+        </form>
+    </div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/editor.md/editormd.min.js"></script>
+    <script type="text/javascript">
+        $(() => {
+
+            $(".publish").prepend("<div id=\"editormd\"></div>");
+
+            let _editormd = editormd("editormd", {
+                width: "100%",
+                height: 500,
+                emoji: true,
+                theme: 'dark',
+                previewTheme : "dark",
+                editorTheme : "pastel-on-dark",
+                saveHTMLToTextarea: true,
+                //markdown: "### 使用markdowm语法编写",
+                path: 'editor.md/lib/'
+            });
+
+            $(".publish-btn").bind('click', () =>{
+                //获取转化后的html
+                let htmlContent = _editormd.getHTML();
+                //赋值给隐藏表单域
+                $(".htmlContent").val(htmlContent);
+                //提交表单
+                $(".publish").submit();
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章列表</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/user/artcles.css">
+</head>
+<body>
+    <div class="artcles-wrap">
+        <table>
+            <thead class="thead">
+                <tr>
+                    <td>编码</td>
+                    <td>标签</td>
+                    <td>标题</td>
+                    <td>发表时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                {{each blogArr}}
+                    <tr>
+                        <td>{{$value._id}}</td>
+                        <td>{{$value.type}}</td>
+                        <td>{{$value.title}}</td>
+                        <td>{{$value.publishTime}}</td>
+                        <td>
+                            <span><a href="/updateArtcle?id={{$value._id}}">修改</a></span>
+                            <span><a href="/preViewArtcle?id={{$value._id}}">预览</a></span>
+                            <span><a href="/delArtcle?id={{$value._id}}">删除</a></span>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.layout-wrap{
+    width: 98%;
+    margin: 0 auto;
+}
+.layout-wrap .publish-btn{
+    position: absolute;
+    right: 50px;    
+}
