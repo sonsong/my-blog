@@ -48,14 +48,15 @@
 }
 .index-wrap .article .detail{
     width: calc(100% - 20px);
-    height: 70px;
+    height: 300px;
     margin: 0 auto;
     line-height: 20px;
+    overflow: hidden;
 }
 .index-wrap .head .title{
     font-size: 20px;
     margin: 20px 0 10px 0;
 }
 .index-wrap .content .read-btn{
-    margin: 20px 0 10px 10px;
+    margin: 20px 0 10px 25px;
 }

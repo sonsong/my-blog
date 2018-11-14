@@ -22,7 +22,8 @@
                 </tr>
             </thead>
             <tbody class="tbody">
-                {{each blogArr}}
+                
+                {{each blogs}}
                     <tr>
                         <td>{{$value._id}}</td>
                         <td>{{$value.type}}</td>
@@ -30,7 +31,7 @@
                         <td>{{$value.publishTime}}</td>
                         <td>
                             <span><a href="/updateArtcle?id={{$value._id}}">修改</a></span>
-                            <span><a href="/preViewArtcle?id={{$value._id}}">预览</a></span>
+                            <span><a href="/previewArtcle?id={{$value._id}}">预览</a></span>
                             <span><a href="/delArtcle?id={{$value._id}}">删除</a></span>
                         </td>
                     </tr>

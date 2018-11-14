@@ -40,3 +40,7 @@ button{
     background-color: #F56C6C;
     border: 1px solid #F56C6C;
 }
+
+.editormd-preview-container, .editormd-html-preview{
+    width: auto !important;
+}

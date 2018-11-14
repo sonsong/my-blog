@@ -14,7 +14,28 @@
 <body>
     <div class="layout-wrap">
         <form action="/publish" method="post" class="publish">
+            <!-- 文章编码 -->
+            <input type="hidden" name="id" class="art_id" value="{{id}}">
+            <!-- 编译好的html -->
             <input type="hidden" name="htmlContent" class="htmlContent">
+            <div>
+                <label for="title">文章标题: 
+                    <input type="text" name="title" id="title" value="{{title}}" placeholder="请输入标题">
+                </label>
+                <label for="type">分类:
+                    <select name="type" id="type">
+                        <option value="Java">Java</option>
+                        <option value="HTML" selected>HTML</option>
+                        <option value="CSS">CSS</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Vue">Vue</option>
+                    </select>
+                </label>
+            </div>
+            <div id="my-editormd">
+                <!-- md内容 -->
+                <textarea class="editormd-markdown-textarea" name="mdContent">{{mdContent}}</textarea>
+            </div>
             <button class="warning-btn publish-btn">发表</button>
         </form>
     </div>
@@ -23,12 +44,9 @@
     <script type="text/javascript">
         $(() => {
 
-            $(".publish").prepend("<div id=\"editormd\"></div>");
-
-            editormd("editormd", {
+            editormd("my-editormd", {
                 width: "100%",
                 height: "90%",
-                markdown: "### 使用markdowm语法编写",
                 path: 'editor.md/lib/',
                 theme : "dark",
                 //previewTheme : "dark",
@@ -56,7 +74,6 @@
                 imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                 imageUploadURL : "./php/upload.php",
                 onload : function() {
-                    console.log('onload', this);
                     //this.fullscreen();
                     //this.unwatch();
                     //this.watch().fullscreen();

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/editor.md/css/editormd.css">
 </head>
 <body>
     <div class="index-wrap">
@@ -25,62 +26,22 @@
                 <span><a href="/editor">写文章</a></span>
             </div>
 
-            <div class="article">
-                    <div class="head">
-                        <div class="title">关于小程序的那些事</div>
-                        <div class="sub-title">
-                            <span class="write-time">发表时间:2018-11-10 16:55:30</span>
-                            <span class="read">阅读量:1111</span>
-                            <span class="comment">评论:1111</span>
+            {{each blogs}}
+                <div class="article">
+                        <div class="head">
+                            <div class="title">{{$value.title}}</div>
+                            <div class="sub-title">
+                                <span class="write-time">发表时间:{{$value.publishTime}}</span>
+                                <span class="read">阅读量:1111</span>
+                                <span class="comment">评论:1111</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="detail">
-                        <p>面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题
-                        </p>
-                    </div>
-                    <button class="warning-btn read-btn">阅读全文</button>
-            </div>
-
-            <div class="article">
-                    <div class="head">
-                        <div class="title">关于小程序的那些事</div>
-                        <div class="sub-title">
-                            <span class="write-time">发表时间:2018-11-10 16:55:30</span>
-                            <span class="read">阅读量:1111</span>
-                            <span class="comment">评论:1111</span>
+                        <div class="detail">
+                            {{@$value.htmlContent}}
                         </div>
-                    </div>
-                    <div class="detail">
-                        <p>面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题
-                        </p>
-                    </div>
-                    <button class="warning-btn read-btn">阅读全文</button>
-            </div>
-
-            <div class="article">
-                    <div class="head">
-                        <div class="title">关于小程序的那些事</div>
-                        <div class="sub-title">
-                            <span class="write-time">发表时间:2018-11-10 16:55:30</span>
-                            <span class="read">阅读量:1111</span>
-                            <span class="comment">评论:1111</span>
-                        </div>
-                    </div>
-                    <div class="detail">
-                        <p>面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题面语用词，指独立研究后所写的较为详细的专题文章；也可指学位论文一般指大学或高中生作为作业所写的篇幅有限、
-                            较完整论述某个观点的文章。也可指作品或谈话的主要论题
-                        </p>
-                    </div>
-                    <button class="warning-btn read-btn">阅读全文</button>
-            </div>
+                        <button class="warning-btn read-btn"><a href="/previewArtcle?id={{$value._id}}">阅读全文</a></button>
+                </div>
+            {{/each}}
             
         </div>
     </div>
