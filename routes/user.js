@@ -28,7 +28,7 @@ router.get('/', async(ctx, next) =>{
             }
         }
     });
-    ctx.render('index', {blogs});
+    ctx.render('ind', {blogs});
 });
 
 //写文章
