@@ -11,14 +11,14 @@ router.get('/', async(ctx, next) =>{
     let blogs = [];
 
     //加载数据库的所有文章
-    await Blogs.find({}, '_id type title publishTime htmlContent', (err, docs) =>{
+    await Blogs.find({}, '_id type title publishTime htmlContent', {limit: 10},(err, docs) =>{
         if(!err){
             for (const item of docs) {
                 let doc = {
                     _id: item._id.toString(),
                     type: item.type,
                     title: item.title,
-                    publishTime: item.publishTime,
+                    publishTime: ctx.moment(item.publishTime.toString()).format("YYYY-MM-DD HH:mm:ss"),
                     htmlContent: item.htmlContent
                 }
 

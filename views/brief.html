@@ -6,35 +6,16 @@
     <div class="brief">
         <div class="head">文章简史</div>
         <div class="brief-content">
-
-            <div class="part">
-                    <div class="time">2018-11-11</div>
-                    <ul>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                    </ul>
-            </div>
-
-            <div class="part">
-                    <div class="time">2018-11-11</div>
-                    <ul>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                    </ul>
-            </div>
-            <div class="part">
-                    <div class="time">2018-11-11</div>
-                    <ul>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                        <li><a href="">关于java的那些事</a><span class="publishTime">2018-11-11 13:12:11</span></li>
-                    </ul>
-            </div>
+            {{each blogs}}
+                <div class="part">
+                        <div class="time">{{$value.time}}({{$value.sum}})</div>
+                        <ul>
+                            {{each $value.detail}}
+                                <li><a href="/blog/preview?id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></li>
+                            {{/each}}
+                        </ul>
+                </div>
+            {{/each}}
         </div>
     </div>
 {{/block}}

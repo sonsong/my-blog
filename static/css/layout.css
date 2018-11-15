@@ -54,7 +54,6 @@ button{
 .layout-wrap .left{
     height: 100%;
     width: 250px;
-    background: url('../img//bg.jpg') no-repeat 0 100%;
     background-color: #f1cd8f;
     background-size: contain;
 }

@@ -1,25 +1,25 @@
 
-.index-article{
-    width: 100%;
-    border: 1px solid #e9e9e9;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-.index-article .head{
-    height: 55px;
-    font-weight: 900px;
-    text-align: center;
-}
-.index-article .detail{
-    height: 300px;
-    margin: 0 auto;
-    overflow: hidden;   
-}
-.index-article .head .title{
-    font-size: 24px;
-    font-weight: 700;
-    margin: 20px 0 10px 0;
-}
-.index-article .read-btn{
-    margin: 20px 0 10px 25px;
-}
+    .index-article{
+        width: 100%;
+        border: 1px solid #e9e9e9;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .index-article .head{
+        height: 55px;
+        font-weight: 900px;
+        text-align: center;
+    }
+    .index-article .detail{
+        height: 335px;
+        margin: 0 auto;
+        overflow: hidden;   
+    }
+    .index-article .head .title{
+        font-size: 24px;
+        font-weight: 700;
+        margin: 20px 0 10px 0;
+    }
+    .index-article .read-btn{
+        margin: 20px 0 10px 25px;
+    }

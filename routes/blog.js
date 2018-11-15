@@ -7,7 +7,63 @@ const Blogs = require('../models/t-blog');
 
 //进入文章简史
 router.get('brief', async(ctx, next) =>{
-    ctx.render('brief');
+    //查询每个月所有文章
+    let blogs = [];
+    await Blogs.aggregate([
+        {
+            $group: {
+                _id: {
+                    $dateToString: {format: '%Y-%m', date: '$publishTime'}
+                },
+                titles:{
+                    $push: '$title'
+                },
+                id:{
+                    $push: '$_id'
+                },
+                publishTime:{
+                    $push: '$publishTime'
+                },
+                sum: {
+                    $sum: 1
+                }
+            }
+        },
+        {
+            $sort:{"publishTime": -1}
+        }
+    ], (err, docs) =>{
+        if(!err){
+            blogs = docs;
+        }
+    });
+
+    let _blogs = [];
+    //进行数据处理
+    for (const item of blogs) {
+        let breif = {
+            time: item._id,
+            sum: item.sum,
+            detail:[]
+        };
+        let _detail = [];
+        let titles = item.titles;
+        let ids = item.id;
+        let publishTimes = item.publishTime;
+
+        for (const index in titles) {
+            _detail.push({
+                _id: ids[index].toString(),
+                publishTime: ctx.moment(publishTimes[index].toString()).format("YYYY-MM-DD HH:mm:ss"),
+                title: titles[index]
+            });
+        }
+
+        breif.detail = _detail;
+        _blogs.push(breif);
+    }
+
+    ctx.render('brief', {blogs: _blogs});
 });
 
 /** 
@@ -43,7 +99,8 @@ router.post('publish', async(ctx, next) =>{
         //增加作者字段
         blog.author = author;
         //增加发表时间
-        blog.publishTime = ctx.moment;
+        let moment = ctx.monent;
+        blog.publishTime = moment();
 
         //新增
         await Blogs.create(blog, (err) =>{
