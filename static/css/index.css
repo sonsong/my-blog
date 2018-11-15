@@ -1,62 +1,25 @@
-.index-wrap{
-    height: 100%;
-    font-size: 12px;
-}   
-.index-wrap .category{
-    height: 40px;
-    line-height: 40px;
-    background: #F56C6C;
-    color: #fff;
-    font-size: 14px;
-}
-.index-wrap ul{
-    display: flex;
-    justify-content: center;
-    text-align: center;
-}
-.index-wrap ul li{
-    min-width: 80px;
-    cursor: pointer;
-}
-.index-wrap ul li:hover{
-    background: rgb(211, 46, 46);
-    color: rgba(255, 255, 255, 0.7);
-}
-.index-wrap .content{
-    width: 60%;
-    margin: 0 auto;
-}
-.index-wrap .content .toolBox{
-    border: 1px solid #fff;
-    text-align: right;
-    height: 50px;
-    line-height: 50px;
-}
-.index-wrap .toolBox a:hover{
-    color: #F56C6C;
-}
-.index-wrap .content .article{
+
+.index-article{
     width: 100%;
     border: 1px solid #e9e9e9;
     margin-bottom: 20px;
     border-radius: 5px;
 }
-.index-wrap .article .head{
+.index-article .head{
     height: 55px;
     font-weight: 900px;
     text-align: center;
 }
-.index-wrap .article .detail{
-    width: calc(100% - 20px);
+.index-article .detail{
     height: 300px;
     margin: 0 auto;
-    line-height: 20px;
-    overflow: hidden;
+    overflow: hidden;   
 }
-.index-wrap .head .title{
-    font-size: 20px;
+.index-article .head .title{
+    font-size: 24px;
+    font-weight: 700;
     margin: 20px 0 10px 0;
 }
-.index-wrap .content .read-btn{
+.index-article .read-btn{
     margin: 20px 0 10px 25px;
 }

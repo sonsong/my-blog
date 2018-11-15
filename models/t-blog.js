@@ -9,9 +9,9 @@ var blogsSchema = mongoose.Schema({
     //文章类型
     type: String,
     //发表时间
-    publishTime: String,
+    publishTime: Date,
     //更新时间
-    updateTime: String,
+    updateTime: Date,
     //md内容
     mdContent: String,
     //html内容

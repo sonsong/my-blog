@@ -17,7 +17,8 @@ const user = require('./routes/user');
 const admin = require('./routes/admin');
 
 app.use(async(ctx, next) =>{
-    ctx.moment = moment().format("YYYY-MM-DD HH:mm:ss");
+    //.format("YYYY-MM-DD HH:mm:ss")    
+    ctx.moment = moment();
     await next();
 });
 
