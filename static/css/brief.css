@@ -1,4 +1,5 @@
 .brief{
+    min-height: 91%;
     margin-bottom: 30px;
     border: 1px solid #e9e9e9;
     font-size: 16px;
@@ -47,4 +48,13 @@
 .brief .part ul li span{
     font-size: 12px;
     padding-left: 10px;
+}
+
+
+/* 标签相关样式 */
+.brief .tags-content button{
+    margin: 10px;
+}
+.brief .tags-content button a{
+    color: #fff;
 }

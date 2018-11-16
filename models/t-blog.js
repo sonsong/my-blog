@@ -7,7 +7,7 @@ var blogsSchema = mongoose.Schema({
     //文章标题
     title: String,
     //文章类型
-    type: String,
+    tags: Array,
     //发表时间
     publishTime: Date,
     //更新时间
@@ -15,7 +15,9 @@ var blogsSchema = mongoose.Schema({
     //md内容
     mdContent: String,
     //html内容
-    htmlContent: String
+    htmlContent: String,
+    //浏览次数
+    readNum: Number
 })
 
 //建立约束与模型的映射关系

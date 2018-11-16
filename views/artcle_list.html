@@ -26,11 +26,11 @@
                     {{each blogs}}
                         <tr>
                             <td>{{$value._id}}</td>
-                            <td>{{$value.type}}</td>
                             <td>{{$value.title}}</td>
+                            <td>{{$value.tags}}</td>
                             <td>{{$value.publishTime}}</td>
                             <td>
-                                <span><a href="/blog/updateArtcle?id={{$value._id}}">修改</a></span>
+                                <span><a href="/updateArtcle?id={{$value._id}}">修改</a></span>
                                 <span><a href="/blog/preview?id={{$value._id}}">预览</a></span>
                                 <span><a href="/blog/delArtcle?id={{$value._id}}">删除</a></span>
                             </td>

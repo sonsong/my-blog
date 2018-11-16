@@ -17,6 +17,7 @@ const user = require('./routes/user');
 const admin = require('./routes/admin');
 
 app.use(async(ctx, next) =>{
+    //设置时间
     ctx.moment = moment;
     await next();
 });

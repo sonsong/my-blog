@@ -1,0 +1,25 @@
+{{extend './layout.html'}}
+{{block 'css'}}
+    <link rel="stylesheet" href="/css/brief.css">
+{{/block}}
+{{block 'content'}}
+    <div class="brief">
+        <div class="head">文章标签</div>
+        <div class="tags-content">
+            {{each tags}}
+               <button><a href="/?_id={{$value._ids}}">{{$value.tag}} ({{$value.sum}})</a></button>
+            {{/each}}
+        </div>
+    </div>
+{{/block}}
+{{block 'js'}}
+    <script>
+        $(function(){
+            //给标签button加上随机颜色
+            let colors = ['primary-btn', 'success-btn', 'warning-btn', 'danger-btn', '.info-btn'];
+            $('.tags-content button').each(function(){
+                $(this).addClass(colors[Math.floor(Math.random()*(colors.length-1))]);
+            })
+        })
+    </script>
+{{/block}}
