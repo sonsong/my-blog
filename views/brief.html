@@ -1,4 +1,5 @@
 {{extend './layout.html'}}
+{{block 'title'}}<title>文章简史</title>{{/block}}
 {{block 'css'}}
     <link rel="stylesheet" href="/css/brief.css">
 {{/block}}
@@ -11,7 +12,7 @@
                         <div class="time">{{$value.time}}({{$value.sum}})</div>
                         <ul>
                             {{each $value.detail}}
-                                <li><a href="/blog/preview?id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></li>
+                                <li><a href="/preview?_id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></li>
                             {{/each}}
                         </ul>
                 </div>

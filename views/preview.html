@@ -1,9 +1,14 @@
 {{extend './layout.html'}}
+{{block 'title'}}<title>文章详情</title>{{/block}}
 {{block 'css'}}
     <link rel="stylesheet" href="/css/preview.css">
 {{/block}}
 {{block 'content'}}
     <div class="preview">
         {{@htmlContent}}
+    </div>
+    <div class="read-tips">
+        <div>上一篇：<a href="/preview?_id={{preA._id}}">{{preA.title}}</a></div>
+        <div>下一篇：<a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a></div>
     </div>
 {{/block}}

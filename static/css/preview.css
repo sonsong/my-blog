@@ -1,4 +1,9 @@
 .preview{
     border: 1px solid #e9e9e9;  
-    margin-bottom: 20px;
+}
+.read-tips > div{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding-left: 20px;
 }

@@ -1,0 +1,115 @@
+{{extend './layout.html'}}
+{{block 'title'}}<title>写文章</title>{{/block}}
+{{block 'css'}}
+    <link rel="stylesheet" href="/css/admin/artcle_list.css">
+{{/block}}
+{{block 'content'}}
+    <div class="artcles">
+        <table class="layui-table" lay-even lay-skin="nob">
+            <thead class="thead">
+                <tr>
+                    <td>编码</td>
+                    <td>标签</td>
+                    <td>标题</td>
+                    <td>发表时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                
+                {{each blogs}}
+                    <tr>
+                        <td>{{$value._id}}</td>
+                        <td>{{$value.title}}</td>
+                        <td>{{$value.tags}}</td>
+                        <td>{{$value.publishTime}}</td>
+                        <td>
+                            <span><a href="/admin/blog/update_artcle?_id={{$value._id}}">
+                                <button class="layui-btn layui-btn-xs layui-btn-warm"><i class="layui-icon"></i>修改</button>
+                            </a></span>
+                            <span>
+                                <a href="/admin/blog/preview?_id={{$value._id}}">
+                                    <button class="layui-btn layui-btn-xs layui-btn-normal"><i class="layui-icon"></i>预览</button>
+                                </a>
+                            </span>
+                            <span>
+                                <a href="/admin/blog/del_artcle?_id={{$value._id}}">
+                                    <button class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon"></i>删除</button>
+                                </a>
+                                <!-- <button data-method="notice" id="del_{{$value._id}}" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon"></i>删除</button> -->
+                            </span>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div id="pager"></div>
+    </div>
+{{/block}}
+{{block 'js'}}
+    <script>
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage;
+            var layer = layui.layer;
+
+            laypage.render({
+                elem: 'pager',
+                count: 100,
+                layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj){
+                    console.log(obj);
+
+                    //发送ajax请求
+                }
+            });
+        });
+
+        /* let delId = '';
+
+        layui.use(['layer'], function(){
+            var layer = layui.layer;
+            var active = {
+                notice(){
+                    layer.open({
+                        type: 1
+                        ,title: '提示' //不显示标题栏
+                        ,closeBtn: false
+                        ,area: '400px;'
+                        ,shade: 0.8
+                        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                        ,btn: ['确定', '取消']
+                        ,btnAlign: 'c'
+                        ,moveType: 1 //拖拽模式，0或者1
+                        ,content: '<div style="height:60px;line-height:60px;text-align:center">是否删除该文章?</div>'
+                        ,success: function(layero){
+                            //发送ajax请求
+                            $.ajax({
+                                url: '/admin/blog/del_artcle',
+                                dataType: 'JSON',
+                                data:{
+                                    _id: delId
+                                },
+                                //同步
+                                async: false,
+                                success(res){
+                                    if(res.status === '1'){
+                                        alert(res.mess);
+
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+
+            $('.artcles .layui-btn').on('click', function(){
+                var othis = $(this), method = othis.data('method');
+                delId = $(this).attr("id").split('_')[1]; 
+
+                active[method] ? active[method].call(this, othis) : '';
+            });
+        }); */
+    </script>
+{{/block}}

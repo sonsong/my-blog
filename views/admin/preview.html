@@ -1,0 +1,10 @@
+{{extend './layout.html'}}
+{{block 'title'}}<title>预览文章</title>{{/block}}
+{{block 'css'}}
+    <link rel="stylesheet" href="/css/admin/preview.css">
+{{/block}}
+{{block 'content'}}
+    <div class="preview">
+        {{@htmlContent}}
+    </div>
+{{/block}}

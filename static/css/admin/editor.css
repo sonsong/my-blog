@@ -1,12 +1,13 @@
-.layout-wrap{
+.editor{
     width: 90%;
     height: 100%;
     margin: 0 auto;
 }
-.layout-wrap form{
+.editor form{
     height: 100%;
 }
-.layout-wrap .publish-btn{
+.editor .publish-btn{
     position: absolute;
-    right: 5%;    
+    right: 6%;
+    margin-bottom: 12px
 }
