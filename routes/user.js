@@ -27,7 +27,7 @@ router.get('/', async(ctx, next) =>{
     await Blogs.find(condition, '_id tags title publishTime htmlContent readNum')
             .skip((pageCode - 1) * pageSize)
             .limit(pageSize)
-            .sort({'publishTime': 1})
+            .sort({'publishTime': -1})
             .exec((err, docs) =>{
                 if(!err){
                     for (const item of docs) {
@@ -41,7 +41,7 @@ router.get('/', async(ctx, next) =>{
                             readNum: item.readNum
                         }
         
-                        blogs.unshift(doc);
+                        blogs.push(doc);
                     }
                 }
             });
@@ -61,7 +61,6 @@ router.get('/', async(ctx, next) =>{
         totalPage: totalPage,
         params
     };
-
     ctx.render('index', {blogs, pager});
 });
 

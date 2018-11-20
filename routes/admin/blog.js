@@ -1,4 +1,6 @@
 const router = require('koa-router')();
+const URL = require('url');
+const qs = require('querystring');
 
 const Blogs = require('../../models/t-blog');
 
@@ -72,24 +74,74 @@ router.post('publish', async(ctx, next) =>{
 //进入文章列表
 router.get('artcle_list', async(ctx, next) =>{
 
+    //当前页码
+    let pageCode = ctx.query.pageCode === undefined ? 1 : parseInt(ctx.query.pageCode);
+    //每页显示数量
+    let pageSize = ctx.query.pageSize === undefined ? 20 : parseInt(ctx.query.pageSize);
+
+    //查询条件
+    let condition = '';
+
+    let search = URL.parse(ctx.url).search;
+
+    if(search !== null){
+        if(search.indexOf("?pageCode") !== -1){
+            //咩有其它多余的条件
+            condition = '';
+        }else{
+            let index = search.indexOf("&pageCode") === -1 ? -1 : search.indexOf("&pageCode");
+            if(index === -1){
+                condition = search.substring(1);
+            }else{
+                condition = search.substring(0, index);
+            }
+        }
+    }
+
     let blogs = [];
     //查询数据库中的所有文章
-    await Blogs.find({}, '_id tags title publishTime', (err, docs) =>{
-        if(!err){
-            for (const item of docs) {
-                let doc = {
-                    _id: item._id.toString(),
-                    tags: item.tags.toString(),
-                    title: item.title,
-                    publishTime:  ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+    await Blogs.find(qs.parse(condition), '_id tags title publishTime')
+            .skip((pageCode - 1) * pageSize)
+            .limit(pageSize)
+            .sort({'publishTime': 1})
+            .exec((err, docs) =>{
+                if(!err){
+                    for (const item of docs) {
+                        let doc = {
+                            _id: item._id.toString(),
+                            tags: item.tags.toString(),
+                            title: item.title,
+                            publishTime:  ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                        }
+        
+                        blogs.push(doc);
+                    }
+                }else{
+                    console.log(err)
                 }
-
-                blogs.unshift(doc);
-            }
+            });
+    
+    //查询数据库的总记录数
+    let totalPage = 0;
+    await Blogs.countDocuments(condition, (err, count) =>{
+        if(!err){
+            let total = count;
+            totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
         }
     });
 
-    ctx.render('admin/artcle_list', {blogs});
+    let params = '?';
+    if(condition !== ''){
+        params = condition + '&';
+    }
+
+    let pager = {
+        pageCode,
+        totalPage,
+        params  
+    };
+
+    ctx.render('admin/artcle_list', {blogs, pager});
 });
 
 //跳转到修改文章页面

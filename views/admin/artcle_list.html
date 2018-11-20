@@ -1,5 +1,5 @@
 {{extend './layout.html'}}
-{{block 'title'}}<title>写文章</title>{{/block}}
+{{block 'title'}}<title>文章列表</title>{{/block}}
 {{block 'css'}}
     <link rel="stylesheet" href="/css/admin/artcle_list.css">
 {{/block}}
@@ -43,27 +43,108 @@
                 {{/each}}
             </tbody>
         </table>
-        <div id="pager"></div>
+        {{if blogs.length !== 0}}
+            <div class="pager">
+                {{if pager.totalPage === 1}}
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-pre"></use>
+                        </svg>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-next"></use>
+                        </svg>
+                    </div>
+                {{else if pager.pageCode === 1}}
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-pre"></use>
+                        </svg>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <a href="/admin/blog/artcle_list/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-next"></use>
+                            </svg>
+                        </a>
+                    </div>
+                {{else if pager.pageCode === pager.totalPage}}
+                    <div>
+                        <a href="/admin/blog/artcle_list/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-pre"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-next"></use>
+                        </svg>
+                    </div>
+                {{else}}
+                    <div>
+                        <a href="/admin/blog/artcle_list/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-pre"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <a href="/admin/blog/artcle_list/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-next"></use>
+                            </svg>
+                        </a>
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
     </div>
 {{/block}}
 {{block 'js'}}
     <script>
-        layui.use(['laypage', 'layer'], function(){
-            var laypage = layui.laypage;
-            var layer = layui.layer;
+        /* $(function(){
 
-            laypage.render({
-                elem: 'pager',
-                count: 100,
-                layout: ['count', 'prev', 'page', 'next'],
-                jump: function(obj){
-                    console.log(obj);
+            //当前页码
+            let pageCode = parseInt('{{pager.pageCode}}');
+            //总页数
+            let total = parseInt('{{pager.totalPage}}');
+            //携带的参数
+            let condition = '{{pager.condition}}';
 
-                    //发送ajax请求
-                }
+            layui.use(['laypage', 'layer'], function(){
+                var laypage = layui.laypage;
+                var layer = layui.layer;
+
+                laypage.render({
+                    elem: 'pager',
+                    count: total,
+                    limit: 1,
+                    curr: pageCode,
+                    layout: ['count', 'prev', 'page', 'next'],
+                    jump: function(obj){
+                        if(obj.curr !== 1){
+                            //请求路径
+                            let path = `/admin/blog/artcle_list`;
+                            let url = condition === '{}' ? `${path}?pageCode=${obj.curr}&pageSize=${obj.limit}` 
+                                : `${path}?${condition}&pageCode=${obj.curr}&pageSize=${obj.limit}`; 
+                            
+                            $.ajaxSettings.async = false;
+                            $.get(url, (data, status) =>{
+                                $('html').html(data);
+                            })
+                        }
+                    }
+                })
+                
             });
-        });
-
+        })
+ */
         /* let delId = '';
 
         layui.use(['layer'], function(){
