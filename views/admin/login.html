@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/admin/login.css">
+    <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
+</head>
+<body>
+    <div class="login-wrap">
+        <form class="layui-form login-form" action="/admin/loginSubmit" method="POST">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="uname" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="passwd" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item login-tips">用户名或密码错误</div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal submit-btn" lay-submit="" lay-filter="login">登陆</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/iconfont.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
+    <script>
+        $(function(){
+            layui.use(['form'], function(){
+                var form = layui.form;
+                
+                //监听提交
+                form.on('submit(login)', function(data){
+                    let uname = data.field.uname;
+                    let passwd = data.field.passwd;
+
+                    $('.submit-btn').on('click', function(){
+                        //1、做数据校验
+                        //2、向后台请求token, 拿令牌，存放到session中
+                        //3、正式登陆，请求头携带authorization: token，后台解析
+                    });
+
+                    return false;
+                });
+            });
+        })
+    </script>
+</html>

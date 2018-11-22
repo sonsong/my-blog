@@ -1,0 +1,26 @@
+html, body{
+    height: 100%;
+}
+.login-wrap{
+    width: 100%;
+    height: 100%;
+    background: rgb(63, 58, 82);
+}
+.login-wrap .login-form{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 400px;
+    height: 180px;
+    padding: 50px 50px 10px 0px;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.login-wrap .login-tips{
+    color: red;
+    padding-left: 27%;
+}

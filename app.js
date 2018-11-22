@@ -6,7 +6,17 @@ const Koa = require('koa'),
         bodyParser = require('koa-bodyparser'),
         app = new Koa(),
         router = new Router(),
-        moment = require('moment');
+        moment = require('moment'),
+        JWT = require('jsonwebtoken'),
+        koaJWT = require('koa-jwt'),
+        util = require('util');
+
+const verify = util.promisify(JWT.verify);
+const jwt_secret = 'my-blog jwt';
+app.use(koaJWT({jwt_secret}).unless({
+    //数组中的路径不需要通过jwt验证
+    path: [/^\/admin\/login/, /\w*.css$/, /\w*.js$/, /\w*.gif|png$/]
+}));
         
 //连接数据库
 require('./utils/connection');
@@ -19,6 +29,8 @@ const admin = require('./routes/admin');
 app.use(async(ctx, next) =>{
     //设置时间
     ctx.moment = moment;
+    ctx.verify = verify;
+
     await next();
 });
 
