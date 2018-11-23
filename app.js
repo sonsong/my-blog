@@ -7,17 +7,16 @@ const Koa = require('koa'),
         app = new Koa(),
         router = new Router(),
         moment = require('moment'),
+        //生产token
         JWT = require('jsonwebtoken'),
+        //解析token
         koaJWT = require('koa-jwt'),
         util = require('util');
 
 const verify = util.promisify(JWT.verify);
-const jwt_secret = 'my-blog jwt';
-app.use(koaJWT({jwt_secret}).unless({
-    //数组中的路径不需要通过jwt验证
-    path: [/^\/admin\/login/, /\w*.css$/, /\w*.js$/, /\w*.gif|png$/]
-}));
-        
+//密钥
+const secret = 'my-blog jwt';
+
 //连接数据库
 require('./utils/connection');
 
@@ -29,10 +28,22 @@ const admin = require('./routes/admin');
 app.use(async(ctx, next) =>{
     //设置时间
     ctx.moment = moment;
+
     ctx.verify = verify;
+    ctx.secret = secret;
+    ctx.JWT = JWT;
 
     await next();
 });
+
+//过滤不需要验证登陆的请求
+app.use(koaJWT({secret, cookie:'token'}).unless({
+    //数组中的路径不需要通过jwt验证
+    path: [
+        /^\/admin\/login|toLogin/, 
+        /\w*.css|js|gif|png|ico$/, 
+    ]
+}));
 
 //注册art-template模板解析器
 render(app, {
@@ -49,6 +60,7 @@ app.use(static_server(path.join(__dirname, 'static')));
 
 router.use('/', user.routes());
 router.use('/admin', admin.routes());
+
 
 //注册路由
 app.use(router.routes()).use(router.allowedMethods());

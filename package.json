@@ -22,7 +22,8 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.3.11"
+    "mongoose": "^5.3.11",
+    "sha1": "^1.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"
