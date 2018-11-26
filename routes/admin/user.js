@@ -6,6 +6,15 @@ const SHA1 = require('sha1');
 //用户实体
 const Users = require('../../models/t-user');
 
+//退出登录
+router.get('exit', async(ctx) =>{
+    //清空cookie
+    ctx.cookies.set('token', '');
+
+    //回到登陆页
+    ctx.redirect('login');
+});
+
 //跳转到登陆页面
 router.get('login', async(ctx, next) =>{
     ctx.render('admin/login');
@@ -15,22 +24,20 @@ router.get('login', async(ctx, next) =>{
 router.get('getUserInfo', async(ctx) =>{
 
     // 获取jwt
-    const token = ctx.cookies.get('authorization');
-
-    console.log(token)
+    const token = ctx.cookies.get('token');
 
     let payload = {};
     if (token) {
-        // 解密，获取payload
-        payload = await ctx.verify(token.split(' ')[1], ctx.secret);
+        // 解密，获取payload 以token形式解析 不惜要Bearer前缀
+        payload = await ctx.verify(token, ctx.secret);
         //将payload存储到cookie中
         ctx.cookies.set('uname', payload.name, {
             //cookie有效时长，单位：毫秒数
-            maxAge: 7 * 60 * 60 *1000,       
+            maxAge: 7 * 60 * 60 *1000,
             //过期时间，unix时间戳   
             //expires:"0000000000",
             //cookie保存路径, 默认是'/，set时更改，get时同时修改，不然会保存不上，服务同时也获取不到        
-            path:"/",
+            path: "/",
             //cookie可用域名，“.”开头支持顶级域名下的所有子域名                    
             //domain:".xxx.com",
             //默认false，设置成true表示只有https可以访问       
@@ -45,15 +52,15 @@ router.get('getUserInfo', async(ctx) =>{
 
         ctx.body = {message: 'ok', code: 1};
     } else {
-        ctx.body = {message: '登陆已过期, 请重新登陆', code: 0};
+        ctx.throw(500, '登陆已过期, 请重新登陆');
     }
 });
 
 //用户登陆获取token
-router.post('toLogin', async(ctx) =>{
+router.post('toLogin', async(ctx, next) =>{
     
     //获取用户名和密码
-    let uname = ctx.request.body.uname;
+    let uname  = ctx.request.body.uname;
     let passwd = ctx.request.body.passwd;
 
     //校验用户名和密码
@@ -64,29 +71,28 @@ router.post('toLogin', async(ctx) =>{
             if(SHA1(passwd) === doc.passwd){
                 //载体
                 let payload = {id: doc._id.toString(), name: uname};
-                //生成token 设置过期时间为1小时
-                let token = '';
-                try {
-                    token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: '10m'});
+                let token   = '';
+                //生成token 设置过期时间为12个小时
+                token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
+                
+                //将token保存到cookie中
+                ctx.cookies.set('token', `${token}`, {
+                    maxAge   : 12 * 60 * 60 * 1000,
+                    path     : "/",
+                    secure   : false,
+                    httpOnly : false,
+                    overwrite: true
+                });
 
-                    ctx.cookies.set('token', `Bearer ${token}`, {
-                        maxAge: 7 * 60 * 60 *1000,       
-                        path:"/",
-                        secure: false,
-                        httpOnly: false,
-                        overwrite: true
-                    });
-
-                    ctx.body = {message: 'ok', expiresIn: ctx.moment().format("YYYY-MM-DD HH:mm:ss"), code: 1};
-
-                } catch (error) {
-                    console.log(error);
-                }
+                //将登录时间保存到session中
+                ctx.session.expiresIn = new Date().getTime();
+                
+                ctx.body = {message: 'ok', code: 1};
             }else{
-                ctx.body = {message: '用户名或密码错误', code: 0};
+                ctx.throw(500,'用户名或密码错误');
             }
         }else{
-            ctx.body = {message: '用户名或密码错误', code: 0};
+            ctx.throw(500, '用户名或密码错误');
         }
     });
 });

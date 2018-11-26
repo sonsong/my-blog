@@ -1,6 +1,6 @@
 const router = require('koa-router')();
 const URL = require('url');
-const qs = require('querystring');
+const qs  = require('querystring');
 
 const Blogs = require('../../models/t-blog');
 
@@ -28,7 +28,7 @@ router.post('publish', async(ctx, next) =>{
     //md格式的内容
     let mdContent = params['mdContent'];
     //html格式的内容
-    let htmlContent = params['htmlContent'];    
+    let htmlContent = params['htmlContent'];
 
     //博客对象
     let blog = {
@@ -108,10 +108,10 @@ router.get('artcle_list', async(ctx, next) =>{
                 if(!err){
                     for (const item of docs) {
                         let doc = {
-                            _id: item._id.toString(),
-                            tags: item.tags.toString(),
-                            title: item.title,
-                            publishTime:  ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                            _id        : item._id.toString(),
+                            tags       : item.tags.toString(),
+                            title      : item.title,
+                            publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
                         }
         
                         blogs.push(doc);
@@ -125,8 +125,8 @@ router.get('artcle_list', async(ctx, next) =>{
     let totalPage = 0;
     await Blogs.countDocuments(condition, (err, count) =>{
         if(!err){
-            let total = count;
-            totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
+            let total     = count;
+                totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
         }
     });
 
@@ -159,7 +159,7 @@ router.get('update_artcle', async(ctx, next) =>{
     });
 
     //回到编辑页面
-    ctx.render('admin/editor', {tags: blog.tags.toString().replace(',', ' '), title: blog.title, mdContent: blog.mdContent, id});
+    ctx.render('admin/editor', {tags: blog.tags.toString(), title: blog.title, mdContent: blog.mdContent, id});
 });
 
 //跳转到预览页面

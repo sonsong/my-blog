@@ -38,6 +38,10 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
     <script>
         $(function(){
+
+            let mess = '{{mess}}';
+            console.log(mess);
+
             layui.use(['form'], function(){
                 var form = layui.form;
                 
@@ -51,9 +55,6 @@
                         method: 'POST',
                         success(res){
                             if(res.code === 1){
-                                //存储获取token的时间
-                                sessionStorage.setItem('expireIn', res.expiresIn);
-
                                 //发送请求获取用户信息
                                 getUserInfo();
                             }else{

@@ -1,9 +1,0 @@
-.artcles .pager{
-    display: flex;
-    justify-content: flex-end;
-    height: 30px;
-    line-height: 30px;
-}
-.artcles .pager .total{
-    padding-right: 20px;
-}

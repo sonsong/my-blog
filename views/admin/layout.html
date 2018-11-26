@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     {{block 'title'}}<title>后台首页</title>{{/block}}
+    <link rel="stylesheet" href="/css/admin/user.css">
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/editor.md/css/editormd.css">
     <link rel="stylesheet" href="/editor.md/lib/codemirror/codemirror.min.css">
     <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
-    {{block 'css'}}{{/block}}
     <style>
         .layui-layout-admin .layui-body{
             padding: 20px;
@@ -32,11 +32,11 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">
                         <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        贤心
+                        {{uname}}
                     </a>
                     <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
+                    <dd><a href="/admin/userInfo">基本资料</a></dd>
+                    <dd><a href="/admin/safeSetting">安全中心</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="/admin/exit">告辞~</a></li>
