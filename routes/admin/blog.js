@@ -4,6 +4,39 @@ const qs  = require('querystring');
 
 const Blogs = require('../../models/t-blog');
 
+//处理查询条件
+router.post('handlerQuery', async(ctx, next) =>{
+    let params = ctx.request.body;
+    //处理时间，转化成数组
+    let date = params.date.split(' - ').toString();
+    //文章类型
+    let type = params.type;
+
+    //重定向到文章列表页面
+    ctx.redirect(`artcle_list?publisTime=${date}&type=${type}`);
+})
+//获取文章类型
+router.get('getArtcleTypes', async(ctx) =>{
+    let tags = [];
+    await Blogs.aggregate([
+        {
+            //将tags数组拆分成单独的一项
+            $unwind: '$tags'
+        },
+        {
+            $group: {
+                _id: '$tags',
+            }
+        }
+    ], (err, docs) =>{
+        if(!err){
+            tags = docs;
+        }
+    })
+
+    ctx.body = tags;
+})
+
 //写文章
 router.get('editor', async(ctx, next) =>{
     ctx.render('admin/editor');
@@ -181,19 +214,26 @@ router.get('preview', async(ctx, next) =>{
 });
 
 //删除指定的文章
-router.get('del_artcle', async(ctx, next) =>{
+router.get('del_artcle/:_id', async(ctx, next) =>{
     //获取文章编码
-    let id = ctx.query._id;
+    let id = ctx.params._id;
 
     //删除该文章
-    await Blogs.deleteOne({_id: id}, (err) =>{
-        if(!err){
-            console.log("删除文章成功");
-        }
-    });
+    try {
+        await Blogs.deleteOne({_id: id}, (err) =>{
+            if(!err){
+                ctx.body = {message: '删除成功', code: '1'}
+            }else{
+                ctx.err_message = '删除失败';
+            }
+        });
+    } catch (error) {
+        ctx.err_message = '删除失败';
+    }
 
-    //回到文章列表
-    ctx.redirect("artcle_list");
+    if(ctx.err_message){
+        ctx.body = {message: ctx.err_message, code: '-1'};
+    }
 });
 
 module.exports = router;

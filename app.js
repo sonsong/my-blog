@@ -50,9 +50,11 @@ app.use(async(ctx, next) =>{
     
     if(loginTime !== undefined){
 
-        if(new Date().getTime() - loginTime > 60 * 1000){
-            //抛出自定义异常
-            ctx.throw(555, '登陆已超时，请重新登陆');
+        if(new Date().getTime() - loginTime > 12 * 60 * 60 * 1000){
+            //超时了，重新登陆
+            ctx.cookies.set('token', '');
+            //清空session
+            ctx.session.expiresIn = undefined;
         }
     }
     
@@ -63,24 +65,30 @@ app.use(async(ctx, next) =>{
     ctx.secret = secret;
     ctx.JWT    = JWT;
 
-    try {
+    await next();
+
+   /*  try {
         await next();
     } catch (err) {
         //统一处理异常, 回到登陆页面，清空session、cookie中的token
         ctx.cookies.set('token', '');
         ctx.session.expiresIn = undefined;
 
-        //返回登陆页面
-        //ctx.render('admin/login', {message: err.message});
-        ctx.redirect('admin/login');
-    }
+        if(err.status === 555){
+            ctx.body = ({message: err.message, code: -1});
+        }else if(err.status === 401){
+            ctx.render('admin/login', {message: '登陆已超时，请重新登陆'});
+        } *//* else{
+            ctx.render('admin/login', {message: err.message});
+        } 
+    }*/
 
     //处理异常
     if(ctx.status === 404){
-        ctx.render('errors/404', {message: '页面没找到'});
+        //ctx.render('errors/404', {message: '页面没找到'});
     }
     else if(ctx.status === 500){
-        ctx.render('errors/500', {message: '服务器内部错误'});
+        //ctx.render('errors/500', {message: '服务器内部错误'});
     }
 });
 
@@ -118,17 +126,6 @@ const admin = require('./routes/admin');
 
 router.use('/', user.routes());
 router.use('/admin', admin.routes());
-
-//捕获违背try..catch的异常
-app.on('error', (err, ctx) =>{
-    //超时了，重新登陆
-    ctx.cookies.set('token', '');
-    //清空session
-    ctx.session.expiresIn = undefined;
-
-    ctx.redirect('admin/login');
-    //ctx.render('admin/login', {message: err.message});
-});
 
 //注册路由
 app.use(router.routes()).use(router.allowedMethods());

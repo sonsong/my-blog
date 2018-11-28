@@ -2,6 +2,31 @@
 {{block 'title'}}<title>文章列表</title>{{/block}}
 {{block 'content'}}
     <div class="artcles">
+        <fieldset>
+            <legend>查询条件</legend>
+            <form class="layui-form" action="/admin/blog/handlerQuery" method="POST">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发表时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="date" id="date" lay-verify="required" readonly placeholder="请选择时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择框</label>
+                    <div class="layui-input-block">
+                        <select name="type" id="tags" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="query">查询</button>
+                    </div>
+                </div>
+        </form>
+        </fieldset>
         <table class="layui-table" lay-even lay-skin="nob">
             <thead class="thead">
                 <tr>
@@ -30,10 +55,7 @@
                                 </a>
                             </span>
                             <span>
-                                <a href="/admin/blog/del_artcle?_id={{$value._id}}">
-                                    <button class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon"></i>删除</button>
-                                </a>
-                                <!-- <button data-method="notice" id="del_{{$value._id}}" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon"></i>删除</button> -->
+                                <button class="layui-btn layui-btn-xs layui-btn-danger delBtn" id="{{$value._id}}"><i class="layui-icon"></i>删除</button>
                             </span>
                         </td>
                     </tr>
@@ -104,90 +126,61 @@
     </div>
 {{/block}}
 {{block 'js'}}
+    <script src="/js/moment.min.js"></script>
     <script>
-        /* $(function(){
+        $(function(){
 
-            //当前页码
-            let pageCode = parseInt('{{pager.pageCode}}');
-            //总页数
-            let total = parseInt('{{pager.totalPage}}');
-            //携带的参数
-            let condition = '{{pager.condition}}';
+            //获取文章类型
+            $.ajax({
+                url:'/admin/blog/getArtcleTypes',
+                dataType: 'json',
+                success(tags){
+                    $('#tags').append('<option id="noType" selected>==请选择文章分类==</option>');
 
-            layui.use(['laypage', 'layer'], function(){
-                var laypage = layui.laypage;
-                var layer = layui.layer;
-
-                laypage.render({
-                    elem: 'pager',
-                    count: total,
-                    limit: 1,
-                    curr: pageCode,
-                    layout: ['count', 'prev', 'page', 'next'],
-                    jump: function(obj){
-                        if(obj.curr !== 1){
-                            //请求路径
-                            let path = `/admin/blog/artcle_list`;
-                            let url = condition === '{}' ? `${path}?pageCode=${obj.curr}&pageSize=${obj.limit}` 
-                                : `${path}?${condition}&pageCode=${obj.curr}&pageSize=${obj.limit}`; 
-                            
-                            $.ajaxSettings.async = false;
-                            $.get(url, (data, status) =>{
-                                $('html').html(data);
-                            })
-                        }
+                    if(tags.length === 0){
+                    }else{
+                        tags.forEach(function(ele, index){
+                            $('#tags').append(`<option value=${ele._id}>${ele._id}</option>`);
+                        });
                     }
-                })
-                
+                }
+            });
+
+            layui.use(['layer', 'form', 'laydate'], function(){
+                let form = layui.form;
+                let laydate = layui.laydate;
+
+                //初始化时间
+                laydate.render({
+                    elem: '#date',
+                    type: 'date',
+                    range: true,
+                    format: 'yyyy-MM-dd',
+                    btns: ['confirm'],
+                    max: new Date().getTime(),
+                    trigger: 'click'
+                });
+
+                //删除文章
+                $('.delBtn').on('click', function(){
+                    //获取id参数
+                    let id = $(this).attr('id');
+
+                    layer.confirm('是否删除该文章?', function(index){
+                        //发送ajax请求
+                        $.ajax({
+                            url: `/admin/blog/del_artcle/${id}`,
+                            success(res){
+                                if(res.code === '1'){
+                                    window.location.reload();
+                                }
+                                layer.msg(res.message);
+                            }
+                        });
+                        layer.close(index);
+                    });       
+                });
             });
         })
- */
-        /* let delId = '';
-
-        layui.use(['layer'], function(){
-            var layer = layui.layer;
-            var active = {
-                notice(){
-                    layer.open({
-                        type: 1
-                        ,title: '提示' //不显示标题栏
-                        ,closeBtn: false
-                        ,area: '400px;'
-                        ,shade: 0.8
-                        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                        ,btn: ['确定', '取消']
-                        ,btnAlign: 'c'
-                        ,moveType: 1 //拖拽模式，0或者1
-                        ,content: '<div style="height:60px;line-height:60px;text-align:center">是否删除该文章?</div>'
-                        ,success: function(layero){
-                            //发送ajax请求
-                            $.ajax({
-                                url: '/admin/blog/del_artcle',
-                                dataType: 'JSON',
-                                data:{
-                                    _id: delId
-                                },
-                                //同步
-                                async: false,
-                                success(res){
-                                    if(res.status === '1'){
-                                        alert(res.mess);
-
-                                        window.location.reload();
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            };
-
-            $('.artcles .layui-btn').on('click', function(){
-                var othis = $(this), method = othis.data('method');
-                delId = $(this).attr("id").split('_')[1]; 
-
-                active[method] ? active[method].call(this, othis) : '';
-            });
-        }); */
     </script>
 {{/block}}

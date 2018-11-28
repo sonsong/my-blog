@@ -27,9 +27,10 @@ router.get('getUserInfo', async(ctx) =>{
     const token = ctx.cookies.get('token');
 
     let payload = {};
-    if (token) {
-        // 解密，获取payload 以token形式解析 不惜要Bearer前缀
+    if (token && token !== '') {
+        // 解密，获取payload 以token形式解析 不要Bearer前缀
         payload = await ctx.verify(token, ctx.secret);
+        
         //将payload存储到cookie中
         ctx.cookies.set('uname', payload.name, {
             //cookie有效时长，单位：毫秒数
@@ -52,7 +53,7 @@ router.get('getUserInfo', async(ctx) =>{
 
         ctx.body = {message: 'ok', code: 1};
     } else {
-        ctx.throw(500, '登陆已过期, 请重新登陆');
+        ctx.throw(555, '登陆已过期, 请重新登陆');
     }
 });
 
@@ -64,13 +65,14 @@ router.post('toLogin', async(ctx, next) =>{
     let passwd = ctx.request.body.passwd;
 
     //校验用户名和密码
+    //在回调函数中抛出的异常的外面无法被try..catch捕获的，不在同一个执行流中
     await Users.findOne({uname}, (err, doc) =>{
         try {
             if(!err){
                 //验证密码是否正确
                 if(SHA1(passwd) === doc.passwd){
                     //载体
-                    let payload = {id: doc._id.toString(), name: uname};
+                    let payload = {id: doc._id.toString(), name: doc.uname, picture: doc.picture};
                     let token   = '';
                     //生成token 设置过期时间为12个小时
                     token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
@@ -89,13 +91,14 @@ router.post('toLogin', async(ctx, next) =>{
                     
                     ctx.body = {message: 'ok', code: 1};
                 }else{
-                    throw new Error('用户名或密码错误~~~');
+                    ctx.err_mess = '用户名或密码错误~~~';
                 }
             }else{
-                throw new Error('该用户不存在~~~');
+                ctx.err_mess = '用户名或密码错误~~~';
             }
-        } catch (e) {
-            ctx.err_mess = e.message;
+            
+        } catch (error) {
+            ctx.err_mess = '该用户不存在~~~';
         }
     })
 
