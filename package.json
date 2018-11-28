@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "art-template": "^4.13.1",
+    "cnpm": "^6.0.0",
     "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.1",
     "koa-art-template": "^1.1.1",

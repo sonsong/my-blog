@@ -8,14 +8,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">发表时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="date" id="date" lay-verify="required" readonly placeholder="请选择时间" autocomplete="off" class="layui-input">
+                        <input type="text" name="publishTime" id="date" readonly placeholder="请选择发表时间" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-inline">
-                    <label class="layui-form-label">选择框</label>
+                    <label class="layui-form-label">标签类型</label>
                     <div class="layui-input-block">
-                        <select name="type" id="tags" lay-verify="required">
+                        <select name="tags" id="tags">
                         </select>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                 url:'/admin/blog/getArtcleTypes',
                 dataType: 'json',
                 success(tags){
-                    $('#tags').append('<option id="noType" selected>==请选择文章分类==</option>');
+                    $('#tags').append('<option id="noType" selected value="" >==请选择文章分类==</option>');
 
                     if(tags.length === 0){
                     }else{

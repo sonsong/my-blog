@@ -7,13 +7,24 @@ const Blogs = require('../../models/t-blog');
 //处理查询条件
 router.post('handlerQuery', async(ctx, next) =>{
     let params = ctx.request.body;
-    //处理时间，转化成数组
-    let date = params.date.split(' - ').toString();
-    //文章类型
-    let type = params.type;
+    let query  = '';
+
+    //参数过滤 空参数不要
+    for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+            if(params[key] !== ''){
+                query += `${key}=${params[key]}&`
+            }
+        }
+    }
+
+    //去掉最后一个&
+    query = query.substring(0, query.length-1);
+
+    console.log(`query=${query}`)
 
     //重定向到文章列表页面
-    ctx.redirect(`artcle_list?publisTime=${date}&type=${type}`);
+    ctx.redirect(`artcle_list?${query}`);
 })
 //获取文章类型
 router.get('getArtcleTypes', async(ctx) =>{
@@ -110,13 +121,14 @@ router.get('artcle_list', async(ctx, next) =>{
     //当前页码
     let pageCode = ctx.query.pageCode === undefined ? 1 : parseInt(ctx.query.pageCode);
     //每页显示数量
-    let pageSize = ctx.query.pageSize === undefined ? 20 : parseInt(ctx.query.pageSize);
+    let pageSize = ctx.query.pageSize === undefined ? 1 : parseInt(ctx.query.pageSize);
 
     //查询条件
     let condition = '';
 
     let search = URL.parse(ctx.url).search;
 
+    //url 携带参数
     if(search !== null){
         if(search.indexOf("?pageCode") !== -1){
             //咩有其它多余的条件
@@ -124,16 +136,27 @@ router.get('artcle_list', async(ctx, next) =>{
         }else{
             let index = search.indexOf("&pageCode") === -1 ? -1 : search.indexOf("&pageCode");
             if(index === -1){
+                //去掉问好
                 condition = search.substring(1);
             }else{
-                condition = search.substring(0, index);
+                condition = search.substring(1, index);
             }
         }
     }
 
+    //判断是否有时间参数
+    let _condition = qs.parse(condition);
+
+    let publishTime = _condition.publishTime;
+    if(publishTime){
+        publishTime = publishTime.split(' - ');
+        //设置查询参数 将时间转化成Date类型
+        _condition.publishTime = {$gte: ctx.moment((publishTime[0])), $lt: ctx.moment((publishTime[1]))};
+    }
+
     let blogs = [];
     //查询数据库中的所有文章
-    await Blogs.find(qs.parse(condition), '_id tags title publishTime')
+    await Blogs.find(_condition, '_id tags title publishTime')
             .skip((pageCode - 1) * pageSize)
             .limit(pageSize)
             .sort({'publishTime': 1})
@@ -156,16 +179,17 @@ router.get('artcle_list', async(ctx, next) =>{
     
     //查询数据库的总记录数
     let totalPage = 0;
-    await Blogs.countDocuments(condition, (err, count) =>{
+    await Blogs.countDocuments(_condition, (err, count) =>{
         if(!err){
-            let total     = count;
-                totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
+            let total = count;
+
+            totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
         }
     });
 
     let params = '?';
     if(condition !== ''){
-        params = condition + '&';
+        params += condition + '&';
     }
 
     let pager = {
