@@ -39,8 +39,10 @@
     <script>
         $(function(){
 
-            let mess = '{{mess}}';
-            console.log(mess);
+            let message = '{{message}}';
+            if(message !== ''){
+                alert(message)
+            }
 
             layui.use(['form'], function(){
                 var form = layui.form;

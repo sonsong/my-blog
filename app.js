@@ -51,13 +51,8 @@ app.use(async(ctx, next) =>{
     if(loginTime !== undefined){
 
         if(new Date().getTime() - loginTime > 60 * 1000){
-            //超时了，重新登陆
-            ctx.cookies.set('token', '');
-            //清空session
-            ctx.session.expiresIn = undefined;
-            
             //抛出自定义异常
-            ctx.render('admin/login.html', {message: '登陆已超时，请重新登陆'});
+            ctx.throw(555, '登陆已超时，请重新登陆');
         }
     }
     
@@ -70,8 +65,14 @@ app.use(async(ctx, next) =>{
 
     try {
         await next();
-    } catch (error) {
-        console.log('error=================================');
+    } catch (err) {
+        //统一处理异常, 回到登陆页面，清空session、cookie中的token
+        ctx.cookies.set('token', '');
+        ctx.session.expiresIn = undefined;
+
+        //返回登陆页面
+        //ctx.render('admin/login', {message: err.message});
+        ctx.redirect('admin/login');
     }
 
     //处理异常
@@ -117,6 +118,17 @@ const admin = require('./routes/admin');
 
 router.use('/', user.routes());
 router.use('/admin', admin.routes());
+
+//捕获违背try..catch的异常
+app.on('error', (err, ctx) =>{
+    //超时了，重新登陆
+    ctx.cookies.set('token', '');
+    //清空session
+    ctx.session.expiresIn = undefined;
+
+    ctx.redirect('admin/login');
+    //ctx.render('admin/login', {message: err.message});
+});
 
 //注册路由
 app.use(router.routes()).use(router.allowedMethods());

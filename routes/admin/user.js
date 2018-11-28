@@ -65,36 +65,44 @@ router.post('toLogin', async(ctx, next) =>{
 
     //校验用户名和密码
     await Users.findOne({uname}, (err, doc) =>{
-        if(!err){
-
-            //验证密码是否正确
-            if(SHA1(passwd) === doc.passwd){
-                //载体
-                let payload = {id: doc._id.toString(), name: uname};
-                let token   = '';
-                //生成token 设置过期时间为12个小时
-                token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
-                
-                //将token保存到cookie中
-                ctx.cookies.set('token', `${token}`, {
-                    maxAge   : 12 * 60 * 60 * 1000,
-                    path     : "/",
-                    secure   : false,
-                    httpOnly : false,
-                    overwrite: true
-                });
-
-                //将登录时间保存到session中
-                ctx.session.expiresIn = new Date().getTime();
-                
-                ctx.body = {message: 'ok', code: 1};
+        try {
+            if(!err){
+                //验证密码是否正确
+                if(SHA1(passwd) === doc.passwd){
+                    //载体
+                    let payload = {id: doc._id.toString(), name: uname};
+                    let token   = '';
+                    //生成token 设置过期时间为12个小时
+                    token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
+                    
+                    //将token保存到cookie中
+                    ctx.cookies.set('token', `${token}`, {
+                        maxAge   : 12 * 60 * 60 * 1000,
+                        path     : "/",
+                        secure   : false,
+                        httpOnly : false,
+                        overwrite: true
+                    });
+    
+                    //将登录时间保存到session中
+                    ctx.session.expiresIn = new Date().getTime();
+                    
+                    ctx.body = {message: 'ok', code: 1};
+                }else{
+                    throw new Error('用户名或密码错误~~~');
+                }
             }else{
-                ctx.throw(500,'用户名或密码错误');
+                throw new Error('该用户不存在~~~');
             }
-        }else{
-            ctx.throw(500, '用户名或密码错误');
+        } catch (e) {
+            ctx.err_mess = e.message;
         }
-    });
+    })
+
+    //处理异常
+    if(ctx.err_mess){
+        ctx.throw(555, ctx.err_mess);
+    }
 });
 
 module.exports = router;
