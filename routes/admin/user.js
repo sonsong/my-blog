@@ -6,6 +6,15 @@ const SHA1 = require('sha1');
 //用户实体
 const Users = require('../../models/t-user');
 
+//修改密码
+router.get('safe_center', async(ctx) =>{
+    //从cookie中获取用户
+    ctx.render('admin/safe_center', {user: JSON.parse(ctx.cookies.get('user'))})
+});
+//获取用户信息
+router.get('user_info', async(ctx) =>{
+    ctx.render('admin/user_info');
+});
 //退出登录
 router.get('exit', async(ctx) =>{
     //清空cookie
@@ -32,7 +41,7 @@ router.get('getUserInfo', async(ctx) =>{
         payload = await ctx.verify(token, ctx.secret);
         
         //将payload存储到cookie中
-        ctx.cookies.set('uname', payload.name, {
+        ctx.cookies.set('user', JSON.stringify(payload), {
             //cookie有效时长，单位：毫秒数
             maxAge: 7 * 60 * 60 *1000,
             //过期时间，unix时间戳   

@@ -1,9 +1,61 @@
 {{extend './layout.html'}}
 {{block 'title'}}<title>安全中心</title>{{/block}}
 {{block 'content'}}
-    <div class="safe">
-        
+    <div class="safe_center">
+        <fieldset>
+            <legend>修改密码</legend>
+            <form class="layui-form login-form" action="" method="POST" style="width:40%;margin:0 auto">
+                <input type="hidden" name="id" value="{{user.id}}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uname" autocomplete="off" value="{{user.name}}" class="layui-input" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">初始密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="passwd" placeholder="请输入密码" autocomplete="off" class="layui-input verityPass">
+                    </div>
+                </div>
+                <div class="layui-form-item passwdTips"></div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="newPasswd" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item newPasswdTips"></div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal submit-btn" lay-submit="" lay-filter="login">确定</button>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
     </div>
 {{/block}}
 {{block 'js'}}
+    <script>
+        $(() =>{
+
+            layui.use(['layer', 'form'], function () {
+                //校验初始密码
+                $('.verityPass').on('blur', function(){
+                    let passwd = $(this).val();
+                    if(passwd === ''){
+                        $(this).css('border-color', 'red');
+                        $('.passwdTips').css('display', "")
+                        $('.passwdTips').text('请输入密码');
+                    }else{
+                        //校验用户密码
+                        $.ajax({
+                        })
+                    }
+                }).on('focus', function(){
+                    $('.passwdTips').css('display', "none")
+                })
+            })
+        })
+    </script>
 {{/block}}

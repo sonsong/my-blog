@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     {{block 'title'}}<title>后台首页</title>{{/block}}
-    <link rel="stylesheet" href="/css/admin/user.css">
+    <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/editor.md/css/editormd.css">
     <link rel="stylesheet" href="/editor.md/lib/codemirror/codemirror.min.css">
@@ -25,27 +25,27 @@
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
-        <div class="layui-header">
-            <div class="layui-logo">后台管理</div>
+        <div class="layui-header layui-bg-cyan">
+            <div class="layui-logo">Blog后台管理</div>
            
-            <ul class="layui-nav layui-layout-right">
+            <ul class="layui-nav layui-layout-right ">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        {{uname}}
+                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img userImg">
+                        <span class="uname"></span>
                     </a>
                     <dl class="layui-nav-child">
-                    <dd><a href="/admin/userInfo">基本资料</a></dd>
-                    <dd><a href="/admin/safeSetting">安全中心</a></dd>
+                    <dd><a href="/admin/user_info">基本资料</a></dd>
+                    <dd><a href="/admin/safe_center">安全中心</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="/admin/exit">告辞~</a></li>
             </ul>
         </div>
     
-        <div class="layui-side layui-bg-black">
+        <div class="layui-side layui-bg-cyan">
             <div class="layui-side-scroll">
-                <ul class="layui-nav layui-nav-tree">
+                <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
                     <li class="layui-nav-item layui-nav-itemed">
                         <a class="" href="javascript:;">文章管理</a>
                         <dl class="layui-nav-child">
@@ -69,11 +69,27 @@
     <script src="/js/iconfont.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/editor.md/editormd.min.js"></script>
-    {{block 'js'}}{{/block}}
     <script>
-        layui.use(['element'], function(){
-            var element = layui.element;
-        });
-    </script>
+        $(() =>{
+            layui.use('element', function(){
+                let element = layui.element;
+            })
+
+            //从cookie中获取用户信息
+            let cookies = document.cookie;
+            cookies = cookies.substring(cookies.indexOf('user')).split(';');
+            for (const item of cookies) {
+                let index = item.indexOf('user=');
+                if( index !== -1){
+                    let obj = JSON.parse(item.substring(index + 5));
+                    //设置用户头像
+                    $('.userImg').attr('src', obj.picture);
+                    //设置用户名
+                    $('.uname').text(obj.name);
+                } 
+            }
+        })
+    </script>   
+    {{block 'js'}}{{/block}}
 </body>
 </html>
