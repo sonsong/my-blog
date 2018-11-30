@@ -1,8 +1,11 @@
 const router = require('koa-router')();
-const URL = require('url');
-const qs  = require('querystring');
+//文件上传
+const multer = require('koa-multer');
 
 const Blogs = require('../../models/t-blog');
+
+//配置上传文件存储的位置
+const upload = multer({ dest: '/static/upload' });
 
 //获取文章类型
 router.get('getArtcleTypes', async(ctx) =>{
@@ -26,6 +29,10 @@ router.get('getArtcleTypes', async(ctx) =>{
     ctx.body = tags;
 })
 
+//图片上传
+router.post('imgUpload', upload.single('editormd-image-file'), async(ctx) =>{
+    console.log(ctx.request.body)
+})
 //写文章
 router.get('editor', async(ctx, next) =>{
     ctx.render('admin/editor');

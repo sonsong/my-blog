@@ -35,12 +35,14 @@
 </body>
     <script src="/layui/layui.js"></script>
     <script src="/js/iconfont.js"></script>
+    <script src="/js/sha1.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
     <script>
         $(function(){
 
             layui.use(['form', 'layer'], function(){
-                var form = layui.form;
+                let form = layui.form;
+                let layer = layui.layer;
 
                 //错误提示
                 let message = '{{message}}';
@@ -50,10 +52,16 @@
                 
                 //监听提交
                 form.on('submit(login)', function(data){
+                    //对密码加密
+                    let passwd = SHA2(data.field.passwd);
+
                     //发生ajax请求获取登陆令牌
                     $.ajax({
-                        url: 'http://localhost:3000/admin/toLogin',
-                        data: data.field,
+                        url: '/admin/toLogin',
+                        data: {
+                            passwd,
+                            uname: data.field.uname
+                        },
                         dataType: 'json',
                         method: 'POST',
                         success(res){
@@ -79,15 +87,15 @@
             //获取用户信息
             function getUserInfo(){
                 $.ajax({
-                    url: 'http://localhost:3000/admin/getUserInfo',
+                    url: '/admin/getUserInfo',
                     method: 'GET',
                     success(res){
                         //跳转到后台首页
                         if(res.code === 1){
-                            window.location.href = 'http://localhost:3000/admin';
+                            window.location.href = '/admin';
                         }else{
                             //登陆过期
-                            console.log(res.message);
+                            layer.msg(res.message);
                         }
                     }
                 });

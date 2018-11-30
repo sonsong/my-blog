@@ -1,12 +1,56 @@
 //用户路由
 const router = require('koa-router')();
-//密码加密
-const SHA1 = require('sha1');
 
 //用户实体
 const Users = require('../../models/t-user');
 
 //修改密码
+router.post('updatePasswd', async(ctx) =>{
+
+    let {_id, passwd, newPasswd} = ctx.request.body;
+
+    //简单做下后台校验
+    await Users.findById({_id}, 'passwd', (err, doc) =>{
+        if(!err){
+            if(doc.passwd !== passwd){
+                ctx.body = {message: '初始密码不正确', code: -1};
+            }
+            if(doc.passwd === newPasswd){
+                ctx.body = {message: '新密码不能和初始密码相同', code: -1};
+            }
+        }else{
+            ctx.body = {message: '该用户不存在', code: -1};
+        }
+    })
+
+    //修改密码
+    await Users.updateOne({_id}, {$set: {passwd: newPasswd}}, (err, doc) =>{
+        if(!err){
+            ctx.body = {message: '修改密码成功', code: 0};
+        }else{
+            ctx.body = {message: '修改密码失败', code: -1};
+        }
+    });
+});
+//校验初始密码
+router.post('verifyInitPasswd', async(ctx) =>{
+    //获取用户编码
+    let {_id, passwd} = ctx.request.body;
+
+    await Users.findById({_id}, 'passwd', (err, doc) =>{
+        if(!err){
+            if(passwd === doc.passwd){
+                ctx.body = {message: 'ok', code: 0};
+            }else{
+                ctx.body = {message: '初始密码错误', code: -1};
+            }
+        }else{
+            ctx.body = {message: '该用户不存在', code: -1};
+        }
+    })
+})
+
+//修改密码页面
 router.get('safe_center', async(ctx) =>{
     //从cookie中获取用户
     ctx.render('admin/safe_center', {user: JSON.parse(ctx.cookies.get('user'))})
@@ -79,7 +123,7 @@ router.post('toLogin', async(ctx, next) =>{
         try {
             if(!err){
                 //验证密码是否正确
-                if(SHA1(passwd) === doc.passwd){
+                if(passwd === doc.passwd){
                     //载体
                     let payload = {id: doc._id.toString(), name: doc.uname, picture: doc.picture};
                     let token   = '';

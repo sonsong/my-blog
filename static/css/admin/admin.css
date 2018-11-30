@@ -5,6 +5,10 @@ html, body{
 .preview{
     border: 1px solid #e9e9e9;
 }
+.editormd-preview-container, .editormd-html-preview{
+    width: 97.5% !important;
+}
+
 
 /* 编辑器页面样式 */
 .editor{
@@ -39,4 +43,3 @@ fieldset legend{
     font-size: 16px;
     color: #000;
 }
-

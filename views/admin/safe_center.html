@@ -4,8 +4,8 @@
     <div class="safe_center">
         <fieldset>
             <legend>修改密码</legend>
-            <form class="layui-form login-form" action="" method="POST" style="width:40%;margin:0 auto">
-                <input type="hidden" name="id" value="{{user.id}}">
+            <form class="layui-form login-form" style="width:40%;margin:0 auto">
+                <input type="hidden" name="id" id = "id" value="{{user.id}}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-block">
@@ -15,20 +15,20 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">初始密码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="passwd" placeholder="请输入密码" autocomplete="off" class="layui-input verityPass">
+                        <input type="password" name="passwd" id="passwd" placeholder="请输入密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item passwdTips"></div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">新密码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="newPasswd" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                        <input type="password" name="newPasswd" id="newPasswd" placeholder="请输入密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item newPasswdTips"></div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal submit-btn" lay-submit="" lay-filter="login">确定</button>
+                        <button class="layui-btn layui-btn-normal submit-btn" lay-submit="" lay-filter="updatePass">确定</button>
                     </div>
                 </div>
             </form>
@@ -36,26 +36,124 @@
     </div>
 {{/block}}
 {{block 'js'}}
+    <script src="/js/sha1.js"></script>
     <script>
         $(() =>{
 
             layui.use(['layer', 'form'], function () {
+                let form = layui.form;
+                let layer = layui.layer;
+
                 //校验初始密码
-                $('.verityPass').on('blur', function(){
-                    let passwd = $(this).val();
-                    if(passwd === ''){
-                        $(this).css('border-color', 'red');
-                        $('.passwdTips').css('display', "")
-                        $('.passwdTips').text('请输入密码');
-                    }else{
-                        //校验用户密码
-                        $.ajax({
-                        })
-                    }
+                $('#passwd').on('blur', function(){
+                    verityPasswd();
                 }).on('focus', function(){
+                    $('#passwd').css('border-color', '');
                     $('.passwdTips').css('display', "none")
+                });
+                //校验新密码
+                $('#newPasswd').on('blur', function(){
+                    veritynewPasswd();
+                }).on('focus', function(){
+                    $('#newPasswd').css('border-color', '');
+                    $('.newPasswdTips').css('display', "none")
+                });
+
+                //修改密码
+                form.on('submit(updatePass)', (data) =>{
+                    if(!veritynewPasswd()){
+                        layer.msg("请先输入正确的初始密码", {icon: 2});
+                        $("#passwd").focus();
+
+                        return false;
+                    }
+
+                    if(!veritynewPasswd()){
+                        layer.msg("请输入新密码", {icon: 2});
+                        $("#newPasswd").focus();
+
+                        return false;
+                    }
+
+                    //修改密码
+                    $.ajax({
+                        url: '/admin/updatePasswd',
+                        method: 'POST',
+                        data:{
+                            _id: data.field.id,
+                            newPasswd: SHA2(data.field.newPasswd),
+                            passwd: SHA2(data.field.passwd)
+                        },
+                        dataType:'json',
+                        success(res){
+                            if(res.code === -1){
+                                layer.msg(res.message, {icon: 2});
+                            }else{
+                                layer.confirm(`${res.message}, 是否重新登陆？`, function(index){
+                                    //退出登陆
+                                    window.location.href = '/admin/exit';
+                                    layer.close(index);
+                                })
+                            }
+                        }
+                    })
+
+                    return false;
                 })
             })
         })
+        
+        //校验新密码
+        function veritynewPasswd(){
+            //校验新密码，不能全为数字/字母
+            let newPasswd = $('#newPasswd').val();
+            if(newPasswd === ''){
+                $('#newPasswd').css('border-color', 'red');
+                $('.newPasswdTips').css('display', "")
+                $('.newPasswdTips').text("请输入新密码");
+
+                return false;
+            }else if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(newPasswd)){
+                $(this).css('border-color', 'red');
+                $('.newPasswdTips').css('display', "")
+                $('.newPasswdTips').text("新密码不能小于6位， 而且不能是纯数字或纯字母");
+
+                return false;
+            }else if(newPasswd === $('#passwd').val()){
+                $(this).css('border-color', 'red');
+                $('.newPasswdTips').css('display', "")
+                $('.newPasswdTips').text("新密码不能和初始密码相同");
+            }
+
+            return true;
+        };
+        //校验初始密码
+        function verityPasswd(){
+            //校验初始密码
+            let passwd = $("#passwd").val();
+            if(passwd === ''){
+                $('#passwd').css('border-color', 'red');
+                $('.passwdTips').css('display', "")
+                $('.passwdTips').text('请输入密码');
+            }else{
+                //校验用户密码
+                $.ajax({
+                    url:'/admin/verifyInitPasswd',
+                    method: 'POST',
+                    data:{
+                        _id: $("#id").val(),
+                        passwd: SHA2($("#passwd").val())
+                    },
+                    dataType: 'json',
+                    success(res){
+                        if(res.code === -1){
+                            $('#passwd').css('border-color', 'red');
+                            $('.passwdTips').css('display', "")
+                            $('.passwdTips').text(res.message);
+                        }
+                    }
+                })
+            }
+        }
     </script>
 {{/block}}
