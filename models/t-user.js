@@ -13,7 +13,11 @@ var usersSchema = mongoose.Schema({
     //简介
     introd: String,
     //头像
-    picture: String
+    picture: String,
+    //创建时间
+    createTime: Date,
+    //角色
+    role: Number
 })
 
 //建立约束与模型的映射关系

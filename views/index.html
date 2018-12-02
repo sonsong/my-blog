@@ -1,89 +1,92 @@
 {{extend './layout.html'}}
+{{block 'title'}}<title>首页</title>{{/block}}
 {{block 'css'}}
     <link rel="stylesheet" href="/css/index.css">
 {{/block}}
 {{block 'content'}}
-    {{each blogs}}
-        <div class="index-article">
-            <div class="head">
-                <div class="title">{{$value.title}}</div>
-                <div class="sub-title">
-                    <span class="write-time">发表时间: {{$value.publishTime}}</span>
-                    <span class="read">阅读量: {{$value.readNum}}</span>
-                    <span class="tags">标签: <span>{{each $value.tags}}<a href="#">{{$value}}&nbsp;</a>{{/each}}</span></span>
-                    <!-- <span class="comment">评论: 1111</span> -->
+    <div class="index-wrap">
+            {{each blogs}}
+            <div class="index-article">
+                <div class="head">
+                    <div class="title">{{$value.title}}</div>
+                    <div class="sub-title">
+                        <span class="write-time">发表时间: {{$value.publishTime}}</span>
+                        <span class="read">阅读量: {{$value.readNum}}</span>
+                        <span class="tags">标签: <span>{{each $value.tags}}<a href="#">{{$value}}&nbsp;</a>{{/each}}</span></span>
+                        <!-- <span class="comment">评论: 1111</span> -->
+                    </div>
+                </div>
+                <div class="detail">
+                    {{@$value.htmlContent}}
+                </div>
+                <div class="hidden-block">
+                    <button class="danger-btn"><a href="/preview?_id={{$value._id}}">阅读全文</a></button>
                 </div>
             </div>
-            <div class="detail">
-                {{@$value.htmlContent}}
-            </div>
-            <div class="hidden-block">
-                <button class="danger-btn"><a href="/preview?_id={{$value._id}}">阅读全文</a></button>
-            </div>
-        </div>
-    {{/each}}
-
-    {{if blogs.length !== 0}}
-        <div class="pager">
-            
-            {{if pager.totalPage === 1}}
-                <div>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-pre"></use>
-                    </svg>
-                </div>
-                <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
-                <div>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-next"></use>
-                    </svg>
-                </div>
-            {{else if pager.pageCode === 1}}
-                <div>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-pre"></use>
-                    </svg>
-                </div>
-                <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
-                <div>
-                    <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-next"></use>
-                        </svg>
-                    </a>
-                </div>
-            {{else if pager.pageCode === pager.totalPage}}
-                <div>
-                    <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
+        {{/each}}
+    
+        {{if blogs.length !== 0}}
+            <div class="pager">
+                
+                {{if pager.totalPage === 1}}
+                    <div>
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-pre"></use>
                         </svg>
-                    </a>
-                </div>
-                <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
-                <div>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-next"></use>
-                    </svg>
-                </div>
-            {{else}}
-                <div>
-                    <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-pre"></use>
-                        </svg>
-                    </a>
-                </div>
-                <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
-                <div>
-                    <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-next"></use>
                         </svg>
-                    </a>
-                </div>
-            {{/if}}
-
-        </div>
-    {{/if}}
+                    </div>
+                {{else if pager.pageCode === 1}}
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-pre"></use>
+                        </svg>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-next"></use>
+                            </svg>
+                        </a>
+                    </div>
+                {{else if pager.pageCode === pager.totalPage}}
+                    <div>
+                        <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-pre"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-next"></use>
+                        </svg>
+                    </div>
+                {{else}}
+                    <div>
+                        <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-pre"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div>
+                        <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-next"></use>
+                            </svg>
+                        </a>
+                    </div>
+                {{/if}}
+    
+            </div>
+        {{/if}}
+    </div>
 {{/block}}

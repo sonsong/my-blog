@@ -1,6 +1,19 @@
 html, body{
     height: 100%;
 }
+/* 首页 */
+.layui-nav-itemed>.layui-nav-child{
+    padding-left: 22px !important;
+}
+.collapse{
+    line-height: 60px;
+    position   : absolute;
+    left       : 15.5%;
+}
+.layui-layout-admin .layui-body{
+    padding: 20px;
+}
+
 /* 预览文章页面样式 */
 .preview{
     border: 1px solid #e9e9e9;
@@ -9,10 +22,9 @@ html, body{
     width: 97.5% !important;
 }
 
-
 /* 编辑器页面样式 */
 .editor{
-    width : 90%;
+    width : 100%;
     height: 100%;
     margin: 0 auto;
 }
@@ -20,9 +32,9 @@ html, body{
     height: 100%;
 }
 .editor .publish-btn{
-    position     : absolute;
-    right        : 6%;
-    margin-bottom: 12px
+    position: absolute;
+    right   : 6%;
+    bottom  : -10px;
 }
 
 /* 文章列表页面样式 */
@@ -32,7 +44,7 @@ html, body{
 
 /* 修改密码页面 */
 .passwdTips, .newPasswdTips{
-    color: red;
+    color       : red;
     padding-left: 16.5%;
 }
 
@@ -41,5 +53,5 @@ fieldset {
 }
 fieldset legend{
     font-size: 16px;
-    color: #000;
+    color    : #000;
 }

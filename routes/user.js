@@ -4,54 +4,65 @@ const router = require('koa-router')();
 //博客实体
 const Blogs = require('../models/t-blog');
 
+//根据关键字查询文章
+router.get('searchArtcleByTag', async(ctx) =>{
+    let tag = ctx.query.search;
+
+    let blogs = [];
+    await Blogs.find({tags: tag}, (err, docs) =>{
+        if(!err){
+            blogs = docs;
+        }
+    })
+
+    ctx.body = {blogs};
+})
 //进入首页
 router.get('/', async(ctx, next) =>{
     let blogs = [];
 
-    let ids = ctx.query._id;
+    let ids      = ctx.query._id;
     let pageCode = ctx.query.pageCode === undefined ? 1 : parseInt(ctx.query.pageCode);
     let pageSize = 5;
 
     //查询条件
     let condition = {};
-    let params = '?';
+    let params    = '?';
 
     if(ids !== undefined){
         params = `?_id=${ids}&`;
         
-        ids = ids.split(',');
+        ids       = ids.split(',');
         condition = {_id: {$in: ids}};
     }
 
     //加载数据库的文章, 进行分页， 每页显示10条 -1升序 1降序
-    await Blogs.find(condition, '_id tags title publishTime htmlContent readNum')
-            .skip((pageCode - 1) * pageSize)
-            .limit(pageSize)
-            .sort({'publishTime': -1})
-            .exec((err, docs) =>{
-                if(!err){
-                    for (const item of docs) {
-                        let doc = {
-                            _id: item._id.toString(),
-                            tags: item.tags,
-                            title: item.title,
-                            //moment()的第二个参数，指定时间的类型
-                            publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
-                            htmlContent: item.htmlContent,
-                            readNum: item.readNum
-                        }
-        
-                        blogs.push(doc);
+    await Blogs.find(condition, '_id tags title publishTime htmlContent readNum', 
+        {skip: (pageCode - 1) * pageSize, limit: pageSize, sort: {'publishTime': -1}}, 
+        (err, docs) =>{
+            if(!err){
+                for (const item of docs) {
+                    let doc = {
+                        _id  : item._id.toString(),
+                        tags : item.tags,
+                        title: item.title,
+                        //moment()的第二个参数，指定时间的类型
+                        publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
+                        htmlContent: item.htmlContent,
+                        readNum    : item.readNum
                     }
+
+                    blogs.push(doc);
                 }
-            });
+            }
+    })
 
     //查询数据库的总记录数
     let totalPage = 0;
     await Blogs.countDocuments(condition, (err, count) =>{
         if(!err){
-            let total = count;
-            totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
+            let total     = count;
+                totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
         }
     });
 
@@ -61,6 +72,7 @@ router.get('/', async(ctx, next) =>{
         totalPage: totalPage,
         params
     };
+
     ctx.render('index', {blogs, pager});
 });
 
@@ -89,40 +101,35 @@ router.get('brief', async(ctx, next) =>{
             }
         },
         {
-            $sort:{"publishTime": -1}
+            $sort: {"publishTime": -1}
         }
-    ], (err, docs) =>{
-        if(!err){
-            blogs = docs;
+    ]).then(docs =>{
+        //进行数据处理
+        for (const item of docs) {
+            let breif = {
+                time  : item._id,
+                sum   : item.sum,
+                detail: []
+            };
+            let _detail      = [];
+            let titles       = item.titles;
+            let ids          = item.id;
+            let publishTimes = item.publishTime;
+
+            for (const index in titles) {
+                _detail.push({
+                    _id        : ids[index].toString(),
+                    publishTime: ctx.moment(publishTimes[index], ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
+                    title      : titles[index]
+                });
+            }
+
+            breif.detail = _detail;
+            blogs.push(breif);
         }
-    });
+    })
 
-    let _blogs = [];
-    //进行数据处理
-    for (const item of blogs) {
-        let breif = {
-            time: item._id,
-            sum: item.sum,
-            detail:[]
-        };
-        let _detail = [];
-        let titles = item.titles;
-        let ids = item.id;
-        let publishTimes = item.publishTime;
-
-        for (const index in titles) {
-            _detail.push({
-                _id: ids[index].toString(),
-                publishTime: ctx.moment(publishTimes[index], ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
-                title: titles[index]
-            });
-        }
-
-        breif.detail = _detail;
-        _blogs.push(breif);
-    }
-
-    ctx.render('brief', {blogs: _blogs});
+    ctx.render('brief', {blogs: blogs});
 });
 
 //跳转到预览页面
@@ -148,10 +155,10 @@ router.get('preview', async(ctx, next) =>{
     await Blogs.findOne({_id: {$lt: id}}, '_id title', (err, doc) =>{
         if(!err){
             if(doc === null){
-                preA._id = id;
+                preA._id   = id;
                 preA.title = '没有了^_^_^_^';
             }else{
-                preA._id = doc._id.toString();
+                preA._id   = doc._id.toString();
                 preA.title = doc.title;
             }
          }
@@ -161,10 +168,10 @@ router.get('preview', async(ctx, next) =>{
     await Blogs.findOne({_id: {$gt: id}}, '_id title', (err, doc) =>{
         if(!err){
            if(doc === null){
-                nextA._id = id;
+                nextA._id   = id;
                 nextA.title = '没有了^_^_^_^';
            }else{
-               nextA._id = doc._id.toString();
+               nextA._id   = doc._id.toString();
                nextA.title = doc.title;
            }
         }
@@ -186,7 +193,7 @@ router.get('tags', async(ctx, next) =>{
         {
             $group: {
                 _id: '$tags',
-                id:{
+                id : {
                     $push: '$_id'
                 },
                 sum: {
@@ -194,17 +201,16 @@ router.get('tags', async(ctx, next) =>{
                 }
              }
         }
-    ], (err, docs) =>{
-        if(!err){
-            docs.forEach(ele => {
-                let ids = ele.id.map(id => id.toString());
-                tags.push({
-                    tag: ele._id,
-                    _ids: ids.toString(),
-                    sum: ele.sum
-                });
+    ]).then(docs =>{
+        console.log(docs)
+        docs.forEach(ele => {
+            let ids = ele.id.map(id => id.toString());
+            tags.push({
+                tag : ele._id,
+                _ids: ids.toString(),
+                sum : ele.sum
             });
-        }
+        });
     })
 
     ctx.render("tags", {tags});

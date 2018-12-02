@@ -4,6 +4,61 @@ const router = require('koa-router')();
 //用户实体
 const Users = require('../../models/t-user');
 
+
+//查询所有用户
+router.get('user_list', async(ctx) =>{
+    let query = ctx.query;
+
+    //当前页码
+    let page = query.page === undefined ? 1 : parseInt(query.page);
+    //每页显示数量
+    let limit = query.limit === undefined ? 20 : parseInt(query.limit);
+
+    //查询条件
+    let params = {};
+    delete query.page;
+    delete query.limit;
+    params = query;
+
+    let users = [];
+    //查询数据库中的所有文章
+    await Users.find(params, {skip: (page - 1) * limit, limit, sort: {'createTime': 1}}, (err, docs) =>{
+        if(!err){
+            for (const item of docs) {
+                if(item.role === 1){
+                    let doc = {
+                        _id       : item._id.toString(),
+                        uname     : item.uname,
+                        email     : item.email,
+                        motto     : item.motto,
+                        introd    : item.introd,
+                        picture   : item.picture,
+                        createTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                    }
+                    
+                    users.push(doc);
+                }
+            }
+        }else{
+            console.log(err)
+        }
+    });
+
+    //查询数据库的总记录数
+    let total = 0;
+    await Users.countDocuments(params, (err, count) =>{
+        if(!err){
+            total = count - 1;
+        }
+    });
+
+    ctx.body = {
+        code : 0,
+        msg  : '查询成功',
+        count: total,
+        data : users
+    };
+})
 //修改密码
 router.post('updatePasswd', async(ctx) =>{
 
@@ -55,10 +110,12 @@ router.get('safe_center', async(ctx) =>{
     //从cookie中获取用户
     ctx.render('admin/safe_center', {user: JSON.parse(ctx.cookies.get('user'))})
 });
+
 //获取用户信息
 router.get('user_info', async(ctx) =>{
     ctx.render('admin/user_info');
 });
+
 //退出登录
 router.get('exit', async(ctx) =>{
     //清空cookie
@@ -66,11 +123,6 @@ router.get('exit', async(ctx) =>{
 
     //回到登陆页
     ctx.redirect('login');
-});
-
-//跳转到登陆页面
-router.get('login', async(ctx, next) =>{
-    ctx.render('admin/login');
 });
 
 //获取用户信息
@@ -107,57 +159,6 @@ router.get('getUserInfo', async(ctx) =>{
         ctx.body = {message: 'ok', code: 1};
     } else {
         ctx.throw(555, '登陆已过期, 请重新登陆');
-    }
-});
-
-//用户登陆获取token
-router.post('toLogin', async(ctx, next) =>{
-    
-    //获取用户名和密码
-    let uname  = ctx.request.body.uname;
-    let passwd = ctx.request.body.passwd;
-
-    //校验用户名和密码
-    //在回调函数中抛出的异常的外面无法被try..catch捕获的，不在同一个执行流中
-    await Users.findOne({uname}, (err, doc) =>{
-        try {
-            if(!err){
-                //验证密码是否正确
-                if(passwd === doc.passwd){
-                    //载体
-                    let payload = {id: doc._id.toString(), name: doc.uname, picture: doc.picture};
-                    let token   = '';
-                    //生成token 设置过期时间为12个小时
-                    token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
-                    
-                    //将token保存到cookie中
-                    ctx.cookies.set('token', `${token}`, {
-                        maxAge   : 12 * 60 * 60 * 1000,
-                        path     : "/",
-                        secure   : false,
-                        httpOnly : false,
-                        overwrite: true
-                    });
-    
-                    //将登录时间保存到session中
-                    ctx.session.expiresIn = new Date().getTime();
-                    
-                    ctx.body = {message: 'ok', code: 1};
-                }else{
-                    ctx.err_mess = '用户名或密码错误~~~';
-                }
-            }else{
-                ctx.err_mess = '用户名或密码错误~~~';
-            }
-            
-        } catch (error) {
-            ctx.err_mess = '该用户不存在~~~';
-        }
-    })
-
-    //处理异常
-    if(ctx.err_mess){
-        ctx.throw(555, ctx.err_mess);
     }
 });
 

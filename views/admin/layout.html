@@ -9,25 +9,12 @@
     <link rel="stylesheet" href="/editor.md/css/editormd.css">
     <link rel="stylesheet" href="/editor.md/lib/codemirror/codemirror.min.css">
     <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
-    <style>
-        .layui-layout-admin .layui-body{
-            padding: 20px;
-        }
-        .icon {
-            width: 1.5em; 
-            height: 1.5em;
-            vertical-align: -0.4em;
-            fill: currentColor;
-            overflow: hidden;
-            padding-right: 20px;
-        }
-    </style>
 </head>
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header layui-bg-cyan">
             <div class="layui-logo">Blog后台管理</div>
-           
+            <div class="collapse"><i class="layui-icon layui-icon-shrink-right"></i></div>
             <ul class="layui-nav layui-layout-right ">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
@@ -35,23 +22,35 @@
                         <span class="uname"></span>
                     </a>
                     <dl class="layui-nav-child">
-                    <dd><a href="/admin/user_info">基本资料</a></dd>
-                    <dd><a href="/admin/safe_center">安全中心</a></dd>
+                    <dd><a href="/admin/user/user_info">基本资料</a></dd>
+                    <dd><a href="/admin/user/safe_center">安全中心</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="/admin/exit">告辞~</a></li>
+                <li class="layui-nav-item"><a href="/admin/user/exit">告辞~</a></li>
             </ul>
         </div>
     
-        <div class="layui-side layui-bg-cyan">
+        <div class="layui-side layui-bg-cyan nav">
             <div class="layui-side-scroll">
                 <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">文章管理</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="/admin/blog/artcle_list">文章列表</a></dd>
-                            <dd><a href="/admin/blog/editor">写文章</a></dd>
-                        </dl>
+                        <a class="" href="/admin/">
+                            <i class="layui-icon layui-icon-home" style="padding-right:10px"></i>首页
+                        </a>
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="/admin/blog/artcle_list">
+                            <i class="layui-icon layui-icon-read" style="padding-right:10px"></i>文章列表
+                        </a>
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="/admin/user/user_list">
+                            <i class="layui-icon layui-icon-user" style="padding-right:10px"></i>用户管理
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -66,13 +65,33 @@
         </div>
     </div>
     <script src="/layui/layui.js"></script>
-    <script src="/js/iconfont.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/editor.md/editormd.min.js"></script>
     <script>
         $(() =>{
             layui.use('element', function(){
                 let element = layui.element;
+            })
+            
+            let flag = true;
+            $('.collapse i').on('click', function(){
+                if(flag){
+                    //隐藏侧边栏
+                    $('.nav').css('display', "none");
+                    $(this).removeClass('layui-icon-shrink-right').addClass('layui-icon-spread-left');
+
+                    $(".layui-body").css('left', '0').css('width', '100%');
+                    $('.layui-layout-admin .layui-footer').css('left', '5px');
+                }else{
+                    //展开侧边栏
+                    $('.nav').css('display', "");
+                    $(this).removeClass('layui-icon-spread-left').addClass('layui-icon-shrink-right');
+
+                    $(".layui-body").css('left', '200px').css('width', 'calc(100% - 200px)');
+                    $('.layui-layout-admin .layui-footer').css('left', '200px');
+                }
+
+                flag = !flag;
             })
 
             //从cookie中获取用户信息

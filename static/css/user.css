@@ -1,0 +1,127 @@
+/* 首页样式 */
+.index-wrap{
+    padding-bottom: 50px;
+}
+.index-article{
+    position     : relative;
+    width        : 100%;
+    border       : 1px solid #e9e9e9;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background   : #fff
+}
+.index-article .head{
+    height     : 55px;
+    font-weight: 900px;
+    text-align : center;
+}
+.index-article .detail{
+    height  : 335px;
+    margin  : 0 auto;
+    overflow: hidden;
+}
+.index-article .head .title{
+    font-size  : 24px;
+    font-weight: 700;
+    margin     : 20px 0 10px 0;
+}
+.index-article .hidden-block{
+    position   : absolute;
+    bottom     : 0;
+    left       : 20px;
+    background : linear-gradient(to bottom, rgb(235, 229, 229), rgb(27, 27, 27));
+    height     : 80px;
+    line-height: 80px;
+    width      : calc(100% - 40px);
+    text-align : center;
+    z-index    : 10;
+    opacity    : 0.8;
+}
+.index-article .read-btn{
+    margin: 20px 0 10px 25px;
+}
+.index-article .read-btn a{
+    color: #fff;
+}
+.index-article .sub-title span{
+    margin: 0 10px
+}
+.index-article .tags span a{
+    color : sandybrown;
+    cursor: pointer;
+}
+
+/* 简史样式 */
+.brief{
+    border    : 1px solid #e9e9e9;
+    font-size : 16px;
+    color     : #000;
+    background: #fff
+}
+.brief .head{
+    height      : 50px;
+    line-height : 50px;
+    font-size   : 24px;
+    padding-left: 20px;
+    background  : #f8f6f6;
+}
+.brief .brief-content{
+    width      : 80%;
+    margin     : 20px auto;
+    border-left: 2px solid #57dbec;
+}
+
+.brief .time{
+    height     : 50px;
+    line-height: 50px;
+    font-size  : 18px;
+    margin-left: -10px;
+}       
+.brief .time::before{
+    content      : '';
+    display      : inline-block;
+    width        : 6px;
+    height       : 6px;
+    background   : rgb(105, 240, 240);
+    border-radius: 50%;
+    margin-right : 15px;
+    padding      : 2px;
+    border       : 4px solid rgb(101, 213, 228);
+    cursor       : pointer;
+}
+.brief .part ul{
+    margin-left: 40px;
+}
+.brief .part ul li{
+    height     : 30px;
+    line-height: 30px;
+}
+.brief .part ul li a:hover{
+    color: #05d3ee;
+}
+.brief .part ul li span{
+    font-size   : 12px;
+    padding-left: 10px;
+}
+
+/* 标签相关样式 */
+.brief .tags-content button{
+    margin: 10px;
+}
+.brief .tags-content button a{
+    color: #fff;
+}
+
+/* 预览页面样式 */
+.preview{
+    padding-bottom: 60px;
+    background    : #fff
+}
+.preview_content{
+    border: 1px solid #e9e9e9;
+}
+.read-tips > div{
+    font-size  : 14px;
+    height     : 30px;
+    line-height: 30px;
+}

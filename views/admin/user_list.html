@@ -1,23 +1,14 @@
 {{extend './layout.html'}}
-{{block 'title'}}<title>文章管理</title>{{/block}}
+{{block 'title'}}<title>用户管理</title>{{/block}}
 {{block 'content'}}
 <div class="artcles">
     <fieldset>
         <legend>查询条件</legend>
         <form class="layui-form">
             <div class="layui-inline">
-                <label class="layui-form-label">发表时间</label>
+                <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="publishTime" id="date" readonly placeholder="请选择发表时间" autocomplete="off"
-                        class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">标签类型</label>
-                <div class="layui-input-block">
-                    <select name="tags" id="tags">
-                    </select>
+                    <input type="text" name="uname" id="uname" placeholder="请输入用户名" autocomplete="off" class="layui-input">
                 </div>
             </div>
 
@@ -29,58 +20,29 @@
         </form>
     </fieldset>
 
-    <table class="layui-hide" id="artcleList" lay-filter="artcleList"></table>
+    <table class="layui-hide" id="userList" lay-filter="userList"></table>
     <script type="text/html" id="funcBtn">
         <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="edit"><i class="layui-icon"></i>修改</a>
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="preview"><i class="layui-icon"></i>预览</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon"></i>删除</a>
     </script>
     <script type="text/html" id="toolBar">
         <div class="layui-btn-container">
-          <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delAll"><i class="layui-icon"></i>删除选中的文章</button>
-          <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="write"><i class="layui-icon"></i>写文章</button>
+          <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delAll"><i class="layui-icon"></i>删除选中的用户</button>
+          <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="addUser"><i class="layui-icon"></i>新增用户</button>
         </div>
       </script>
 </div>
 {{/block}}
 {{block 'js'}}
-<script src="/js/moment.min.js"></script>
 <script>
     $(function(){
-        //获取文章类型
-        $.ajax({
-            url:'/admin/blog/getArtcleTypes',
-            dataType: 'json',
-            success(tags){
-                $('#tags').append('<option id="noType" selected value="" >==请选择文章分类==</option>');
 
-                if(tags.length === 0){
-                }else{
-                    tags.forEach(function(ele, index){
-                        $('#tags').append(`<option value=${ele._id}>${ele._id}</option>`);
-                    });
-                }
-            }
-        });
-
-        layui.use(['layer', 'form', 'laydate', 'table'], function () {
+        layui.use(['layer', 'form', 'table'], function () {
             let table = layui.table;
             let form = layui.form;
-            let laydate = layui.laydate;
 
             //查询条件
             let params = {};
-
-            //初始化时间
-            laydate.render({
-                elem: '#date',
-                type: 'date',
-                range: true,
-                format: 'yyyy-MM-dd',
-                btns: ['clear','confirm'],
-                max: new Date().getTime(),
-                trigger: 'click'
-            });
 
             //渲染表格数据
             renderTableData(table, {});
@@ -107,47 +69,45 @@
             });
 
             //监听table事件
-            table.on('toolbar(artcleList)', function(obj){
+            table.on('toolbar(userList)', function(obj){
                 if(obj.event === 'delAll'){
                     //选中的数据
                     let data = table.checkStatus(obj.config.id).data;
                     if(data.length === 0){
-                        layer.msg("请选择您要删除的文章", {icon: 0});
+                        layer.msg("请选择您要删除的用户", {icon: 0});
                         return;
                     }else{
-                        //所有勾选文章的id
+                        //所有勾选用户的id
                         let ids = []
                         for (const item of data) {
                             ids.push(item._id);
                         }
-                        //发送请求删除文章
-                        delArtcles(layer, table, ids.toString(), params);
+                        //发送请求删除用户
+                        delUsers(layer, table, ids.toString(), params);
                     }
-                }else if(obj.event === 'write'){
-                    window.location.href = '/admin/blog/editor';
+                }else if(obj.event === 'addUser'){
+                    //弹窗
                 }
             })
-            table.on('tool(artcleList)', function(obj){
+            table.on('tool(userList)', function(obj){
                 let rowData = obj.data;
 
                 if(obj.event === 'edit'){
-                   //跳转到编辑页面
-                   window.location.href = `/admin/blog/update_artcle?_id=${rowData._id}`;
-                } else if(obj.event === 'preview'){
-                    window.location.href = `/admin/blog/preview?_id=${rowData._id}`;
-                }else if(obj.event === 'delete'){
+                   //弹窗编辑
+
+                } else if(obj.event === 'delete'){
                     delArtcles(layer, table, rowData._id, params);
                 }
             });
         });
     });
 
-    //删除文章
-    function delArtcles(layer, table, ids, params){
-        layer.confirm('是否删除该文章?', function(index){
+    //删除用户
+    function delUsers(layer, table, ids, params){
+        layer.confirm('是否删除该用户?', function(index){
             //发送ajax请求
             $.ajax({
-                url: `/admin/blog/del_artcle/${ids}`,
+                url: `/admin/blog/del_user/${ids}`,
                 success(res){
                     layer.msg(res.message);
                     //重新渲染页面数据
@@ -159,8 +119,8 @@
     }
     //重新渲染表格数据
     function reloadTableData(table, params = {}){
-        table.reload('artcleList', {
-            url: '/admin/blog/getAllArtcles',
+        table.reload('userList', {
+            url: '/admin/user/getAllUsers',
             where: params
         });
     }
@@ -168,19 +128,26 @@
     function renderTableData(table, params = {}){
         table.render({
             elem: '#artcleList',
-            url: '/admin/blog/getAllArtcles',
+            url: '/admin/user/getAllUsers',
             //添加额外参数
             where:params,
             //自定义请求参数
             request:{
             },
             toolbar: '#toolBar',
-            title: '文章列表',
+            title: '用户列表',
             cols: [
                 [
                     {
                         type: 'checkbox',
                         fixed: 'left'
+                    }, 
+                    {
+                        field: 'picture',
+                        title: '头像',
+                        templet: function (res) {
+                            return `<img src=${res.picture}/>`
+                        }
                     }, 
                     {
                         field: '_id',
@@ -192,24 +159,33 @@
                         }
                     }, 
                     {
-                        field: 'publishTime',
-                        title: '发表时间',
+                        field: 'createTime',
+                        title: '创建时间',
                         sort: true,
                     }, 
                     {
-                        field: 'tags',
+                        field: 'uname',
                         width:'10%',
-                        title: '文章标签',
+                        title: '用户名',
                     }, 
                     {
-                        field: 'title',
-                        title: '文章标题',
+                        field: 'email',
+                        title: '邮箱',
                     }, 
+                    {
+                        field: 'motto',
+                        title: '座右铭',
+                    },
+                    {
+                        field: 'introd',
+                        title: '简介'
+                    },
                     {
                         fixed: 'right',
                         title: '操作',
                         align: 'center',
-                        toolbar: '#funcBtn'
+                        toolbar: '#funcBtn',
+                        width: 250
                     }
                 ]
             ],

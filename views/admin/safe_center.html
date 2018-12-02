@@ -77,7 +77,7 @@
 
                     //修改密码
                     $.ajax({
-                        url: '/admin/updatePasswd',
+                        url: '/admin/user/updatePasswd',
                         method: 'POST',
                         data:{
                             _id: data.field.id,
@@ -91,7 +91,7 @@
                             }else{
                                 layer.confirm(`${res.message}, 是否重新登陆？`, function(index){
                                     //退出登陆
-                                    window.location.href = '/admin/exit';
+                                    window.location.href = '/admin/user/exit';
                                     layer.close(index);
                                 })
                             }
@@ -138,7 +138,7 @@
             }else{
                 //校验用户密码
                 $.ajax({
-                    url:'/admin/verifyInitPasswd',
+                    url:'/admin/user/verifyInitPasswd',
                     method: 'POST',
                     data:{
                         _id: $("#id").val(),

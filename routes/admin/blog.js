@@ -4,8 +4,20 @@ const multer = require('koa-multer');
 
 const Blogs = require('../../models/t-blog');
 
+//配置上传图片的保存位置和文件名
+var storage = multer.diskStorage({
+    //文件保存路径
+    destination(req, file, cb) {
+        cb(null, 'static/upload/img/')
+    },
+    //修改文件名称
+    filename(req, file, cb) {
+        var fileName = (file.originalname).split(".");
+        cb(null, `${fileName[0]}_${new Date().getTime()}.${fileName[1]}`);
+    }
+});
 //配置上传文件存储的位置
-const upload = multer({ dest: '/static/upload' });
+const upload = multer({ storage });
 
 //获取文章类型
 router.get('getArtcleTypes', async(ctx) =>{
@@ -31,7 +43,12 @@ router.get('getArtcleTypes', async(ctx) =>{
 
 //图片上传
 router.post('imgUpload', upload.single('editormd-image-file'), async(ctx) =>{
-    console.log(ctx.request.body)
+    ctx.body = {
+        success: 1,        //0表示上传失败;1表示上传成功
+        message: "上传成功",
+        //文件名
+        url: `/upload/img/${ctx.req.file.filename}`  //上传成功时才返回
+    }
 })
 //写文章
 router.get('editor', async(ctx, next) =>{
@@ -152,10 +169,10 @@ router.get('getAllArtcles', async(ctx, next) =>{
     });
 
     ctx.body = {
-        code: 0,
-        msg: '查询成功',
+        code : 0,
+        msg  : '查询成功',
         count: total,
-        data: blogs
+        data : blogs
     };
 });
 //进入文章列表
@@ -200,13 +217,13 @@ router.get('preview', async(ctx, next) =>{
 });
 
 //删除指定的文章 del_artcle
-router.get('del_artcle/:_id', async(ctx) =>{
+router.get('del_artcle/:_ids', async(ctx) =>{
     //获取文章编码
-    let id = ctx.params._id;
+    let ids = ctx.params._ids.split(',');
 
     //删除该文章
     try {
-        await Blogs.deleteOne({_id: id}, (err) =>{
+        await Blogs.deleteOne({_id: {$in: ids}}, (err) =>{
             if(!err){
                 //查询所有的文章
                 ctx.body = {message: '删除成功', code: '1'}
