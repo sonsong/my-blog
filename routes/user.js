@@ -202,7 +202,6 @@ router.get('tags', async(ctx, next) =>{
              }
         }
     ]).then(docs =>{
-        console.log(docs)
         docs.forEach(ele => {
             let ids = ele.id.map(id => id.toString());
             tags.push({

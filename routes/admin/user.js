@@ -4,15 +4,85 @@ const router = require('koa-router')();
 //用户实体
 const Users = require('../../models/t-user');
 
+//删除用户
+router.get('del_user/:ids', async(ctx) =>{
+    //获取文章编码
+    let ids = ctx.params.ids.split(',');
 
+    //删除该文章
+    try {
+        await Users.deleteMany({_id: {$in: ids}}, (err) =>{
+            if(!err){
+                //查询所有的文章
+                ctx.body = {message: '删除成功', code: '1'}
+            }else{
+                ctx.err_mess = '删除失败';
+            }
+        });
+    } catch (error) {
+        ctx.err_mess = '删除失败';
+    }
+
+    if(ctx.err_mess){
+        ctx.body = {message: ctx.err_mess, code: '-1'};
+    }
+})
+//新增/编辑用户
+router.post('addUser', async(ctx) =>{
+    let user = ctx.request.body;
+
+    //id 存在编辑不存在修改
+    if(user._id !== ''){
+        //保存数据
+        await Users.updateOne({_id: user._id}, {$set: {nname: user.nname, email: user.email, motto: user.motto, introd: user.introd}}, async(err) =>{
+            if(!err){
+                ctx.body = {message: '修改用户成功', code: 0}
+            }
+        })
+    }else{
+        //删除id属性
+        Reflect.deleteProperty(user, '_id');
+        //判断登陆名是否已经被注册
+        await Users.findOne({uname: user.uname}, (err, doc) =>{
+            if(!err){
+                if(doc !== null){
+                    ctx.body = {message: '该用户名已经被注册了', code: -1}
+                }
+            }
+        })
+
+        //增加创建时间
+        user.createTime = new Date();
+        //新增
+        await Users.create(user).then(res =>{
+            ctx.body = {message: '新增用户成功', code: 0}
+        })
+    }
+})
+//校验用户名是否存在
+router.get('verityUname', async(ctx) =>{
+    let user = [];
+
+    await Users.find({uname: ctx.query.uname}, '_id uname', (err, docs) =>{
+        if(!err){
+            user = docs;
+        }
+    })
+
+    if(user.length === 0){
+        ctx.body = {message: 'ok', code: 0};
+    }else{
+        ctx.body = {message: '该用户名已注册', code: -1};
+    }
+})
 //查询所有用户
-router.get('user_list', async(ctx) =>{
+router.get('getAllUsers', async(ctx) =>{
     let query = ctx.query;
 
     //当前页码
     let page = query.page === undefined ? 1 : parseInt(query.page);
     //每页显示数量
-    let limit = query.limit === undefined ? 20 : parseInt(query.limit);
+    let limit = query.limit === undefined ? 10 : parseInt(query.limit);
 
     //查询条件
     let params = {};
@@ -21,19 +91,22 @@ router.get('user_list', async(ctx) =>{
     params = query;
 
     let users = [];
-    //查询数据库中的所有文章
-    await Users.find(params, {skip: (page - 1) * limit, limit, sort: {'createTime': 1}}, (err, docs) =>{
+    //查询数据库中的所有用户
+    await Users.find(params, '_id uname nname email motto introd picture createTime role', { skip: ((page - 1) * limit), limit, sort: {'createTime': 1} }, (err, docs) =>{
         if(!err){
             for (const item of docs) {
-                if(item.role === 1){
+
+                //只显示普通用户
+                if(item.role === '1'){
                     let doc = {
                         _id       : item._id.toString(),
                         uname     : item.uname,
+                        nname: item.nname,
                         email     : item.email,
                         motto     : item.motto,
                         introd    : item.introd,
                         picture   : item.picture,
-                        createTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                        createTime: ctx.moment(item.createTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
                     }
                     
                     users.push(doc);
@@ -58,6 +131,10 @@ router.get('user_list', async(ctx) =>{
         count: total,
         data : users
     };
+})
+//跳转到用户列表
+router.get('user_list', async(ctx) =>{
+    ctx.render('admin/user_list');
 })
 //修改密码
 router.post('updatePasswd', async(ctx) =>{
@@ -108,12 +185,19 @@ router.post('verifyInitPasswd', async(ctx) =>{
 //修改密码页面
 router.get('safe_center', async(ctx) =>{
     //从cookie中获取用户
-    ctx.render('admin/safe_center', {user: JSON.parse(ctx.cookies.get('user'))})
+    ctx.render('admin/safe_center', {user: JSON.parse(decodeURI(ctx.cookies.get('user')))})
 });
 
 //获取用户信息
 router.get('user_info', async(ctx) =>{
-    ctx.render('admin/user_info');
+    //查询当前用户的信息
+    await Users.findById({_id: JSON.parse(ctx.cookies.get('user')).id}, async(err, doc) =>{
+        if(!err){
+            user = doc;
+        }
+    }) 
+
+    ctx.render('admin/user_info', {user});
 });
 
 //退出登录
@@ -122,7 +206,7 @@ router.get('exit', async(ctx) =>{
     ctx.cookies.set('token', '');
 
     //回到登陆页
-    ctx.redirect('login');
+    ctx.redirect('/admin/login');
 });
 
 //获取用户信息

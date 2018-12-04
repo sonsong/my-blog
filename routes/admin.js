@@ -32,13 +32,19 @@ router.post('/toLogin', async(ctx, next) =>{
                 //验证密码是否正确
                 if(passwd === doc.passwd){
                     //载体
-                    let payload = {id: doc._id.toString(), name: doc.uname, picture: doc.picture};
+                    let payload = {
+                        id: doc._id.toString(), 
+                        name: encodeURI(doc.nname), 
+                        uname: doc.uname,
+                        picture: doc.picture, 
+                        role: doc.role
+                    };
                     let token   = '';
                     //生成token 设置过期时间为12个小时
                     token = ctx.JWT.sign(payload, ctx.secret, {expiresIn: 12 * 60 * 60 * 1000});
-                    
+
                     //将token保存到cookie中
-                    ctx.cookies.set('token', `${token}`, {
+                    ctx.cookies.set('token', token, {
                         maxAge   : 12 * 60 * 60 * 1000,
                         path     : "/",
                         secure   : false,

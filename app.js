@@ -65,11 +65,11 @@ app.use(async(ctx, next) =>{
     ctx.secret = secret;
     ctx.JWT    = JWT;
 
-    await next();
-
-   /*  try {
+    try {
         await next();
     } catch (err) {
+        console.log(err)
+        
         //统一处理异常, 回到登陆页面，清空session、cookie中的token
         ctx.cookies.set('token', '');
         ctx.session.expiresIn = undefined;
@@ -78,17 +78,17 @@ app.use(async(ctx, next) =>{
             ctx.body = ({message: err.message, code: -1});
         }else if(err.status === 401){
             ctx.render('admin/login', {message: '登陆已超时，请重新登陆'});
-        } *//* else{
+        } /* else{
             ctx.render('admin/login', {message: err.message});
-        } 
-    }*/
-
+        } */ 
+    }
+    
     //处理异常
     if(ctx.status === 404){
-        //ctx.render('errors/404', {message: '页面没找到'});
+        ctx.render('errors/404');
     }
     else if(ctx.status === 500){
-        //ctx.render('errors/500', {message: '服务器内部错误'});
+        ctx.render('errors/500', {message: '服务器内部错误'});
     }
 });
 

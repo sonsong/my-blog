@@ -1,14 +1,14 @@
 {{extend './layout.html'}}
 {{block 'title'}}<title>用户管理</title>{{/block}}
 {{block 'content'}}
-<div class="artcles">
+<div class="users">
     <fieldset>
         <legend>查询条件</legend>
         <form class="layui-form">
             <div class="layui-inline">
-                <label class="layui-form-label">用户名</label>
+                <label class="layui-form-label">登录名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="uname" id="uname" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    <input type="text" name="uname" id="_uname" placeholder="请输入登陆名" autocomplete="off" class="layui-input">
                 </div>
             </div>
 
@@ -21,6 +21,7 @@
     </fieldset>
 
     <table class="layui-hide" id="userList" lay-filter="userList"></table>
+
     <script type="text/html" id="funcBtn">
         <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="edit"><i class="layui-icon"></i>修改</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon"></i>删除</a>
@@ -30,7 +31,7 @@
           <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delAll"><i class="layui-icon"></i>删除选中的用户</button>
           <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="addUser"><i class="layui-icon"></i>新增用户</button>
         </div>
-      </script>
+    </script>
 </div>
 {{/block}}
 {{block 'js'}}
@@ -43,13 +44,73 @@
 
             //查询条件
             let params = {};
+            //弹出层的索引
+            let index = 0;
+            let formDom = `
+                            <div id="addUser">
+                                <form class="layui-form user-form" action="">
+                                    <input type="hidden" name="_id" id="_id" value="">
+                                    <input type="hidden" name="picture" id="picture" value="/img/user.gif">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">登陆名</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="uname" id="uname" placeholder="请输入登陆名" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux uname-tip"></div>
+                                    </div>
+                                    <div class="layui-form-item passwd">
+                                        <label class="layui-form-label">登陆密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="password" name="passwd" id="passwd" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux passwd-tip"></div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">用户名</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="nname" id="nname" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">邮箱</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="email" id="email"lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">座右铭</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="motto" id="motto" placeholder="请输入座右铭" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item layui-form-text">
+                                        <label class="layui-form-label">简介</label>
+                                        <div class="layui-input-block">
+                                            <textarea name="introd" id="introd" placeholder="请输入内容" class="layui-textarea"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item role">
+                                        <label class="layui-form-label">权限</label>
+                                        <div class="layui-input-block">
+                                        <!--<input type="radio" name="role" value="0" title="管理员">-->
+                                        <input type="radio" name="role" value="1" title="普通用户" checked>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn layui-btn-normal add" lay-submit lay-filter="add">新增</button>
+                                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        `
 
             //渲染表格数据
             renderTableData(table, {});
 
             //处理查询条件
             form.on('submit(query)', function(data){
-
                 //data.field 不能这样写let data = data.field 鬼知道为什么
                 params = data.field;
                 
@@ -57,7 +118,10 @@
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
                         if(params[key] === ''){
-                            delete params[key];
+                            Reflect.deleteProperty(params, key);
+                        }else{
+                            //去掉两端空格
+                            params[key] = $.trim(params[key]);
                         }
                     }
                 }
@@ -67,6 +131,50 @@
 
                 return false;
             });
+            
+            //新增用户
+            form.on('submit(add)', function(data){
+                data = data.field;
+                let bool = true;
+
+                //校验用户名是否被注册
+                if(data._id === ''){
+                    if(!verityUname()){
+                        bool = false;
+                    }
+                    if(!verityPasswd()){
+                        bool = false;
+                    }
+                }
+                
+                if(bool){
+                    //对密码进行加密
+                    let passwd = SHA2(data.passwd);
+                    data.passwd = passwd;
+
+                    $.ajax({
+                        url: '/admin/user/addUser',
+                        data,
+                        dataType: 'json',
+                        method: 'post',
+                        success(res){
+                            layer.close();
+                            if(res.code === 0){
+                                //关闭弹出层
+                                layer.close(index);
+                                //提示信息
+                                layer.msg(res.message, {icon: 1});
+                                //重新加载表格数据
+                                reloadTableData(table, params);
+                            }else{
+                                layer.msg(res.message, {icon: 2})
+                            }
+                        }
+                    })
+                }
+               
+                return false;
+            })
 
             //监听table事件
             table.on('toolbar(userList)', function(obj){
@@ -87,50 +195,135 @@
                     }
                 }else if(obj.event === 'addUser'){
                     //弹窗
+                    index = layer.open({
+                        type: 1, 
+                        title: '<strong><em>新增用户</em></strong>',
+                        area: '40%', 
+                        content: formDom,
+                        success(){
+                            //校验用户名
+                            $('#uname').on('blur', function(){
+                                verityUname();
+                            }).on('focus', function(){
+                                $('#uname').css('border-color', '');
+                                $('.uname-tip').html('');
+                            })
+                            //校验密码
+                            $('#passwd').on('blur', function(){
+                                verityPasswd()
+                            }).on('focus', function(){
+                                $('#passwd').css('border-color', '');
+                                $('.passwd-tip').html('');
+                            })
+
+                            //动态生成的表单 需要重新渲染  要不然check/radio不会显示
+                            form.render();
+                        }
+                    });
                 }
             })
             table.on('tool(userList)', function(obj){
                 let rowData = obj.data;
 
                 if(obj.event === 'edit'){
-                   //弹窗编辑
+                    //弹窗编辑 赋值
+                    index = layer.open({
+                        type: 1, 
+                        title: '<strong><em>修改用户</em></strong>',
+                        area: '40%', 
+                        content: formDom,
+                        success(){
+                            $('.add').html('修改');
+                            $('#_id').val(rowData._id);
+                            $('#uname').val(rowData.uname).attr('readOnly', 'readOnly');
+                            $('.passwd').css('display', 'none');
+                            $('#email').val(rowData.email);
+                            $('#nname').val(rowData.nname);
+                            $('#motto').val(rowData.motto);
+                            $('#introd').val(rowData.introd);
 
+                            form.render();
+                        }
+                    });
                 } else if(obj.event === 'delete'){
-                    delArtcles(layer, table, rowData._id, params);
+                    delUsers(layer, table, rowData._id, params);
                 }
             });
         });
     });
+    //校验密码
+    function verityPasswd(){
+        let passwd = $('#passwd').val();
+        if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(passwd)){
+            $('#passwd').css('border-color', 'red');
+            $('.passwd-tip').html('密码必须由字符和密码组成, 且长度在6~20位');
 
+            return false;
+        }
+
+        return true;
+    }
+    //校验登陆名是否已经存在
+    function verityUname(){
+        let uname = $('#uname').val();
+        let bool = false;
+        if(uname === ''){
+            $('#uname').css('border-color', 'red');
+            $('.uname-tip').html('登录名不能为空');
+
+            bool =  false;
+        }else{
+            $.ajax({
+                url: '/admin/user/verityUname',
+                data:{
+                    uname: $('#uname').val()
+                },
+                dataType: 'json',
+                async: false,
+                success(res){
+                    if(res.code === -1){
+                        $('#uname').css('border-color', 'red');
+                        $('.uname-tip').html(res.message);
+
+                        bool =  false;
+                    }
+
+                    bool =  true;
+                }
+            })
+        }
+
+        return bool;
+    }
     //删除用户
-    function delUsers(layer, table, ids, params){
+    function delUsers(layer, table, ids, param){
         layer.confirm('是否删除该用户?', function(index){
             //发送ajax请求
             $.ajax({
-                url: `/admin/blog/del_user/${ids}`,
+                url: `/admin/user/del_user/${ids}`,
                 success(res){
                     layer.msg(res.message);
                     //重新渲染页面数据
-                    reloadTableData(table, params);
+                    reloadTableData(table, param);
                 }
             });
             layer.close(index);
         })
     }
     //重新渲染表格数据
-    function reloadTableData(table, params = {}){
+    function reloadTableData(table, param = {}){
         table.reload('userList', {
             url: '/admin/user/getAllUsers',
-            where: params
+            where: param 
         });
     }
     //渲染表格数据
-    function renderTableData(table, params = {}){
+    function renderTableData(table, param = {}){
         table.render({
-            elem: '#artcleList',
+            elem: '#userList',
             url: '/admin/user/getAllUsers',
             //添加额外参数
-            where:params,
+            where:param,
             //自定义请求参数
             request:{
             },
@@ -145,16 +338,18 @@
                     {
                         field: 'picture',
                         title: '头像',
-                        templet: function (res) {
-                            return `<img src=${res.picture}/>`
+                        width: 100,
+                        height: 60,
+                        align: 'center',
+                        templet(res){
+                            return `<img src="${res.picture}" style="width:30px;height: 30px;border-radius:50%"/>`
                         }
-                    }, 
+                    },
                     {
                         field: '_id',
                         title: '编码',
-                        fixed: 'left',
                         sort: true,
-                        templet: function (res) {
+                        templet(res) {
                             return '<em>' + res._id + '</em>'
                         }
                     }, 
@@ -165,7 +360,10 @@
                     }, 
                     {
                         field: 'uname',
-                        width:'10%',
+                        title: '登陆名',
+                    }, 
+                    {
+                        field: 'nname',
                         title: '用户名',
                     }, 
                     {
@@ -185,7 +383,7 @@
                         title: '操作',
                         align: 'center',
                         toolbar: '#funcBtn',
-                        width: 250
+                        width: 200
                     }
                 ]
             ],

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/user.css">
-    <link rel="stylesheet" href="/editor.md/css/editormd.css"> 
+    <link rel="stylesheet" href="/editor.md/css/editormd.min.css">
     <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
 </head>
 <body>
@@ -71,7 +71,7 @@
 <script>
     $(() =>{
         //根据关键字查询文章
-        $("#search").on('keyup', debounce(search, 500))
+        $("#search").on('keyup', debounce(search, 500));
     })
 
     //查询文章

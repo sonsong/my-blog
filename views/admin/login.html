@@ -15,7 +15,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
-                    <input type="text" name="uname" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                    <input type="text" name="uname" id="uname" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -99,6 +99,17 @@
                         }
                     }
                 });
+            }
+
+            //从cookie中获取用户信息
+            let cookies = document.cookie;
+            cookies = cookies.substring(cookies.indexOf('user')).split(';');
+            for (const item of cookies) {
+                let index = item.indexOf('user=');
+                if( index !== -1){
+                    let obj = JSON.parse(item.substring(index + 5));
+                    $('#uname').val(obj.uname)
+                }   
             }
         })
         

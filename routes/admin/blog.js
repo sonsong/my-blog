@@ -217,13 +217,13 @@ router.get('preview', async(ctx, next) =>{
 });
 
 //删除指定的文章 del_artcle
-router.get('del_artcle/:_ids', async(ctx) =>{
+router.get('del_artcle/:ids', async(ctx) =>{
     //获取文章编码
-    let ids = ctx.params._ids.split(',');
+    let ids = ctx.params.ids.split(',');
 
     //删除该文章
     try {
-        await Blogs.deleteOne({_id: {$in: ids}}, (err) =>{
+        await Blogs.deleteMany({_id: {$in: ids}}, (err) =>{
             if(!err){
                 //查询所有的文章
                 ctx.body = {message: '删除成功', code: '1'}

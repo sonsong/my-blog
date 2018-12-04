@@ -8,7 +8,7 @@ html, body{
 .collapse{
     line-height: 60px;
     position   : absolute;
-    left       : 15.5%;
+    left       : 200px;
 }
 .layui-layout-admin .layui-body{
     padding: 20px;
@@ -40,6 +40,12 @@ html, body{
 /* 文章列表页面样式 */
 .layui-table-page{
     text-align: right;
+}
+
+/* 用户列表样式 */
+#addUser{
+    width: 90%;
+    margin: 20px auto;
 }
 
 /* 修改密码页面 */

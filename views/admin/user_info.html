@@ -4,6 +4,52 @@
     <div class="userInfo">
         <fieldset>
             <legend>基本资料</legend>
+            <div class="user-info">
+                <div class="top">
+                    <img src="/img/user.gif" alt="" class="top-left">
+                    <div class="top-rigth">
+                        <ul>
+                            <li>登录名：<span>{{user.uname}}</span></li>
+                            <li>用户名：<span>{{user.nname}}</li>
+                            <li>邮  箱：<span>{{user.email}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="resume">
+                        简历：<button type="button" class="layui-btn layui-btn-normal" id="resume"><i class="layui-icon"></i>上传简历</button><span class="tip">仅支持pdf格式的简历</span>
+                    </div>
+                    <div class="motto">
+                        座右铭：<span>{{user.motto}}</span>
+                    </div>
+                    <div class="introd">
+                        简介：<span>{{user.introd}}</span>
+                    </div>
+                </div>
+            </div>
         </fieldset>
     </div>
+{{/block}}
+{{block 'js'}}
+    <script>
+        $(() =>{
+            layui.use(['upload'], () =>{
+                let upload = layui.upload;
+                
+                //文件上传
+                upload.render({
+                    elem: '#resume',
+                    url: '/admin/user/uploadResume',
+                    accept: 'file',
+                    //只允许上传pdf格式的文件
+                    exts: 'pdf',
+                    error(index, upload){
+                    },
+                    done: function(res){
+                        console.log(res)
+                    }
+                });
+            })
+        })
+    </script>
 {{/block}}

@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 //初始化user集合的约束条件
 var usersSchema = mongoose.Schema({
-    //用户名
+    //登陆名
     uname: String,
+    //用户名
+    nname: String,
     //密码
     passwd: String,
     //邮箱
@@ -17,7 +19,7 @@ var usersSchema = mongoose.Schema({
     //创建时间
     createTime: Date,
     //角色
-    role: Number
+    role: String
 })
 
 //建立约束与模型的映射关系

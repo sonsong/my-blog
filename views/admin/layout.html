@@ -6,7 +6,7 @@
     {{block 'title'}}<title>后台首页</title>{{/block}}
     <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/layui/css/layui.css">
-    <link rel="stylesheet" href="/editor.md/css/editormd.css">
+    <link rel="stylesheet" href="/editor.md/css/editormd.min.css">
     <link rel="stylesheet" href="/editor.md/lib/codemirror/codemirror.min.css">
     <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
 </head>
@@ -46,7 +46,7 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
+                <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline userManage">
                     <li class="layui-nav-item layui-nav-itemed">
                         <a class="" href="/admin/user/user_list">
                             <i class="layui-icon layui-icon-user" style="padding-right:10px"></i>用户管理
@@ -65,6 +65,7 @@
         </div>
     </div>
     <script src="/layui/layui.js"></script>
+    <script src="/js/sha1.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/editor.md/editormd.min.js"></script>
     <script>
@@ -104,7 +105,12 @@
                     //设置用户头像
                     $('.userImg').attr('src', obj.picture);
                     //设置用户名
-                    $('.uname').text(obj.name);
+                    $('.uname').text(decodeURI(obj.name));
+
+                    //临时的权限  普通用户隐藏用户管理
+                    if(obj.role === '1'){
+                        $('.userManage').css('display', 'none')
+                    }
                 } 
             }
         })
