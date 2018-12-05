@@ -16,6 +16,8 @@ var usersSchema = mongoose.Schema({
     introd: String,
     //头像
     picture: String,
+    //简历
+    resume: String,
     //创建时间
     createTime: Date,
     //角色

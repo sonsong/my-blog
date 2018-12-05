@@ -155,7 +155,7 @@ router.get('preview', async(ctx, next) =>{
     await Blogs.findOne({_id: {$lt: id}}, '_id title', (err, doc) =>{
         if(!err){
             if(doc === null){
-                preA._id   = id;
+                preA._id   = '';
                 preA.title = '没有了^_^_^_^';
             }else{
                 preA._id   = doc._id.toString();
@@ -168,7 +168,7 @@ router.get('preview', async(ctx, next) =>{
     await Blogs.findOne({_id: {$gt: id}}, '_id title', (err, doc) =>{
         if(!err){
            if(doc === null){
-                nextA._id   = id;
+                nextA._id   = '';
                 nextA.title = '没有了^_^_^_^';
            }else{
                nextA._id   = doc._id.toString();

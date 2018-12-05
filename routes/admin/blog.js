@@ -2,13 +2,16 @@ const router = require('koa-router')();
 //文件上传
 const multer = require('koa-multer');
 
+//博客实体
 const Blogs = require('../../models/t-blog');
+//博客图片实体
+const BlogImgs = require('../../models/t-blog-img');
 
 //配置上传图片的保存位置和文件名
 var storage = multer.diskStorage({
     //文件保存路径
     destination(req, file, cb) {
-        cb(null, 'static/upload/img/')
+        cb(null, 'static/upload/blog-img/')
     },
     //修改文件名称
     filename(req, file, cb) {
@@ -41,15 +44,31 @@ router.get('getArtcleTypes', async(ctx) =>{
     ctx.body = tags;
 })
 
-//图片上传
+//图片上传 单文件上传
 router.post('imgUpload', upload.single('editormd-image-file'), async(ctx) =>{
-    ctx.body = {
-        success: 1,        //0表示上传失败;1表示上传成功
-        message: "上传成功",
-        //文件名
-        url: `/upload/img/${ctx.req.file.filename}`  //上传成功时才返回
-    }
+    //上传图片信息
+    let img = ctx.req.file;
+
+    //上传路径
+    let path = `/upload/blog-img/${img.filename}`;
+
+    //将写文章上传的图片跟用户管理，方便与图片管理
+    await BlogImgs.create({
+        user: ctx.state.user.id,
+        path,
+        createTime: new Date()
+    }).then(res =>{
+        if(res){
+            ctx.body = {
+                success: 1,        //0表示上传失败;1表示上传成功
+                message: "上传成功",
+                //文件名
+                url: path  //上传成功时才返回
+            }
+        }
+    })
 })
+
 //写文章
 router.get('editor', async(ctx, next) =>{
     ctx.render('admin/editor');
@@ -129,8 +148,10 @@ router.get('getAllArtcles', async(ctx, next) =>{
 
     //查询条件
     let params = {};
-    delete query.page;
-    delete query.limit;
+    //删除分页属性
+    Reflect.deleteProperty(query, page);
+    Reflect.deleteProperty(query, limit);
+    
     params = query;
 
     //判断是否有时间参数
@@ -176,7 +197,7 @@ router.get('getAllArtcles', async(ctx, next) =>{
     };
 });
 //进入文章列表
-router.get('artcle_list', async(ctx, next) =>{
+router.get('/', async(ctx, next) =>{
     ctx.render('admin/artcle_list');
 });
 
@@ -239,5 +260,9 @@ router.get('del_artcle/:ids', async(ctx) =>{
         ctx.body = {message: ctx.err_mess, code: '-1'};
     }
 });
+
+//导入博客图片路由
+let img_router = require('./img');
+router.use('img/', img_router.routes());
 
 module.exports = router;

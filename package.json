@@ -18,6 +18,7 @@
     "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.1",
     "koa-art-template": "^1.1.1",
+    "koa-better-body": "^3.0.4",
     "koa-bodyparser": "^4.2.1",
     "koa-jwt": "^3.5.1",
     "koa-multer": "^1.0.2",

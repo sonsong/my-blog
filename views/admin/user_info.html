@@ -6,25 +6,52 @@
             <legend>基本资料</legend>
             <div class="user-info">
                 <div class="top">
-                    <img src="/img/user.gif" alt="" class="top-left">
-                    <div class="top-rigth">
+                    <img src="{{user.picture}}" alt="" class="top-left" id="img">
+                    <div class="top-right">
                         <ul>
                             <li>登录名：<span>{{user.uname}}</span></li>
-                            <li>用户名：<span>{{user.nname}}</li>
-                            <li>邮  箱：<span>{{user.email}}</li>
+                            <li>简历：
+                                <a href="{{user.resume}}" target="_blank" title="预览">{{resumeName}}</a>
+                                {{ if resumeName !== ''}}<br>{{/if}}
+                                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="resume"><i class="layui-icon"></i>上传简历</button><span class="tip">仅支持pdf格式的简历</span></li>
                         </ul>
                     </div>
                 </div>
                 <div class="bottom">
-                    <div class="resume">
-                        简历：<button type="button" class="layui-btn layui-btn-normal" id="resume"><i class="layui-icon"></i>上传简历</button><span class="tip">仅支持pdf格式的简历</span>
-                    </div>
-                    <div class="motto">
-                        座右铭：<span>{{user.motto}}</span>
-                    </div>
-                    <div class="introd">
-                        简介：<span>{{user.introd}}</span>
-                    </div>
+                    <form class="layui-form user-form">
+                        <input type="hidden" name="_id" id="_id" value="{{user._id}}">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="nname" lay-verify="required" value="{{user.nname}}" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">邮箱</label>
+                                <div class="layui-input-inline">
+                                <input type="text" name="email" lay-verify="email" value="{{user.email}}" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">座右铭</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="motto" placeholder="请输入你的座右铭" value="{{user.motto}}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">简介</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="请输入内容" name="introd" class="layui-textarea">{{user.introd}}</textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-normal add" lay-submit lay-filter="update">修改</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </fieldset>
@@ -33,8 +60,26 @@
 {{block 'js'}}
     <script>
         $(() =>{
-            layui.use(['upload'], () =>{
+            layui.use(['upload', 'form'], () =>{
                 let upload = layui.upload;
+                let form = layui.form;
+
+                form.on('submit(update)', (data) =>{
+                    data = data.field;
+
+                    $.ajax({
+                        url: '/admin/user/update',
+                        method: 'POST',
+                        data,
+                        dataType:'json',
+                        success(res){
+                            if(res.code === 0){
+                                layer.msg(res.message, {icon: 1})
+                            }
+                        }
+                    })
+                    return false;
+                })
                 
                 //文件上传
                 upload.render({
@@ -46,7 +91,25 @@
                     error(index, upload){
                     },
                     done: function(res){
-                        console.log(res)
+                        if(res.code === 0){
+                            window.location.reload();
+                            
+                            layer.msg(res.message, {icon: 1})
+                        }else{
+                            layer.msg(res.message, {icon: 0})
+                        }
+                    }
+                });
+                //上传头像
+                upload.render({
+                    elem: '#img',
+                    url: '/admin/user/uploadImg',
+                    done: function(res){
+                        if(res.code === 0){
+                            layer.msg(res.message, {icon: 1})
+                        }else{
+                            layer.msg(res.message, {icon: 0})
+                        }
                     }
                 });
             })

@@ -4,6 +4,116 @@ const router = require('koa-router')();
 //用户实体
 const Users = require('../../models/t-user');
 
+//操作文件工具
+const fs = require('fs');
+
+//文件上传工具
+const multer = require('koa-multer');
+
+//配置上传图片的保存位置和文件名
+let img_storage = multer.diskStorage({
+    //文件保存路径
+    destination(req, file, cb) {
+        cb(null, 'static/upload/user-img/')
+    },
+    //修改文件名称
+    filename(req, file, cb) {
+        var fileName = (file.originalname).split(".");
+        cb(null, `${fileName[0]}_${new Date().getTime()}.${fileName[1]}`);
+    }
+});
+
+//配置上传图片存储的位置
+const img_upload = multer({ storage: img_storage });
+
+//配置上传文件的保存位置和文件名
+let file_storage = multer.diskStorage({
+    //文件保存路径
+    destination(req, file, cb) {
+        cb(null, 'static/upload/file/')
+    },
+    //修改文件名称
+    filename(req, file, cb) {
+        var fileName = (file.originalname).split(".");
+        cb(null, `${fileName[0]}_${new Date().getTime()}.${fileName[1]}`);
+    }
+});
+//配置上传图片存储的位置
+const file_upload = multer({ storage: file_storage });
+
+//上传头像
+router.post('uploadImg', img_upload.single('file'), async(ctx) =>{
+    //注意： ctx.req(node 的request) !== ctx.request(koa 的request)   
+    let img = ctx.req.file;
+
+    //用户换新头像，需要将旧头像删除
+    let user = {};
+    //用户编码
+    let _id = ctx.state.user.id;
+    //查询用户信息
+    await Users.findById({_id}, (err, doc) =>{
+        if(!err){
+            user = doc;
+        }
+    });
+
+    //如果头像是初始头像，不管，否则删除
+    if(user.picture !== '/img/user.gif'){
+        await fs.unlink(`static/${user.picture}`, (err) =>{
+            if(err){
+               ctx.body = {message: '头像上传失败', code: -1}
+            }
+        })
+    }
+
+    //将头像更新到用户信息中
+    await Users.updateOne({_id}, {$set: {picture: `/upload/user-img/${img.filename}`}}, (err, doc) =>{
+        if(!err){
+            ctx.body = {message: '修改头像成功', code: 0}
+        }
+    });
+})
+//上传简历
+router.post('uploadResume', file_upload.single('file'), async(ctx) =>{
+    let file = ctx.req.file;
+
+    let user = {};
+    //用户id
+    let _id = ctx.state.user.id;
+    //获取用户信息，删除旧简历
+    await Users.findById({_id}, (err, doc) =>{
+        if(!err){
+            user = doc;
+        }
+    })
+
+    //如果之前上传了简历，删除
+    if(user.resume !== ''){
+        await fs.unlink(`static/${user.resume}`, (err) =>{
+            if(err){
+                ctx.body = {message: '简历上传失败', code: -1};
+            }
+        })
+    }
+
+    //修改用户的信息
+    await Users.updateOne({_id}, {$set: {resume: `/upload/file/${file.filename}`}}, (err, doc) =>{
+        if(!err){
+            ctx.body = {message: '简历上传成功', code: 0}
+        }
+    })
+
+})
+//修改用户信息
+router.post('update', async(ctx) =>{
+    let user = ctx.request.body;
+
+    await Users.updateOne({_id: user._id}, {$set: {nname: user.nname, introd: user.introd, motto: user.motto, email: user.email}}, async(err) =>{
+        if(!err){
+            ctx.body = {message: '修改用户成功', code: 0}
+        }
+    })
+})
 //删除用户
 router.get('del_user/:ids', async(ctx) =>{
     //获取文章编码
@@ -31,10 +141,10 @@ router.get('del_user/:ids', async(ctx) =>{
 router.post('addUser', async(ctx) =>{
     let user = ctx.request.body;
 
-    //id 存在编辑不存在修改
+    //id 存在编辑 不存在修改
     if(user._id !== ''){
         //保存数据
-        await Users.updateOne({_id: user._id}, {$set: {nname: user.nname, email: user.email, motto: user.motto, introd: user.introd}}, async(err) =>{
+        await Users.updateOne({_id: user._id}, {$set: {nname: user.nname, role: user.role}}, async(err) =>{
             if(!err){
                 ctx.body = {message: '修改用户成功', code: 0}
             }
@@ -86,8 +196,10 @@ router.get('getAllUsers', async(ctx) =>{
 
     //查询条件
     let params = {};
-    delete query.page;
-    delete query.limit;
+    //删除分页属性
+    Reflect.deleteProperty(query, page);
+    Reflect.deleteProperty(query, limit);
+    
     params = query;
 
     let users = [];
@@ -133,7 +245,7 @@ router.get('getAllUsers', async(ctx) =>{
     };
 })
 //跳转到用户列表
-router.get('user_list', async(ctx) =>{
+router.get('/', async(ctx) =>{
     ctx.render('admin/user_list');
 })
 //修改密码
@@ -185,19 +297,34 @@ router.post('verifyInitPasswd', async(ctx) =>{
 //修改密码页面
 router.get('safe_center', async(ctx) =>{
     //从cookie中获取用户
-    ctx.render('admin/safe_center', {user: JSON.parse(decodeURI(ctx.cookies.get('user')))})
+    ctx.render('admin/safe_center', {user: ctx.state.user})
 });
 
 //获取用户信息
 router.get('user_info', async(ctx) =>{
     //查询当前用户的信息
-    await Users.findById({_id: JSON.parse(ctx.cookies.get('user')).id}, async(err, doc) =>{
+    await Users.findById({_id: ctx.state.user.id}, async(err, doc) =>{
         if(!err){
-            user = doc;
+            user = {
+                _id: doc._id.toString(),
+                uname: doc.uname,
+                nname: doc.nname,
+                motto: doc.motto,
+                email: doc.email,
+                introd: doc.introd,
+                picture: doc.picture,
+                resume: doc.resume
+            };
         }
-    }) 
+    });
+    //计算简历的名字
+    let resumeName = '';
+    let index = user.resume.lastIndexOf('/') === -1 ? -1 : user.resume.lastIndexOf('/');
+    if(index !== -1){
+        resumeName = user.resume.substring(index + 1);
+    }
 
-    ctx.render('admin/user_info', {user});
+    ctx.render('admin/user_info', {user, resumeName});
 });
 
 //退出登录

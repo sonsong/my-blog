@@ -6,8 +6,20 @@
             {{@htmlContent}}
         </div>
         <div class="read-tips">
-            <div>上一篇：<a href="/preview?_id={{preA._id}}">{{preA.title}}</a></div>
-            <div>下一篇：<a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a></div>
+            <div>上一篇：
+                {{if preA._id === ''}}
+                    <span style="cursor: pointer;">{{preA.title}}</span>
+                {{else}}
+                    <a href="/preview?_id={{preA._id}}">{{preA.title}}</a>
+                {{/if}}
+            </div>
+            <div>下一篇：
+                {{if preA._id === ''}}
+                    <span style="cursor: pointer;">{{nextA.title}}</span>
+                {{else}}
+                    <a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a>
+                {{/if}}
+            </div>
         </div>
     </div>
 {{/block}}

@@ -71,28 +71,10 @@
                                             <input type="text" name="nname" id="nname" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
                                         </div>
                                     </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">邮箱</label>
-                                        <div class="layui-input-inline">
-                                            <input type="text" name="email" id="email"lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">座右铭</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="motto" id="motto" placeholder="请输入座右铭" autocomplete="off" class="layui-input">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item layui-form-text">
-                                        <label class="layui-form-label">简介</label>
-                                        <div class="layui-input-block">
-                                            <textarea name="introd" id="introd" placeholder="请输入内容" class="layui-textarea"></textarea>
-                                        </div>
-                                    </div>
                                     <div class="layui-form-item role">
                                         <label class="layui-form-label">权限</label>
                                         <div class="layui-input-block">
-                                        <!--<input type="radio" name="role" value="0" title="管理员">-->
+                                        <input type="radio" name="role" value="0" title="管理员">
                                         <input type="radio" name="role" value="1" title="普通用户" checked>
                                         </div>
                                     </div>
@@ -237,10 +219,7 @@
                             $('#_id').val(rowData._id);
                             $('#uname').val(rowData.uname).attr('readOnly', 'readOnly');
                             $('.passwd').css('display', 'none');
-                            $('#email').val(rowData.email);
                             $('#nname').val(rowData.nname);
-                            $('#motto').val(rowData.motto);
-                            $('#introd').val(rowData.introd);
 
                             form.render();
                         }
