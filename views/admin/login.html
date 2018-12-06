@@ -47,7 +47,7 @@
                 //错误提示
                 let message = '{{message}}';
                 if(message !== ''){
-                    layer.msg(message);
+                    layer.msg(message, {icon: 2});
                 }
                 
                 //监听提交
@@ -65,8 +65,8 @@
                         dataType: 'json',
                         method: 'POST',
                         success(res){
-                            //code == 1 请求成功 -1 请求失败
-                            if(res.code === 1){
+                            //code == 0 
+                            if(res.code === 0){
                                 //发送请求获取用户信息
                                 getUserInfo();
                             }else{
@@ -91,11 +91,11 @@
                     method: 'GET',
                     success(res){
                         //跳转到后台首页
-                        if(res.code === 1){
+                        if(res.code === 0){
                             window.location.href = '/admin';
                         }else{
                             //登陆过期
-                            layer.msg(res.message);
+                            layer.msg(res.message, {icon: 2});
                         }
                     }
                 });

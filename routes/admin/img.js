@@ -2,7 +2,35 @@ const router = require('koa-router')();
 
 //博客图片实体
 const BlogImgs = require('../../models/t-blog-img');
+const fs = require('fs');
 
+//删除图片
+router.get('delImg/:ids', async(ctx) =>{
+    //图片编码
+    let ids = ctx.params.ids;
+    //图片路径
+    let path = ctx.query.paths;
+
+    await BlogImgs.deleteMany({_id: {$in: ids.split(',')}}, (err) =>{
+        try {
+            if(!err){
+                //将服务器的图片同时删除
+                path.split(',').forEach(path =>{
+                    fs.unlinkSync(`static${path}`);
+                })
+                ctx.body = {message: '删除成功', code: 0}
+            }else{
+                ctx.err_mess = '删除失败';
+            }
+        } catch (e) {
+            ctx.err_mess = e.message;
+        }
+
+        if(ctx.err_mess){
+            ctx.throw(555, {message:ctx.err_mess, code: 1});
+        }
+    })
+})
 //获取图片数据
 router.get('getAllImgs', async(ctx) =>{
     let query = ctx.query;
@@ -16,42 +44,78 @@ router.get('getAllImgs', async(ctx) =>{
     //查询条件
     let params = {};
     //删除分页属性
-    Reflect.deleteProperty(query, page);
-    Reflect.deleteProperty(query, limit);
+    Reflect.deleteProperty(query, 'page');
+    Reflect.deleteProperty(query, 'limit');
 
     params = query;
-    
+    let where = {};
+
+    //uname是用户的字段
+    if(params.uname){
+        where.uname = params.uname;
+        Reflect.deleteProperty(params, 'uname');
+    }
     //如果不是管理员， 只查自己的博客
     if(user.role !== '0'){
-        params._id = user.id;
+        params.user = user.id;
     }
 
+    //处理时间查询
+    if(params.createTime){
+        let times = params.createTime.split(' - ');
+        params.createTime = {$gte: new Date(times[0]), $lt: new Date(times[1])};
+    }
+    
     let imgs = [];
     //查询数据库中的所有图片
-    BlogImgs.find(params).populate('"userId"').exec((err, docs) =>{
-        console.log(docs)
-    })
-
-    return;
-
-    //查询数据库的总记录数
-    let total = 0;
-    await BlogImgs.countDocuments(params, (err, count) =>{
-        if(!err){
-            total = count;
-        }
-    });
-
-    ctx.body = {
-        code : 0,
-        msg  : '查询成功',
-        count: total,
-        data : imgs
-    };
+    /** 
+    * path: 外键字段
+    * math： 查询条件
+    * select: 查询字段
+    * options： limit、sort 等字段
+    */
+    await BlogImgs.find()
+        .populate([{path: 'user', match: where, select: '_id uname'}])
+        .where(params)
+        .skip((page-1) * limit)
+        .limit(limit)
+        .sort({createTime: 1})
+        .exec().then(res =>{
+            if(res){
+                //对数据处理
+                for (const img of res) {
+                    //关联表没有记录返回null 主表仍然返回数据
+                    if(img.user !== null){
+                        imgs.push(
+                            {
+                                _id: img._id.toString(),
+                                uid: img.user._id.toString(),
+                                uname: img.user.uname,
+                                path: img.path,
+                                createTime: ctx.moment(img.createTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                            }
+                        );
+                    }
+                }
+            }
+        })
+    
+    //统计总数
+    await BlogImgs.countDocuments()
+        .where(params)
+        .populate([{path: 'user', match: where}])
+        .exec().then(count =>{
+            ctx.body = {
+                code : 0,
+                msg  : '查询成功',
+                count,
+                data : imgs
+            };
+        })
 })
 //跳转到图片管理页面
 router.get('/', async(ctx) =>{
-    ctx.render('admin/blog_img_list');
+    ctx.render('admin/blog/blog_img_list');
 })
 
 module.exports = router;

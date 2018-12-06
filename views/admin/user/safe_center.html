@@ -9,7 +9,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="uname" autocomplete="off" value="{{user.name}}" class="layui-input" readonly>
+                        <input type="text" name="uname" autocomplete="off" value="{{user.uname}}" class="layui-input" readonly>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -85,7 +85,7 @@
                         },
                         dataType:'json',
                         success(res){
-                            if(res.code === -1){
+                            if(res.code !== 0){
                                 layer.msg(res.message, {icon: 2});
                             }else{
                                 layer.confirm(`${res.message}, 是否重新登陆？`, function(index){
@@ -145,7 +145,7 @@
                     },
                     dataType: 'json',
                     success(res){
-                        if(res.code === -1){
+                        if(res.code !== 0){
                             $('#passwd').css('border-color', 'red');
                             $('.passwdTips').css('display', "")
                             $('.passwdTips').text(res.message);

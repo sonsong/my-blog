@@ -186,5 +186,5 @@ body{
 	height: 330px;
 	background: url(../img/sign.png) no-repeat;
 	transform-origin: left bottom;
-	transform: rotate(17deg);
+    transform: rotate(17deg);
 }

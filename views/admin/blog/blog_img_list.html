@@ -6,18 +6,17 @@
         <legend>查询条件</legend>
         <form class="layui-form">
             <div class="layui-inline">
-                <label class="layui-form-label">发表时间</label>
+                <label class="layui-form-label">上传时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="publishTime" id="date" readonly placeholder="请选择发表时间" autocomplete="off"
+                    <input type="text" name="createTime" id="date" readonly placeholder="请选择发表时间" autocomplete="off"
                         class="layui-input">
                 </div>
             </div>
 
             <div class="layui-inline">
-                <label class="layui-form-label">标签类型</label>
-                <div class="layui-input-block">
-                    <select name="tags" id="tags">
-                    </select>
+                <label class="layui-form-label">上传人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="uname" placeholder="请选择上传人" autocomplete="off" class="layui-input">
                 </div>
             </div>
 
@@ -30,13 +29,9 @@
     </fieldset>
 
     <table class="layui-hide" id="imgList" lay-filter="imgList"></table>
-    <script type="text/html" id="funcBtn">
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="preview"><i class="layui-icon"></i>预览</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon"></i>删除</a>
-    </script>
     <script type="text/html" id="toolBar">
         <div class="layui-btn-container">
-          <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delAll"><i class="layui-icon"></i>删除选中的文章</button>
+          <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delAll"><i class="layui-icon"></i>删除选中的图片</button>
         </div>
       </script>
 </div>
@@ -80,7 +75,7 @@
                         }
                     }
                 }
-                
+
                 //reload表格数据
                 reloadTableData(table, params);
 
@@ -93,37 +88,52 @@
                     //选中的数据
                     let data = table.checkStatus(obj.config.id).data;
                     if(data.length === 0){
-                        layer.msg("请选择您要删除的文章", {icon: 0});
+                        layer.msg("请选择您要删除的图片", {icon: 0, anim: 1});
                         return;
                     }else{
                         //所有勾选文章的id
-                        let ids = []
+                        let ids = [];
+                        //图片的路径
+                        let path = [];
                         for (const item of data) {
                             ids.push(item._id);
+                            path.push(item.path);
                         }
-                        //发送请求删除文章
-                        delImgs(layer, table, ids.toString(), params);
+                        //发送请求删除图片
+                        delImgs(layer, table, ids.toString(), path.toString(), params);
                     }
                 }
             })
-            table.on('tool(imgList)', function(obj){
-                let rowData = obj.data;
+            table.on('row(imgList)', function(obj){
+                let data = obj.data;
 
-                if(obj.event === 'preview'){
-                    //弹窗
-                }else if(obj.event === 'delete'){
-                    delImgs(layer, table, rowData._id, params);
-                }
+                $(`.preview_${data._id}`).on('click', function(){
+                    layer.open({
+                        type: 1,
+                        title: '<em>图片预览</em>',
+                        content: `<img src='${data.path}' style="width:300px;height:300px"/>`,
+                        cancel(){
+                            //下载事件
+                            $(`.preview_${data._id}`).off('click');
+                        }
+                    })
+
+                    return false;
+                })
             });
         });
     });
 
     //删除文章
-    function delImgs(layer, table, ids, params){
+    function delImgs(layer, table, ids, paths, params){
         layer.confirm('是否删除该图片?', function(index){
             //发送ajax请求
             $.ajax({
                 url: `/admin/blog/img/delImg/${ids}`,
+                data:{
+                    paths,
+                },
+                dataType:'json',
                 success(res){
                     layer.msg(res.message);
                     //重新渲染页面数据
@@ -174,21 +184,19 @@
                     }, 
                     {
                         field: 'path',
+                        width: '30%',
                         title: '图片路径',
+                        templet(res){
+                            return `<a class='preview_${res._id}' style="cursor: pointer" title="预览">static${res.path}</a>`
+                        }
                     }, 
-                    {
+                    /* {
                         field: 'uid',
                         title: '用户编码',
-                    }, 
+                    },  */
                     {
                         field: 'uname',
                         title: '登录名',
-                    },
-                    {
-                        fixed: 'right',
-                        title: '操作',
-                        align: 'center',
-                        toolbar: '#funcBtn'
                     }
                 ]
             ],

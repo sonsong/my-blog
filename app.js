@@ -65,30 +65,25 @@ app.use(async(ctx, next) =>{
     ctx.secret = secret;
     ctx.JWT    = JWT;
 
-    await next();
-   /*  try {
+    try {
         await next();
     } catch (err) {
-        //统一处理异常, 回到登陆页面，清空session、cookie中的token
-        ctx.cookies.set('token', '');
-        ctx.session.expiresIn = undefined;
-
-        if(err.status === 555){
-            ctx.body = ({message: err.message, code: -1});
+        //自定义错误 或者服务器内部错误 直接提示
+        if(err.status === 555 || err.status === 500){
+            ctx.body = ({message: err.message, code: 1});
         }else if(err.status === 401){
+            //统一处理异常, 回到登陆页面，清空session、cookie中的token
+            ctx.cookies.set('token', '');
+            ctx.session.expiresIn = undefined;
+            //登陆超时，返回登陆页面
             ctx.render('admin/login', {message: '登陆已超时，请重新登陆'});
-        } /* else{
-            ctx.render('admin/login', {message: err.message});
         } 
-    }*/ 
+    }
     
     //处理异常
     if(ctx.status === 404){
         ctx.render('errors/404');
     }
-    else if(ctx.status === 500){
-        ctx.render('errors/500', {message: '服务器内部错误'});
-    } 
 });
 
 //过滤不需要验证登陆的请求

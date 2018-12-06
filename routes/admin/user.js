@@ -61,17 +61,28 @@ router.post('uploadImg', img_upload.single('file'), async(ctx) =>{
     if(user.picture !== '/img/user.gif'){
         await fs.unlink(`static/${user.picture}`, (err) =>{
             if(err){
-               ctx.body = {message: '头像上传失败', code: -1}
+               ctx.err_mess = '头像上传失败';
             }
         })
     }
 
     //将头像更新到用户信息中
     await Users.updateOne({_id}, {$set: {picture: `/upload/user-img/${img.filename}`}}, (err, doc) =>{
-        if(!err){
-            ctx.body = {message: '修改头像成功', code: 0}
+        try{
+            if(!err){
+                ctx.body = {message: '修改头像成功', code: 0}
+            }else{
+                ctx.err_mess = '修改头像失败';
+            }
+        }catch(e){
+            console.log(e)
+            ctx.err_mess = '修改头像失败';
         }
     });
+
+    if(ctx.err_mess){
+        ctx.throw(555, {message:ctx.err_mess, code: 1});
+    }
 })
 //上传简历
 router.post('uploadResume', file_upload.single('file'), async(ctx) =>{
@@ -91,17 +102,26 @@ router.post('uploadResume', file_upload.single('file'), async(ctx) =>{
     if(user.resume !== ''){
         await fs.unlink(`static/${user.resume}`, (err) =>{
             if(err){
-                ctx.body = {message: '简历上传失败', code: -1};
+                ctx.err_mess = '简历上传失败';
             }
         })
     }
 
     //修改用户的信息
     await Users.updateOne({_id}, {$set: {resume: `/upload/file/${file.filename}`}}, (err, doc) =>{
-        if(!err){
-            ctx.body = {message: '简历上传成功', code: 0}
+        try {
+            if(!err){
+                ctx.body = {message: '简历上传成功', code: 0}
+            }
+        } catch (e) {
+            console.log(e);
+            ctx.err_mess = '修改用户信息失败';
         }
     })
+
+    if(ctx.err_mess){
+        ctx.throw(555, {message:ctx.err_mess, code: 1});
+    }
 
 })
 //修改用户信息
@@ -109,32 +129,43 @@ router.post('update', async(ctx) =>{
     let user = ctx.request.body;
 
     await Users.updateOne({_id: user._id}, {$set: {nname: user.nname, introd: user.introd, motto: user.motto, email: user.email}}, async(err) =>{
-        if(!err){
-            ctx.body = {message: '修改用户成功', code: 0}
+        try {
+            if(!err){
+                ctx.body = {message: '修改用户信息成功', code: 0}
+            } else{
+                ctx.err_mess = '修改用户信息失败';
+            }
+        } catch (e) {
+            console.log(e);
+            ctx.err_mess = '修改用户信息失败';
         }
     })
+
+    if(ctx.err_mess){
+        ctx.throw(555, {message:ctx.err_mess, code: 1});
+    }
 })
 //删除用户
 router.get('del_user/:ids', async(ctx) =>{
-    //获取文章编码
+    //获取用户编码
     let ids = ctx.params.ids.split(',');
 
-    //删除该文章
+    //删除该用户
     try {
         await Users.deleteMany({_id: {$in: ids}}, (err) =>{
             if(!err){
-                //查询所有的文章
-                ctx.body = {message: '删除成功', code: '1'}
+                ctx.body = {message: '删除用户成功', code: 0}
             }else{
-                ctx.err_mess = '删除失败';
+                ctx.err_mess = '删除用户失败';
             }
         });
-    } catch (error) {
-        ctx.err_mess = '删除失败';
+    } catch (e) {
+        console.log(e);
+        ctx.err_mess = '删除用户失败';
     }
 
     if(ctx.err_mess){
-        ctx.body = {message: ctx.err_mess, code: '-1'};
+        ctx.body = {message: ctx.err_mess, code: 1};
     }
 })
 //新增/编辑用户
@@ -154,12 +185,22 @@ router.post('addUser', async(ctx) =>{
         Reflect.deleteProperty(user, '_id');
         //判断登陆名是否已经被注册
         await Users.findOne({uname: user.uname}, (err, doc) =>{
-            if(!err){
-                if(doc !== null){
-                    ctx.body = {message: '该用户名已经被注册了', code: -1}
+            try {
+                if(!err){
+                    if(doc !== null){
+                        ctx.err_mess = '该用户名已经被注册了';
+                    }
                 }
+            } catch (e) {
+                console.log(e);
+                ctx.err_mess = '新增用户失败';
             }
+            
         })
+
+        if(ctx.err_mess){
+            ctx.throw(555, ctx.err_mess);
+        }
 
         //增加创建时间
         user.createTime = new Date();
@@ -197,10 +238,15 @@ router.get('getAllUsers', async(ctx) =>{
     //查询条件
     let params = {};
     //删除分页属性
-    Reflect.deleteProperty(query, page);
-    Reflect.deleteProperty(query, limit);
+    Reflect.deleteProperty(query, 'page');
+    Reflect.deleteProperty(query, 'limit');
     
     params = query;
+
+    //只查询普通用户
+    params.role = {$ne: '0'};
+
+    console.log(params)
 
     let users = [];
     //查询数据库中的所有用户
@@ -208,21 +254,18 @@ router.get('getAllUsers', async(ctx) =>{
         if(!err){
             for (const item of docs) {
 
-                //只显示普通用户
-                if(item.role === '1'){
-                    let doc = {
-                        _id       : item._id.toString(),
-                        uname     : item.uname,
-                        nname: item.nname,
-                        email     : item.email,
-                        motto     : item.motto,
-                        introd    : item.introd,
-                        picture   : item.picture,
-                        createTime: ctx.moment(item.createTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
-                    }
-                    
-                    users.push(doc);
+                let doc = {
+                    _id       : item._id.toString(),
+                    uname     : item.uname,
+                    nname: item.nname,
+                    email     : item.email,
+                    motto     : item.motto,
+                    introd    : item.introd,
+                    picture   : item.picture,
+                    createTime: ctx.moment(item.createTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
                 }
+                
+                users.push(doc);
             }
         }else{
             console.log(err)
@@ -246,7 +289,7 @@ router.get('getAllUsers', async(ctx) =>{
 })
 //跳转到用户列表
 router.get('/', async(ctx) =>{
-    ctx.render('admin/user_list');
+    ctx.render('admin/user/user_list');
 })
 //修改密码
 router.post('updatePasswd', async(ctx) =>{
@@ -276,28 +319,38 @@ router.post('updatePasswd', async(ctx) =>{
         }
     });
 });
+
 //校验初始密码
 router.post('verifyInitPasswd', async(ctx) =>{
     //获取用户编码
     let {_id, passwd} = ctx.request.body;
 
     await Users.findById({_id}, 'passwd', (err, doc) =>{
-        if(!err){
-            if(passwd === doc.passwd){
-                ctx.body = {message: 'ok', code: 0};
+        try {
+            if(!err){
+                if(passwd === doc.passwd){
+                    ctx.body = {message: 'ok', code: 0};
+                }else{
+                    ctx.err_mess = '初始密码输入错误';
+                }
             }else{
-                ctx.body = {message: '初始密码错误', code: -1};
+                ctx.err_mess = '该用户不存在';
             }
-        }else{
-            ctx.body = {message: '该用户不存在', code: -1};
+        } catch (e) {
+            ctx.err_mess = '初始密码输入错误';
         }
     })
+
+    if(ctx.err_mess){
+        ctx.throw(555, ctx.err_mess);
+    }
 })
 
 //修改密码页面
 router.get('safe_center', async(ctx) =>{
+    console.log(ctx.state.user)
     //从cookie中获取用户
-    ctx.render('admin/safe_center', {user: ctx.state.user})
+    ctx.render('admin/user/safe_center', {user: ctx.state.user})
 });
 
 //获取用户信息
@@ -324,7 +377,7 @@ router.get('user_info', async(ctx) =>{
         resumeName = user.resume.substring(index + 1);
     }
 
-    ctx.render('admin/user_info', {user, resumeName});
+    ctx.render('admin/user/user_info', {user, resumeName});
 });
 
 //退出登录
@@ -350,7 +403,7 @@ router.get('getUserInfo', async(ctx) =>{
         //将payload存储到cookie中
         ctx.cookies.set('user', JSON.stringify(payload), {
             //cookie有效时长，单位：毫秒数
-            maxAge: 7 * 60 * 60 *1000,
+            maxAge: 7 * 24 * 60 * 60 *1000,
             //过期时间，unix时间戳   
             //expires:"0000000000",
             //cookie保存路径, 默认是'/，set时更改，get时同时修改，不然会保存不上，服务同时也获取不到        
@@ -367,9 +420,9 @@ router.get('getUserInfo', async(ctx) =>{
             overwrite: true
         });
 
-        ctx.body = {message: 'ok', code: 1};
+        ctx.body = {message: 'ok', code: 0};
     } else {
-        ctx.throw(555, '登陆已过期, 请重新登陆');
+        ctx.throw(401, '登陆已过期, 请重新登陆');
     }
 });
 

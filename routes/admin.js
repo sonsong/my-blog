@@ -55,7 +55,7 @@ router.post('/toLogin', async(ctx, next) =>{
                     //将登录时间保存到session中
                     ctx.session.expiresIn = new Date().getTime();
                     
-                    ctx.body = {message: 'ok', code: 1};
+                    ctx.body = {message: 'ok', code: 0};
                 }else{
                     ctx.err_mess = '用户名或密码错误~~~';
                 }

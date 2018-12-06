@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/user.css">
     <link rel="stylesheet" href="/editor.md/css/editormd.min.css">
-    <link rel="shortcut icon" href="/img/user.gif" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/logo1.png" type="image/x-icon">
 </head>
 <body>
     <div class="layout-wrap">
@@ -17,7 +17,7 @@
             <div class="userinfo">
                 <img class="uimg" src="/img/user.gif" alt="">
                 <div class="uname">我真的好菜</div>
-                <div>一个不专注前端的前端程序猿</div>
+                <div class="motto">一个不专注前端的前端程序猿</div>
             </div>
             <div class="category">
                 <ul>
@@ -44,7 +44,7 @@
                     <li><a href="/about">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-about"></use>
-                        </svg>关于我</a>
+                        </svg>联系我</a>
                     </li>
                 </ul>
             </div>
@@ -70,6 +70,15 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
 <script>
     $(() =>{
+        //查询用户信息 admin
+        $.ajax({
+            url: '/getUserInfo',
+            success(res){
+                $('.uimg').attr('src', res.user.picture);
+                $('.uname').text(res.user.nname);
+                $('.motto').text(res.user.motto);
+            }
+        })
         //根据关键字查询文章
         $("#search").on('keyup', debounce(search, 500));
     })

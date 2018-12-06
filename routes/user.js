@@ -3,7 +3,20 @@ const router = require('koa-router')();
 
 //博客实体
 const Blogs = require('../models/t-blog');
+//用户实体
+const Users = require('../models/t-user');
 
+//获取用户信息
+router.get('getUserInfo', async(ctx) =>{
+    let user = {};
+    await Users.findOne({uname: 'admin'}, (err, doc) =>{
+        if(!err){
+            user = doc;
+        }
+    })
+
+    ctx.body = {user};
+})
 //根据关键字查询文章
 router.get('searchArtcleByTag', async(ctx) =>{
     let tag = ctx.query.search;
