@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>基本资料</title>{{/block}}
 {{block 'content'}}
     <div class="userInfo">
@@ -73,9 +73,7 @@
                         data,
                         dataType:'json',
                         success(res){
-                            if(res.code === 0){
-                                layer.msg(res.message, {icon: 1})
-                            }
+                            layer.msg(res.message, {icon: res.code})
                         }
                     })
                     return false;
@@ -91,13 +89,11 @@
                     error(index, upload){
                     },
                     done: function(res){
-                        if(res.code === 0){
+                        if(res.code === 1){
                             window.location.reload();
-                            
-                            layer.msg(res.message, {icon: 1})
-                        }else{
-                            layer.msg(res.message, {icon: 0})
                         }
+
+                        layer.msg(res.message, {icon: res.code});
                     }
                 });
                 //上传头像
@@ -105,11 +101,7 @@
                     elem: '#img',
                     url: '/admin/user/uploadImg',
                     done: function(res){
-                        if(res.code === 0){
-                            layer.msg(res.message, {icon: 1})
-                        }else{
-                            layer.msg(res.message, {icon: 0})
-                        }
+                        layer.msg(res.message, {icon: res.code});
                     }
                 });
             })

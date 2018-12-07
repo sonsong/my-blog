@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>图片管理</title>{{/block}}
 {{block 'content'}}
 <div class="artcles">
@@ -135,7 +135,7 @@
                 },
                 dataType:'json',
                 success(res){
-                    layer.msg(res.message);
+                    layer.msg(res.message, {icon: res.code});
                     //重新渲染页面数据
                     reloadTableData(table, params);
                 }

@@ -1,8 +1,8 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>写文章</title>{{/block}}
 {{block 'content'}}
     <div class="editor">
-        <form action="/admin/blog/publish" method="post" class="publish layui-form">
+        <form action="/admin/blog/publish" method="post" class="layui-form artclePublish">
             <div class="head">
                 <!-- 文章编码 -->
                 <input type="hidden" name="_id" class="art_id" value="{{id}}">
@@ -24,10 +24,10 @@
                 </div>
             </div>
             <div style="text-align: right">
-                <div class="layui-btn-group" style="margin-bottom: 5px;">
-                    <button class="layui-btn layui-btn-sm layui-btn-normal">发表</button>
-                    <button class="layui-btn layui-btn-sm layui-btn-warm">
-                        <i class="layui-icon layui-icon-up headHidden" style="cursor: pointer;" title="收起"></i>
+                <div class="layui-btn-group" style="margin-bottom: 8px;">
+                    <button class="layui-btn layui-btn-sm layui-btn-normal publish">发表</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm headHidden">
+                        <i class="layui-icon layui-icon-up" style="cursor: pointer;" title="收起"></i>
                     </button>
                 </div>
             </div>
@@ -84,35 +84,39 @@
                 }
             });
 
-            layui.use(['layer'], function () {
-
-                let layer = layui.layer;
+            layui.use([], function () {
 
                 //发表文章
-                $(".publish").on('submit', ()=>{
+                $(".publish").on('click', ()=>{
                     //获取转化后的html
                     let htmlContent = $('.editormd-preview').html();
 
                     //赋值给隐藏表单域
                     $(".htmlContent").val(htmlContent);
                     if($(".editormd-markdown-textarea").val() === ''){
-                        layer.msg("请输入文章内容", {icon: 0})
+                        layer.msg("请输入文章内容", {icon: 0});
+
                         return false;
+                    }else{
+                        $('.artclePublish').submit();
                     }
                 })
             })
             
             //收起和展开 flag = true 收起 false 展开
             let flag = true; 
-            $('.headHidden').on('click', function(){
+            $('.headHidden').on('click', function(e){
                 if(flag){
                     $('.head').css('display', 'none');
-                    $(this).removeClass('layui-icon-up').addClass('layui-icon-down').attr('title', '展开');
+                    $('.headHidden i').removeClass('layui-icon-up').addClass('layui-icon-down').attr('title', '展开');
                 }else{
                     $('.head').css('display', '');
-                    $(this).removeClass('layui-icon-down').addClass('layui-icon-up').attr('title', '收起');
+                    $('.headHidden i').removeClass('layui-icon-down').addClass('layui-icon-up').attr('title', '收起');
                 }
                 flag = !flag;   
+                
+                e.preventDefault();
+                return false;
             })
         })
         

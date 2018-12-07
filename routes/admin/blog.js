@@ -82,6 +82,11 @@ router.post('imgUpload', upload.single('editormd-image-file'), async(ctx) =>{
                 //文件名
                 url: path  //上传成功时才返回
             }
+        }else{
+            ctx.body = {
+                success: 0,
+                message: '图片路径含有非法字符'
+            }
         }
     })
 })
@@ -150,7 +155,7 @@ router.post('publish', async(ctx, next) =>{
     }
 
     //跳转到文章列表页面
-    ctx.redirect("artcle_list");
+    ctx.redirect('/admin/blog/');
 });
 
 //获取文章列表
@@ -180,21 +185,26 @@ router.get('getAllArtcles', async(ctx, next) =>{
     }
 
     let blogs = [];
+
     //查询数据库中的所有文章
     await Blogs.find(params, '_id tags title publishTime', {skip: (page - 1) * limit, limit, sort: {'publishTime': 1}}, (err, docs) =>{
-        if(!err){
-            for (const item of docs) {
-                let doc = {
-                    _id        : item._id.toString(),
-                    tags       : item.tags.toString(),
-                    title      : item.title,
-                    publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+        try {
+            if(!err){
+                for (const item of docs) {
+                    let doc = {
+                        _id        : item._id.toString(),
+                        tags       : item.tags.toString(),
+                        title      : item.title,
+                        publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                    }
+                    
+                    blogs.push(doc);
                 }
-                
-                blogs.push(doc);
+            }else{
+                ctx.body = ctx.result;
             }
-        }else{
-            console.log(err)
+        } catch (e) {
+            ctx.body = ctx.result;
         }
     });
 
@@ -206,12 +216,10 @@ router.get('getAllArtcles', async(ctx, next) =>{
         }
     });
 
-    ctx.body = {
-        code : 0,
-        msg  : '查询成功',
-        count: total,
-        data : blogs
-    };
+    ctx.result.count = total;
+    ctx.result.data = blogs;
+
+    ctx.body = ctx.result;
 });
 //进入文章列表
 router.get('/', async(ctx, next) =>{
@@ -264,17 +272,17 @@ router.get('del_artcle/:ids', async(ctx) =>{
         await Blogs.deleteMany({_id: {$in: ids}}, (err) =>{
             if(!err){
                 //查询所有的文章
-                ctx.body = {message: '删除成功', code: '1'}
+                ctx.body = {message: '删除文章成功', code: 1}
             }else{
-                ctx.err_mess = '删除失败';
+                ctx.err_mess = '删除文章失败';
             }
         });
     } catch (e) {
-        ctx.err_mess = e.message;;
+        ctx.err_mess = '删除文章失败';
     }
 
     if(ctx.err_mess){
-        ctx.throw(555, {message:ctx.err_mess, code: 1});
+        ctx.throw(555, ctx.err_mess);
     }
 });
 

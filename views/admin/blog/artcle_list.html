@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>文章管理</title>{{/block}}
 {{block 'content'}}
 <div class="artcles">
@@ -62,7 +62,7 @@
             }
         });
 
-        layui.use(['layer', 'form', 'laydate', 'table'], function () {
+        layui.use(['form', 'laydate', 'table'], function () {
             let table = layui.table;
             let form = layui.form;
             let laydate = layui.laydate;
@@ -148,7 +148,7 @@
             $.ajax({
                 url: `/admin/blog/del_artcle/${ids}`,
                 success(res){
-                    layer.msg(res.message);
+                    layer.msg(res.message, {icon: res.code});
                     //重新渲染页面数据
                     reloadTableData(table, params);
                 }

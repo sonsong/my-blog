@@ -18,16 +18,16 @@ router.get('delImg/:ids', async(ctx) =>{
                 path.split(',').forEach(path =>{
                     fs.unlinkSync(`static${path}`);
                 })
-                ctx.body = {message: '删除成功', code: 0}
+                ctx.body = {message: '删除图片成功', code: 1}
             }else{
-                ctx.err_mess = '删除失败';
+                ctx.err_mess = '删除图片失败';
             }
         } catch (e) {
-            ctx.err_mess = e.message;
+            ctx.err_mess = '删除图片失败';
         }
 
         if(ctx.err_mess){
-            ctx.throw(555, {message:ctx.err_mess, code: 1});
+            ctx.throw(555, ctx.err_mess);
         }
     })
 })
@@ -98,6 +98,8 @@ router.get('getAllImgs', async(ctx) =>{
                     }
                 }
             }
+        }, e =>{
+            ctx.body = ctx.result;
         })
     
     //统计总数
@@ -105,12 +107,10 @@ router.get('getAllImgs', async(ctx) =>{
         .where(params)
         .populate([{path: 'user', match: where}])
         .exec().then(count =>{
-            ctx.body = {
-                code : 0,
-                msg  : '查询成功',
-                count,
-                data : imgs
-            };
+            ctx.result.count = count;
+            ctx.result.data = imgs;
+
+            ctx.body = ctx.result;
         })
 })
 //跳转到图片管理页面

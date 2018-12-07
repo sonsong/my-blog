@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>安全中心</title>{{/block}}
 {{block 'content'}}
     <div class="safe_center">
@@ -39,9 +39,8 @@
     <script>
         $(() =>{
 
-            layui.use(['layer', 'form'], function () {
+            layui.use(['form'], function () {
                 let form = layui.form;
-                let layer = layui.layer;
 
                 //校验初始密码
                 $('#passwd').on('blur', function(){
@@ -61,14 +60,14 @@
                 //修改密码
                 form.on('submit(updatePass)', (data) =>{
                     if(!veritynewPasswd()){
-                        layer.msg("请先输入正确的初始密码", {icon: 2});
+                        layer.msg("请先输入正确的初始密码", {icon: 0});
                         $("#passwd").focus();
 
                         return false;
                     }
 
                     if(!veritynewPasswd()){
-                        layer.msg("请输入新密码", {icon: 2});
+                        layer.msg("请输入新密码", {icon: 0});
                         $("#newPasswd").focus();
 
                         return false;
@@ -85,13 +84,13 @@
                         },
                         dataType:'json',
                         success(res){
-                            if(res.code !== 0){
-                                layer.msg(res.message, {icon: 2});
+                            if(res.code === 2){
+                                layer.msg(res.message, {icon: res.code});
                             }else{
                                 layer.confirm(`${res.message}, 是否重新登陆？`, function(index){
+                                    layer.close(index);
                                     //退出登陆
                                     window.location.href = '/admin/user/exit';
-                                    layer.close(index);
                                 })
                             }
                         }
@@ -145,7 +144,7 @@
                     },
                     dataType: 'json',
                     success(res){
-                        if(res.code !== 0){
+                        if(res.code === 2){
                             $('#passwd').css('border-color', 'red');
                             $('.passwdTips').css('display', "")
                             $('.passwdTips').text(res.message);

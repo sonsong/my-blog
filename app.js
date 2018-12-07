@@ -61,16 +61,25 @@ app.use(async(ctx, next) =>{
     //设置时间
     ctx.moment = moment;
 
+    //jwt参数
     ctx.verify = verify;
     ctx.secret = secret;
     ctx.JWT    = JWT;
 
+    //table所需的response
+    ctx.result = {
+        code : 0,
+        msg  : '查询成功',
+        count: 0,
+        data : []
+    }
+    
     try {
         await next();
     } catch (err) {
         //自定义错误 或者服务器内部错误 直接提示
         if(err.status === 555 || err.status === 500){
-            ctx.body = ({message: err.message, code: 1});
+            ctx.body = {message: err.message, code: 2};
         }else if(err.status === 401){
             //统一处理异常, 回到登陆页面，清空session、cookie中的token
             ctx.cookies.set('token', '');

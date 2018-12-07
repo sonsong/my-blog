@@ -1,4 +1,4 @@
-{{extend './layout.html'}}
+{{extend '../layout.html'}}
 {{block 'title'}}<title>用户管理</title>{{/block}}
 {{block 'content'}}
 <div class="users">
@@ -38,7 +38,7 @@
 <script>
     $(function(){
 
-        layui.use(['layer', 'form', 'table'], function () {
+        layui.use(['form', 'table'], function () {
             let table = layui.table;
             let form = layui.form;
 
@@ -140,16 +140,15 @@
                         dataType: 'json',
                         method: 'post',
                         success(res){
-                            layer.close();
-                            if(res.code === 0){
+                            //提示信息
+                            layer.msg(res.message, {icon: res.code});
+                            
+                            if(res.code === 1){
                                 //关闭弹出层
                                 layer.close(index);
-                                //提示信息
-                                layer.msg(res.message, {icon: 1});
+                                
                                 //重新加载表格数据
                                 reloadTableData(table, params);
-                            }else{
-                                layer.msg(res.message, {icon: 2})
                             }
                         }
                     })
@@ -281,7 +280,7 @@
             $.ajax({
                 url: `/admin/user/del_user/${ids}`,
                 success(res){
-                    layer.msg(res.message);
+                    layer.msg(res.message, {icon: res.code});
                     //重新渲染页面数据
                     reloadTableData(table, param);
                 }

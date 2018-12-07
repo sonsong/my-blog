@@ -133,3 +133,20 @@
     padding-left: 20px;
     box-sizing: border-box;
 }
+
+/* 文章的一些样式调整 */
+abbr {
+    color: #fff;
+    border: none !important;
+    background: #f90 !important;
+    padding: 1px 3px;
+    border-radius: 3px;
+}
+
+p code{
+    color: #fff;
+    border: none !important;
+    background: #5A9600 !important;
+    padding: 1px 3px;
+    border-radius: 3px;
+}
