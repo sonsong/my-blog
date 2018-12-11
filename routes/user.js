@@ -6,17 +6,28 @@ const Blogs = require('../models/t-blog');
 //用户实体
 const Users = require('../models/t-user');
 
-//获取用户信息
-router.get('getUserInfo', async(ctx) =>{
-    let user = {};
-    await Users.findOne({uname: 'admin'}, (err, doc) =>{
+//查询用户信息
+router.use(async(ctx, next) =>{
+    //查询admin信息
+    await Users.findOne({uname: 'admin'}, '_id uname nname email motto introd picture resume', (err, doc) =>{
         if(!err){
-            user = doc;
+            ctx.user = {
+                _id: doc._id.toString(),
+                uname: doc.uname,
+                nname: doc.nname,
+                email: doc.email,
+                introd: doc.introd,
+                motto: doc.motto,
+                picture: doc.picture,
+                resumePath: doc.resume,
+                resumeName: doc.resume.substring('/upload/file/'.length)
+            };
         }
     })
 
-    ctx.body = {user};
-})
+    await next()
+});
+
 //根据关键字查询文章
 router.get('searchArtcleByTag', async(ctx) =>{
     let tag = ctx.query.search;
@@ -86,7 +97,7 @@ router.get('/', async(ctx, next) =>{
         params
     };
 
-    ctx.render('index', {blogs, pager});
+    ctx.render('index', {blogs, pager, user: ctx.user});
 });
 
 //进入文章简史
@@ -142,7 +153,7 @@ router.get('brief', async(ctx, next) =>{
         }
     })
 
-    ctx.render('brief', {blogs: blogs});
+    ctx.render('brief', {blogs: blogs, user: ctx.user});
 });
 
 //跳转到预览页面
@@ -154,12 +165,14 @@ router.get('preview', async(ctx, next) =>{
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: id}, '_id, htmlContent', (err, doc) =>{
+    await Blogs.findById({_id: id}, '_id htmlContent readNum', (err, doc) =>{
         if(!err){
             blog = doc;
 
             //取出阅读次数，让其自增更新
-            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err) =>{});
+            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{
+                console.log(err, doc)
+            });
         }
     });
 
@@ -190,7 +203,7 @@ router.get('preview', async(ctx, next) =>{
         }
     });
 
-    ctx.render('preview', {htmlContent: blog.htmlContent, preA, nextA});
+    ctx.render('preview', {htmlContent: blog.htmlContent, preA, nextA, user: ctx.user});
 });
 
 //进入标签页
@@ -225,12 +238,12 @@ router.get('tags', async(ctx, next) =>{
         });
     })
 
-    ctx.render("tags", {tags});
+    ctx.render("tags", {tags, user: ctx.user});
 });
 
 //关于我
 router.get('about', async(ctx, next) =>{
-    ctx.render('about');
+    ctx.render('about', {user: ctx.user});
 });
 
 module.exports = router;

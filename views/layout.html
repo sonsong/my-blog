@@ -14,10 +14,11 @@
 <body>
     <div class="layout-wrap">
         <div class="left">
+            <div class="colorDiv"></div>
+            <img class="uimg" src="{{user.picture}}">
             <div class="userinfo">
-                <img class="uimg" src="/img/user.gif" alt="">
-                <div class="uname">我真的好菜</div>
-                <div class="motto">一个不专注前端的前端程序猿</div>
+                <div class="uname">{{user.nname}}</div>
+                <div class="motto">{{user.motto}}</div>
             </div>
             <div class="category">
                 <ul>
@@ -57,11 +58,16 @@
                 </div>
             </div>
             <div class="toolBox">
-                <div class="search">
-                    <input type="text" name="search" id="search" placeholder="关键字">
-                    <ul class="result">
-                    </ul>
+                <div class="fixedWrap">
+                    <div class="search">
+                        <input type="text" name="search" id="search" placeholder="文章标签">
+                        <svg class="icon" aria-hidden="true" style="position:absolute;top:9px;right:12px">
+                            <use xlink:href="#icon-search"></use>
+                        </svg>
+                        <ul class="result"></ul>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -70,17 +76,18 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
 <script>
     $(() =>{
-        //查询用户信息 admin
-        $.ajax({
-            url: '/getUserInfo',
-            success(res){
-                $('.uimg').attr('src', res.user.picture);
-                $('.uname').text(res.user.nname);
-                $('.motto').text(res.user.motto);
-            }
-        })
         //根据关键字查询文章
         $("#search").on('keyup', debounce(search, 500));
+
+        //监听屏幕的滚动
+        $('.right').scroll(function(){
+            //随着屏幕滚动的对象
+            let scrolled = $('.fixedWrap');
+            //计算滚动的距离
+            let scrollDistance = $(this).scrollTop() + 'px';
+
+            scrolled.css('top',  scrollDistance);
+        })
     })
 
     //查询文章
@@ -113,17 +120,17 @@
     /*
         函数防抖 在规定的时间内，只执行一次调用，如果在时间范围内有新的输入，重新计时
     */
-    function debounce(method, delay) {
+    function debounce(fn, delay) {
         //定时器  子函数执行完，仍然存在
         let timer = null;
         return function () {
-            let context = this, 
-                args = arguments;
+            let that = this;
+            let args = arguments;
 
             clearTimeout(timer);
             timer = setTimeout(function () {
                 //执行函数
-                method.apply(context, args);
+                fn.apply(that, args);
             }, delay);
         }
     }

@@ -12,7 +12,7 @@
                     <div class="sub-title">
                         <span class="write-time">发表时间: {{$value.publishTime}}</span>
                         <span class="read">阅读量: {{$value.readNum}}</span>
-                        <span class="tags">标签: <span>{{each $value.tags}}<a href="#">{{$value}}&nbsp;</a>{{/each}}</span></span>
+                        <span class="tags">标签: <span>{{each $value.tags}}<a href="javascript:">{{$value}}&nbsp;</a>{{/each}}</span></span>
                         <!-- <span class="comment">评论: 1111</span> -->
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     {{@$value.htmlContent}}
                 </div>
                 <div class="hidden-block">
-                    <button class="danger-btn"><a href="/preview?_id={{$value._id}}">阅读全文</a></button>
+                    <button class="success-btn"><a href="/preview?_id={{$value._id}}" style="text-decoration: none;color: #fff">阅读全文</a></button>
                 </div>
             </div>
         {{/each}}
@@ -34,7 +34,7 @@
                             <use xlink:href="#icon-pre"></use>
                         </svg>
                     </div>
-                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
                     <div>
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-next"></use>
@@ -46,7 +46,7 @@
                             <use xlink:href="#icon-pre"></use>
                         </svg>
                     </div>
-                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
                     <div>
                         <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
                             <svg class="icon" aria-hidden="true">
@@ -62,7 +62,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
                     <div>
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-next"></use>
@@ -76,7 +76,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="total">{{pager.pageCode}}/{{pager.totalPage}}</div>
+                    <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
                     <div>
                         <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
                             <svg class="icon" aria-hidden="true">

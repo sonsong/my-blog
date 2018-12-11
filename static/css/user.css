@@ -5,7 +5,7 @@
 .index-article{
     position     : relative;
     width        : 100%;
-    border       : 1px solid #e9e9e9;
+    border       : 1px solid #eaeaea;
     margin-bottom: 20px;
     border-radius: 5px;
     background   : #fff
@@ -16,7 +16,7 @@
     text-align : center;
 }
 .index-article .detail{
-    height  : 335px;
+    height  : 300px;
     margin  : 0 auto;
     overflow: hidden;
 }
@@ -25,14 +25,18 @@
     font-weight: 700;
     margin     : 20px 0 10px 0;
 }
+.index-article .head .sub-title{
+    height: 20px;
+    line-height: 20px;
+}
 .index-article .hidden-block{
     position   : absolute;
     bottom     : 0;
-    left       : 20px;
-    background : linear-gradient(to bottom, rgb(235, 229, 229), rgb(27, 27, 27));
-    height     : 80px;
-    line-height: 80px;
-    width      : calc(100% - 40px);
+    left       : 0;
+    background : linear-gradient(to bottom, rgb(252, 250, 250), rgb(167, 167, 167));
+    height     : 60px;
+    line-height: 60px;
+    width      : 100%;
     text-align : center;
     z-index    : 10;
     opacity    : 0.8;
@@ -53,17 +57,21 @@
 
 /* 简史样式 */
 .brief{
-    border    : 1px solid #e9e9e9;
+    border    : 1px solid #eaeaea;
     font-size : 16px;
     color     : #000;
-    background: #fff
+    background: #fff;
+    border-radius: 5px;
 }
 .brief .head{
-    height      : 50px;
-    line-height : 50px;
+    height      : 80px;
+    line-height : 80px;
     font-size   : 24px;
-    padding-left: 20px;
-    background  : #f8f6f6;
+    padding-left: 30px;
+    background  : #fff;
+    border-left: 5px solid #4d4d4d;
+    box-sizing: border-box;
+    font-style: italic;
 }
 .brief .brief-content{
     width      : 80%;
@@ -106,7 +114,7 @@
 
 /* 标签相关样式 */
 .brief .tags-content button{
-    margin: 10px;
+    margin: 20px 10px 20px 20px;
 }
 .brief .tags-content button a{
     color: #fff;
@@ -114,24 +122,79 @@
 
 /* 预览页面样式 */
 .preview{
-    padding-bottom: 60px;
+    padding-bottom: 50px;
     background    : #fff
 }
 .preview_content{
-    border: 1px solid #e9e9e9;
+    border: 1px solid #eaeaea;
+}
+.read-tips{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
 }
 .read-tips > div{
-    font-size  : 14px;
-    height     : 30px;
-    line-height: 30px;
+    line-height: 40px;
+    height: 40px;
+    margin: 0 20px;
+}
+.artcle-toc{
+    width:90%;
+    margin: 20px auto;
+    border:1px solid #eaeaea;
+    background: #fff;
+    font-size: 14px;
+}
+.artcle-toc ul li{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.artcle-toc .markdown-toc-list{
+    padding: 10px;
+}
+.artcle-toc .markdown-toc-list li::before{
+    content: '';
+    display: inline-block;
+    border: 3px solid #000;
+    margin: 2px 10px;
+    border-radius: 50%;
+}
+.artcle-toc .markdown-toc-list .toc-level-4, .toc-level-5, .toc-level-6{
+    color: #545050;
+}
+.artcle-toc .markdown-toc-list > li:first-child::before{
+    content: '';
+    border: 0;
+}
+.artcle-toc .markdown-toc-list a{
+    color: #000;
+}
+.artcle-toc .markdown-toc-list a:hover{
+    color: #57dbec;
 }
 
 /* 联系我 */
+.brief .about-content ul{
+    margin-bottom: 20px;
+}
 .brief .about-content ul li{
-    height: 50px;
-    line-height: 50px;
-    padding-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    height: 80px;
+    line-height: 80px;
+    padding-left: 30px;
     box-sizing: border-box;
+}
+.brief .about-content span{
+    display: block;
+    width: 10%;
+    text-align: right;
+}
+.brief .about-content span:last-child{
+    width: 85%;
+    text-align: left;
+    border-bottom: 1px dashed #c2c0c0;    
 }
 
 /* 文章的一些样式调整 */
@@ -149,4 +212,11 @@ p code{
     background: #5A9600 !important;
     padding: 1px 3px;
     border-radius: 3px;
+}
+
+.editormd-html-preview, .editormd-preview-container{
+    padding: 50px !important;
+}
+.markdown-body ol, .markdown-body ul{
+    padding-left: 16px !important;
 }

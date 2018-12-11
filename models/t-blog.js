@@ -17,7 +17,10 @@ var blogsSchema = mongoose.Schema({
     //html内容
     htmlContent: String,
     //浏览次数
-    readNum: Number
+    readNum: {
+        type: Number,
+        default: 0
+    }
 })
 
 //建立约束与模型的映射关系

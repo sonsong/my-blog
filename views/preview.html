@@ -14,7 +14,7 @@
                 {{/if}}
             </div>
             <div>下一篇：
-                {{if preA._id === ''}}
+                {{if nextA._id === ''}}
                     <span style="cursor: pointer;">{{nextA.title}}</span>
                 {{else}}
                     <a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a>
@@ -26,14 +26,27 @@
 {{block 'js'}}
     <script>
         $(() =>{
-            //在toolBox下显示目录
-            $('.toolBox').append(`
-                <div class="artcle-toc markdown-body" style="width:90%;height:auto;margin:20px auto;border:1px solid #e9e9e9">
-                    <div style="background:#e9e9e9;padding:5px 10px"><em>目录</em></div>
-                </div>
-            `)
-            //显示文字目录
-            $('.artcle-toc').append($('.editormd-markdown-toc').html());
+            //目录
+            let category = $('.editormd-markdown-toc').html();
+            
+            //存在目录增加目录结构  
+            if(category){
+                //在toolBox下显示目录
+                $('.fixedWrap').append(`
+                    <div class="artcle-toc markdown-body">
+                        <div style="background:#fff;padding:5px 10px;border-left: 5px solid #4d4d4d;"></div>
+                    </div>
+                `)
+                //显示文字目录
+                $('.artcle-toc').append($('.editormd-markdown-toc').html());
+                //隐藏正文的目录
+                $('.editormd-markdown-toc').css('display', 'none');
+                //菜单栏隐藏标题
+                let titleObj = $('.artcle-toc .markdown-toc-list > li:first-child');
+                $('.artcle-toc > div').html(`<em><strong>${titleObj.html()}文章目录</strong></em>`);
+                titleObj.css('display', 'none');
+
+            }
         })
     </script>
 {{/block}}
