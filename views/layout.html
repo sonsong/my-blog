@@ -37,11 +37,6 @@
                             <use xlink:href="#icon-tag"></use>
                         </svg>文章标签</a>
                     </li>
-                    <!-- <li><a href="/editor">
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-write"></use>
-                        </svg>写文章</a>
-                    </li> -->
                     <li><a href="/about">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-about"></use>
@@ -61,13 +56,12 @@
                 <div class="fixedWrap">
                     <div class="search">
                         <input type="text" name="search" id="search" placeholder="文章标签">
-                        <svg class="icon" aria-hidden="true" style="position:absolute;top:9px;right:12px">
+                        <svg class="icon" aria-hidden="true" style="position:absolute;top:8px;right:12px">
                             <use xlink:href="#icon-search"></use>
                         </svg>
                         <ul class="result"></ul>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -87,7 +81,7 @@
             let scrollDistance = $(this).scrollTop() + 'px';
 
             scrolled.css('top',  scrollDistance);
-        })
+        });
     })
 
     //查询文章
@@ -117,9 +111,8 @@
             })
         }
     }
-    /*
-        函数防抖 在规定的时间内，只执行一次调用，如果在时间范围内有新的输入，重新计时
-    */
+    
+    //函数防抖 在规定的时间内，只执行一次调用，如果在时间范围内有新的输入，重新计时
     function debounce(fn, delay) {
         //定时器  子函数执行完，仍然存在
         let timer = null;
@@ -132,6 +125,24 @@
                 //执行函数
                 fn.apply(that, args);
             }, delay);
+        }
+    }
+    
+    //函数节流
+    function throttle(fn, delay = 1000){
+        let endTime = null;
+
+        return function(){
+            let startTime = new Date();
+            let that = this;
+
+            //如果时间差大于等待时间 || 第一次执行
+            if (startTime - endTime > delay) {
+                //执行函数
+                fn.apply(that, arguments);
+                //记录上次执行的事件
+                endTime = startTime
+            }
         }
     }
 </script>

@@ -199,8 +199,7 @@ button{
     width: 97%;
     padding-left : 10px;
     border       : none;
-    background: none;
-    border-bottom: 2px solid #fff;
+    background: #fff;
 }
 .layout-wrap .result{
     width: 100%;

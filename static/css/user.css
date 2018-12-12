@@ -8,7 +8,7 @@
     border       : 1px solid #eaeaea;
     margin-bottom: 20px;
     border-radius: 5px;
-    background   : #fff
+    background   : #fff;
 }
 .index-article .head{
     height     : 55px;
@@ -16,9 +16,13 @@
     text-align : center;
 }
 .index-article .detail{
+    width: 90%;
     height  : 300px;
     margin  : 0 auto;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-bottom: 2px solid #eaeaea;
 }
 .index-article .head .title{
     font-size  : 24px;
@@ -30,16 +34,10 @@
     line-height: 20px;
 }
 .index-article .hidden-block{
-    position   : absolute;
-    bottom     : 0;
-    left       : 0;
-    background : linear-gradient(to bottom, rgb(252, 250, 250), rgb(167, 167, 167));
-    height     : 60px;
-    line-height: 60px;
-    width      : 100%;
-    text-align : center;
-    z-index    : 10;
-    opacity    : 0.8;
+   height: 60px;
+   line-height: 60px;
+   text-align: right;
+   padding-right: 5%;
 }
 .index-article .read-btn{
     margin: 20px 0 10px 25px;
@@ -171,6 +169,12 @@
     color: #000;
 }
 .artcle-toc .markdown-toc-list a:hover{
+    color: #57dbec;
+}
+.artcle-toc .markdown-toc-list a:target{
+    color: #57dbec;
+}
+.artcle-toc .markdown-toc-list a:active{
     color: #57dbec;
 }
 
