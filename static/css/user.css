@@ -12,7 +12,7 @@
 }
 .index-article .head{
     height     : 55px;
-    font-weight: 900px;
+    font-weight: 900;
     text-align : center;
 }
 .index-article .detail{
@@ -55,11 +55,11 @@
 
 /* 简史样式 */
 .brief{
-    border    : 1px solid #eaeaea;
     font-size : 16px;
     color     : #000;
     background: #fff;
     border-radius: 5px;
+    padding-bottom: 20px;
 }
 .brief .head{
     height      : 80px;
@@ -73,7 +73,8 @@
 }
 .brief .brief-content{
     width      : 80%;
-    margin     : 20px auto;
+    margin     : 0 auto;
+    padding-bottom: 20px;
     border-left: 2px solid #57dbec;
 }
 
@@ -112,7 +113,7 @@
 
 /* 标签相关样式 */
 .brief .tags-content button{
-    margin: 20px 10px 20px 20px;
+    margin: 20px 10px 0 20px;
 }
 .brief .tags-content button a{
     color: #fff;
@@ -120,8 +121,9 @@
 
 /* 预览页面样式 */
 .preview{
-    padding-bottom: 50px;
-    background    : #fff
+    margin-bottom: 80px;
+    border-radius: 5px;
+    background    : #fff;
 }
 .preview_content{
     border: 1px solid #eaeaea;
@@ -137,10 +139,11 @@
     margin: 0 20px;
 }
 .artcle-toc{
-    width:90%;
-    margin: 20px auto;
-    border:1px solid #eaeaea;
+    width:calc(100% - 30px);
     background: #fff;
+    border-radius: 5px;
+}
+.artcle-toc a{
     font-size: 14px;
 }
 .artcle-toc ul li{
@@ -169,24 +172,15 @@
     color: #000;
 }
 .artcle-toc .markdown-toc-list a:hover{
-    color: #57dbec;
-}
-.artcle-toc .markdown-toc-list a:target{
-    color: #57dbec;
-}
-.artcle-toc .markdown-toc-list a:active{
-    color: #57dbec;
+    color: #5788fe;
 }
 
 /* 联系我 */
-.brief .about-content ul{
-    margin-bottom: 20px;
-}
 .brief .about-content ul li{
     display: flex;
     justify-content: flex-start;
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
     padding-left: 30px;
     box-sizing: border-box;
 }
@@ -199,6 +193,25 @@
     width: 85%;
     text-align: left;
     border-bottom: 1px dashed #c2c0c0;    
+}
+
+/* 分页样式 */
+.pager{
+    display        : flex;
+    justify-content: flex-end;
+    line-height    : 30px;
+    margin         : 10px 0;
+    color: #fff;
+}
+.pager .total{
+    padding: 0 15px;
+}
+.pager .pagerWrap{
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+}
+.pager .pagerWrap .icon{
+    padding: 0 5px!important;
 }
 
 /* 文章的一些样式调整 */
@@ -223,4 +236,10 @@ p code{
 }
 .markdown-body ol, .markdown-body ul{
     padding-left: 16px !important;
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px){
+    .index-article .detail{
+        height: 200px;
+    }
 }

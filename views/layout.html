@@ -42,10 +42,22 @@
                             <use xlink:href="#icon-about"></use>
                         </svg>联系我</a>
                     </li>
+                    <li><a href="javascript:" class="query">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-search"></use>
+                        </svg>查询文章</a>
+                    </li>
                 </ul>
             </div>
         </div>
-        <div class="right">
+        <div class="right" id="bg">
+            <div class="search-wrap">
+                <input type="text" name="search" id="search" placeholder="文章标签">
+                <svg class="icon" aria-hidden="true" style="position:absolute;top:8px;right:-10px">
+                    <use xlink:href="#icon-search"></use>
+                </svg>
+                <ul class="result"></ul>
+            </div>
             <div class="content">
                 {{block 'content'}}{{/block}}
                 <div class="content-bottom">
@@ -54,13 +66,6 @@
             </div>
             <div class="toolBox">
                 <div class="fixedWrap">
-                    <div class="search">
-                        <input type="text" name="search" id="search" placeholder="文章标签">
-                        <svg class="icon" aria-hidden="true" style="position:absolute;top:8px;right:12px">
-                            <use xlink:href="#icon-search"></use>
-                        </svg>
-                        <ul class="result"></ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -68,8 +73,26 @@
 </body>
 <script src="/js/iconfont.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
+<script src="/js/particle.js"></script>
 <script>
     $(() =>{
+
+        //粒子背景配置
+        var config = {
+            vx: 4,	//小球x轴速度,正为右，负为左
+            vy: 4,	//小球y轴速度
+            height: 3,	//小球高宽，其实为正方形，所以不宜太大
+            width: 3,
+            count: 200,		//点个数
+            color: "255, 255, 255", 	//点颜色
+            stroke: "255, 192, 203", 		//线条颜色
+            dist: 6000, 	//点吸附距离
+            e_dist: 20000, 	//鼠标吸附加速距离
+            max_conn: 10 	//点到点最大连接数
+        }
+        //调用
+        CanvasParticle(config);
+
         //根据关键字查询文章
         $("#search").on('keyup', debounce(search, 500));
 
@@ -77,11 +100,40 @@
         $('.right').scroll(function(){
             //随着屏幕滚动的对象
             let scrolled = $('.fixedWrap');
+            //搜索框对象
+            let scrolledSearch = $('.search-wrap');
+            
             //计算滚动的距离
             let scrollDistance = $(this).scrollTop() + 'px';
 
             scrolled.css('top',  scrollDistance);
+            scrolledSearch.css('top',  scrollDistance);
         });
+        
+        let flag = false;
+        //显示查询框
+        $('.query').on('click', function(){
+            flag = !flag;
+            if(flag){
+                $('.layout-wrap .search-wrap').css('display', 'block').animate({width:'25%'}, 1000);
+                //没有目录
+                if($('.artcle-toc').length === 0){
+                    $('.right .content').animate({width:'75%'}, 1000);
+                }else{
+                    $('.right .content').animate({width:'55%'}, 1000);
+                }
+            }else{
+                $('.layout-wrap .search-wrap').animate({width:'0'}, 1000, function(){
+                    $(this).css('display', 'none');
+                });
+                //没有目录
+                if($('.artcle-toc').length === 0){
+                    $('.right .content').animate({width:'100%'}, 1000);
+                }else{
+                    $('.right .content').animate({width:'75%'}, 1000);
+                }
+            }
+        })
     })
 
     //查询文章
@@ -99,11 +151,15 @@
                 success(res){
                     let data = res.blogs;
                     if(data.length === 0){
-                        $('.result').html('<li style="text-align:center">无结果</li>');
+                        $('.result').html('<li style="text-align:center;color: #fff">无结果</li>');
                     }else{
                         let html = '';
                         data.forEach(blog =>{
-                            html += `<li><a href="/preview?_id=${blog._id}">${blog.title}</a></li>`;
+                            let title = blog.title;
+                            let index = title.indexOf(search);
+                            //高亮标题中的关键字
+                            title = `${title.substring(0, index)}<span class="keyWord">${search}</span>${title.substring(index + search.length)}`
+                            html += `<li><a href="/preview?_id=${blog._id}">${title}</a></li>`;
                         })
                         $('.result').html(html);
                     }

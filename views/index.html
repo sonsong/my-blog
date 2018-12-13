@@ -29,25 +29,25 @@
             <div class="pager">
                 
                 {{if pager.totalPage === 1}}
-                    <div>
+                    <div class="pagerWrap">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-pre"></use>
                         </svg>
                     </div>
                     <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
-                    <div>
+                    <div class="pagerWrap">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-next"></use>
                         </svg>
                     </div>
                 {{else if pager.pageCode === 1}}
-                    <div>
+                    <div class="pagerWrap">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-pre"></use>
                         </svg>
                     </div>
                     <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
-                    <div>
+                    <div class="pagerWrap">
                         <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-next"></use>
@@ -55,7 +55,7 @@
                         </a>
                     </div>
                 {{else if pager.pageCode === pager.totalPage}}
-                    <div>
+                    <div class="pagerWrap">
                         <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-pre"></use>
@@ -63,13 +63,13 @@
                         </a>
                     </div>
                     <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
-                    <div>
+                    <div class="pagerWrap">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-next"></use>
                         </svg>
                     </div>
                 {{else}}
-                    <div>
+                    <div class="pagerWrap">
                         <a href="/{{pager.params}}pageCode={{pager.pageCode - 1 }}">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-pre"></use>
@@ -77,7 +77,7 @@
                         </a>
                     </div>
                     <div class="total">{{pager.pageCode}} / {{pager.totalPage}}</div>
-                    <div>
+                    <div class="pagerWrap">
                         <a href="/{{pager.params}}pageCode={{pager.pageCode + 1 }}">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#icon-next"></use>

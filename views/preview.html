@@ -31,6 +31,9 @@
             
             //存在目录增加目录结构  
             if(category){
+                //设置工具栏的宽度
+                $('.toolBox').css('width', '25%');
+                $('.right .content').css('width', '75%');
                 //在toolBox下显示目录
                 $('.fixedWrap').append(`
                     <div class="artcle-toc markdown-body">
@@ -45,7 +48,6 @@
                 let titleObj = $('.artcle-toc .markdown-toc-list > li:first-child');
                 $('.artcle-toc > div').html(`<em><strong>${titleObj.html()}文章目录</strong></em>`);
                 titleObj.css('display', 'none');
-
             }
         })
     </script>

@@ -33,7 +33,7 @@ router.get('searchArtcleByTag', async(ctx) =>{
     let tag = ctx.query.search;
 
     let blogs = [];
-    await Blogs.find({tags: tag}, (err, docs) =>{
+    await Blogs.find({tags: {$regex: tag}}, (err, docs) =>{
         if(!err){
             blogs = docs;
         }
@@ -47,7 +47,7 @@ router.get('/', async(ctx, next) =>{
 
     let ids      = ctx.query._id;
     let pageCode = ctx.query.pageCode === undefined ? 1 : parseInt(ctx.query.pageCode);
-    let pageSize = 5;
+    let pageSize = 10;
 
     //查询条件
     let condition = {};
@@ -170,9 +170,7 @@ router.get('preview', async(ctx, next) =>{
             blog = doc;
 
             //取出阅读次数，让其自增更新
-            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{
-                console.log(err, doc)
-            });
+            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{});
         }
     });
 

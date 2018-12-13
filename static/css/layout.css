@@ -77,15 +77,26 @@ button{
 .layout-wrap{
     display   : flex;
     height    : 100%;
-    background: #fff;
     font-size : 12px;
     overflow  : hidden;
+    animation: changeColor 30s ease-in-out infinite;
+    animation-fill-mode: both;
+}
+@keyframes changeColor {
+    from {background: linear-gradient(to bottom,#000 0%,#5788fe 100%);}
+    to {background: linear-gradient(to bottom,#000 0%,#ff6565 100%);}
 }
 .layout-wrap .left{
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
     height          : 100%;
     width           : 300px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
     color: #696969;
+    z-index: 2;
 }
 .layout-wrap .left .colorDiv{
     width: 100%;
@@ -121,7 +132,7 @@ button{
 }
 .layout-wrap .userinfo > div:first-child{
     font-size: 20px;
-    padding: 20px 20px;
+    padding: 20px;
     font-style: normal;
     cursor: pointer;
 }
@@ -146,26 +157,32 @@ button{
 }
 
 .layout-wrap .category li:hover{
-    background: #eaeaea;
-    border-left: 5px solid #929191; 
+    background: #c7c6c6;
+    border-left: 5px solid #686767; 
     box-sizing: border-box;
-}
+}s
 .layout-wrap .category li:hover a{
     color: #b0a0aa;
     text-decoration: none;
 }
 .layout-wrap .right{
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
     display   : flex;
     width     : calc(100% - 300px);
     overflow-y: auto;
-    background: #eaeaea;
-}
-.layout-wrap .right .toolBox{
-    width   : 25%;
+    overflow-x: hidden;
+    background-image:url('../img//bg.png');
+    background-position: -20% calc(100% - 50px);
+    background-repeat: repeat-x;
+    z-index:1;
 }
 .layout-wrap .right .content{
-    width     : 75%;
-    padding   : 30px 0 30px 30px;
+    width     : 100%;
+    padding   : 30px 30px 30px 30px;
     box-sizing: border-box;
 }
 .layout-wrap .right .content-bottom{
@@ -177,9 +194,8 @@ button{
     line-height: 50px;
     font-size  : 14px;
     text-align : center;
-    background : #e9e9e9;
+    background : #fff;
 }
-
 .layout-wrap .toolBox{
     margin-top: 30px;
 }
@@ -189,39 +205,52 @@ button{
     right: 0;
     left: 0;
 }
-.layout-wrap .search{
-    width: 90%;
-    margin:  0 auto;
+.layout-wrap .search-wrap{
+    position: relative;
+    display: none;
+    width: 0;
+    margin:  30px 0;
+    margin-left: 30px;
 }
-.layout-wrap .search input{
+.layout-wrap .search-wrap input{
     border-radius: 5px;
     height       : 30px;
     width: 97%;
-    padding-left : 10px;
+    padding-left : 20px;
+    outline: none;
     border       : none;
     background: #fff;
 }
 .layout-wrap .result{
-    width: 100%;
+    width: 102%;
 }
 .layout-wrap .result li{
-    height       : 30px;
-    line-height  : 30px;
-    cursor       : pointer;
-    padding-left : 10px;
+    height       : 40px;
     border-radius: 5px;
-    border-bottom: 1px dashed  #c0bfbf;
+    line-height  : 40px;
+    margin: 5px 0;  
+    cursor       : pointer;
+    padding-left : 20px;
+    background: rgba(0, 0, 0, 0.3);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.layout-wrap .result li:hover{
+    background: rgba(0, 0, 0, 0.5);
+}
 .layout-wrap .result li a{
-    color: #000;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 14px
 }
-.layout-wrap .result li:hover{
-    background: rgb(159, 203, 247)
+.layout-wrap .result li a:hover{
+    text-decoration: underline;
+    color: rgba(255, 255, 255, 1);
+}
+.layout-wrap .result .keyWord{
+    color: #f90;
+    font-weight: bold;
 }
 
 .icon {
@@ -234,13 +263,34 @@ button{
     font-weight: bold;
 }
 
-/* 分页样式 */
-.pager{
-    display        : flex;
-    justify-content: flex-end;
-    line-height    : 30px;
-    margin         : 10px 0;
-}
-.pager > div:nth-child(2){
-    padding-right: 20px;
-}
+@media only screen and (min-width: 1024px) and (max-width: 1366px){
+    .layout-wrap .left{
+        width: 250px;
+    }
+    .layout-wrap .left .colorDiv{
+        height: 120px;
+    }
+    .layout-wrap .uimg{
+        height: 100px;
+        width: 100px;
+        top: 35px;
+        left: -7px;
+    }
+    .layout-wrap .userinfo{
+        margin-top: 55px;
+    }
+    .layout-wrap .userinfo > div:first-child{
+        padding: 10px;
+    }
+    .layout-wrap .category li{
+        height: 60px;
+        line-height: 60px;
+    }
+    .layout-wrap .right{
+        width: calc(100% - 250px);
+    }
+    .layout-wrap .right .content-bottom{
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+} 
