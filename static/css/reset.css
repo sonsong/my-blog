@@ -14,9 +14,25 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
     border: 0;
-    font-size: 100%;
-	font-family: 'Microsoft YaHei, Consolas';
-    vertical-align: baseline;
+    /* 大屏 */
+    font-size: 125%;
+    font-family: "Microsoft YaHei",Helvetica,"Meiryo UI","Malgun Gothic",
+                    "Segoe UI","Trebuchet MS",Monaco,monospace,Tahoma,STXihei,
+                    "华文细黑",STHeiti,"Helvetica Neue","Droid Sans","wenquanyi micro hei",
+                    FreeSans,Arimo,Arial,SimSun,"宋体",Heiti,"黑体",sans-serif;
+}
+
+/* 手机屏幕~平板 */
+@media only screen and (min-width: 414px) and (max-width: 1024px){
+    *{
+        font-size: 93.75% !important;
+    }
+}
+/* 笔记本屏幕 */
+@media only screen and (min-width: 1024px) and (max-width: 1919px){
+    *{
+        font-size: 93.75% !important;
+    }
 }
 
 html, body{
@@ -44,6 +60,6 @@ q:before, q:after {
 	content: none;
 }
 table {
-	border-collapse: collapse;
+    border-collapse: collapse;
 	border-spacing: 0;
 }

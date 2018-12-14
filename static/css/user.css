@@ -1,23 +1,24 @@
 /* 首页样式 */
 .index-wrap{
-    padding-bottom: 50px;
+    padding-bottom: 1.5rem;
 }
 .index-article{
     position     : relative;
     width        : 100%;
     border       : 1px solid #eaeaea;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     border-radius: 5px;
     background   : #fff;
+    font-size: 0.8rem;
 }
 .index-article .head{
-    height     : 55px;
+    height     : 3.5rem;
     font-weight: 900;
     text-align : center;
 }
 .index-article .detail{
     width: 90%;
-    height  : 300px;
+    height  : 15rem;
     margin  : 0 auto;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -25,28 +26,29 @@
     border-bottom: 2px solid #eaeaea;
 }
 .index-article .head .title{
-    font-size  : 24px;
+    font-size  : 1.2rem;
     font-weight: 700;
-    margin     : 20px 0 10px 0;
+    margin     : 1rem 0 0.5rem 0;
 }
 .index-article .head .sub-title{
-    height: 20px;
-    line-height: 20px;
+    height: 1rem;
+    line-height: 1rem;
+    font-size: 0.6rem;
 }
 .index-article .hidden-block{
-   height: 60px;
-   line-height: 60px;
+   height: 3rem;
+   line-height: 3rem;
    text-align: right;
    padding-right: 5%;
 }
 .index-article .read-btn{
-    margin: 20px 0 10px 25px;
+    margin: 1rem 0 0.5rem 1.25rem;
 }
 .index-article .read-btn a{
     color: #fff;
 }
 .index-article .sub-title span{
-    margin: 0 10px
+    margin: 0 0.5rem;
 }
 .index-article .tags span a{
     color : sandybrown;
@@ -55,17 +57,17 @@
 
 /* 简史样式 */
 .brief{
-    font-size : 16px;
+    font-size : 0.8rem;
     color     : #000;
     background: #fff;
     border-radius: 5px;
-    padding-bottom: 20px;
+    padding-bottom: 1rem;
 }
 .brief .head{
-    height      : 80px;
-    line-height : 80px;
-    font-size   : 24px;
-    padding-left: 30px;
+    height      : 4rem;
+    line-height : 4rem;
+    font-size   : 1.2rem;
+    padding-left: 1.5rem;
     background  : #fff;
     border-left: 5px solid #4d4d4d;
     box-sizing: border-box;
@@ -74,14 +76,14 @@
 .brief .brief-content{
     width      : 80%;
     margin     : 0 auto;
-    padding-bottom: 20px;
+    padding-bottom: 1rem;
     border-left: 2px solid #57dbec;
 }
 
 .brief .time{
-    height     : 50px;
-    line-height: 50px;
-    font-size  : 18px;
+    height     : 2.5rem;
+    line-height: 2.5rem;
+    font-size  : 0.9rem;
     margin-left: -10px;
 }       
 .brief .time::before{
@@ -91,29 +93,29 @@
     height       : 6px;
     background   : rgb(105, 240, 240);
     border-radius: 50%;
-    margin-right : 15px;
-    padding      : 2px;
+    margin-right : 0.75rem;
+    padding      : 0.1rem;
     border       : 4px solid rgb(101, 213, 228);
     cursor       : pointer;
 }
 .brief .part ul{
-    margin-left: 40px;
+    margin-left: 2rem;
 }
 .brief .part ul li{
-    height     : 30px;
-    line-height: 30px;
+    height     : 2rem;
+    line-height: 2rem;
 }
 .brief .part ul li a:hover{
     color: #05d3ee;
 }
 .brief .part ul li span{
-    font-size   : 12px;
-    padding-left: 10px;
+    font-size   : 0.6rem;
+    padding-left: 0.5rem;
 }
 
 /* 标签相关样式 */
 .brief .tags-content button{
-    margin: 20px 10px 0 20px;
+    margin: 1rem 0.5rem 0 1rem;
 }
 .brief .tags-content button a{
     color: #fff;
@@ -121,7 +123,7 @@
 
 /* 预览页面样式 */
 .preview{
-    margin-bottom: 80px;
+    margin-bottom: 2rem;
     border-radius: 5px;
     background    : #fff;
 }
@@ -131,34 +133,41 @@
 .read-tips{
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
 }
 .read-tips > div{
-    line-height: 40px;
-    height: 40px;
-    margin: 0 20px;
+    line-height: 2rem;
+    height: 2rem;
+    margin: 0 1rem;
+    font-size: 0.6rem;
+}
+.read-tips a{
+    font-size: 0.6rem;
 }
 .artcle-toc{
-    width:calc(100% - 30px);
+    width:calc(100% - 1.5rem);
     background: #fff;
     border-radius: 5px;
-}
-.artcle-toc a{
-    font-size: 14px;
+    overflow-y: auto !important;
 }
 .artcle-toc ul li{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.artcle-toc strong{
+    font-size: 1rem;
+}
+.artcle-toc ul li a{
+    font-size: 0.7rem;
+}
 .artcle-toc .markdown-toc-list{
-    padding: 10px;
+    padding: 0.5rem;
 }
 .artcle-toc .markdown-toc-list li::before{
     content: '';
     display: inline-block;
     border: 3px solid #000;
-    margin: 2px 10px;
+    margin: 0.1rem 0.5rem;
     border-radius: 50%;
 }
 .artcle-toc .markdown-toc-list .toc-level-4, .toc-level-5, .toc-level-6{
@@ -179,15 +188,18 @@
 .brief .about-content ul li{
     display: flex;
     justify-content: flex-start;
-    height: 60px;
-    line-height: 60px;
-    padding-left: 30px;
+    line-height: 1.5rem;
+    padding: 0.5rem;
     box-sizing: border-box;
+}
+.brief .about-content span:first-child{
+    font-weight: bold
 }
 .brief .about-content span{
     display: block;
     width: 10%;
     text-align: right;
+    font-size: 0.8rem;
 }
 .brief .about-content span:last-child{
     width: 85%;
@@ -199,22 +211,26 @@
 .pager{
     display        : flex;
     justify-content: flex-end;
-    line-height    : 30px;
-    margin         : 10px 0;
+    margin         : 0.2rem 0 0.6rem 0;
     color: #fff;
+    font-size: 0.6rem;
 }
 .pager .total{
-    padding: 0 15px;
+    padding: 0.2rem 0.75rem;
 }
 .pager .pagerWrap{
     background: rgba(255, 255, 255, 0.6);
     border-radius: 10px;
 }
 .pager .pagerWrap .icon{
-    padding: 0 5px!important;
+    padding: 0.2rem 0.25rem!important;
 }
 
 /* 文章的一些样式调整 */
+.markdown-body *{
+    font-size: 0.8rem;
+    color: #000
+}
 abbr {
     color: #fff;
     border: none !important;
@@ -232,14 +248,19 @@ p code{
 }
 
 .editormd-html-preview, .editormd-preview-container{
-    padding: 50px !important;
+    padding: 2rem !important;
 }
 .markdown-body ol, .markdown-body ul{
-    padding-left: 16px !important;
+    padding-left: 1rem !important;
 }
 
-@media only screen and (min-width: 1024px) and (max-width: 1366px){
-    .index-article .detail{
-        height: 200px;
+@media only screen and (max-width: 1024px){
+    .brief .about-content span{
+        width: 12%;
+    }
+}
+@media only screen and (max-width: 414px){
+    .brief .about-content span{
+        width: 18%;
     }
 }
