@@ -133,7 +133,8 @@
                 interver = setInterval(() =>{
                     let content = textareObj.text();
                     sessionStorage.setItem('mdContent', content);
-                }, 5 * 60 * 1000);
+                    layer.msg('编辑内容已暂时保存在本地~~~', {icon: 6});
+                },  5 * 60 * 1000);
             })
             
             //收起和展开 flag = true 收起 false 展开

@@ -72,6 +72,9 @@ html, body{
     margin-left: 100px;
     box-sizing: border-box;
 }
+.user-info .top-left:hover{
+    cursor: pointer;
+}
 .user-info .top-right{
     line-height: 40px;
     margin-left: 50px;
