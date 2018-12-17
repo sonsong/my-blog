@@ -165,7 +165,7 @@ router.get('preview', async(ctx, next) =>{
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: id}, '_id htmlContent readNum', (err, doc) =>{
+    await Blogs.findById({_id: id}, '_id htmlContent title readNum', (err, doc) =>{
         if(!err){
             blog = doc;
 
@@ -201,7 +201,7 @@ router.get('preview', async(ctx, next) =>{
         }
     });
 
-    ctx.render('preview', {htmlContent: blog.htmlContent, preA, nextA, user: ctx.user});
+    ctx.render('preview', {htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user});
 });
 
 //进入标签页

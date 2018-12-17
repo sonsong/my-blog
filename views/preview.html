@@ -26,30 +26,36 @@
 {{block 'js'}}
     <script>
         $(() =>{
+            //修改标题
+            let title = '{{title}}'
+            $('title').text(title);
             //目录
             let category = $('.editormd-markdown-toc').html();
             let width = window.innerWidth;
-            
-            //存在目录增加目录结构  
-            if(category){
-                //设置工具栏的宽度
-                $('.toolBox').css('width', '25%');
-                $('.right .content').css('width', '75%');
-                //在toolBox下显示目录
-                $('.fixedWrap').append(`
-                    <div class="artcle-toc markdown-body">
-                        <div style="background:#fff;padding:0.25rem 0.5rem;border-left: 5px solid #4d4d4d;"></div>
-                    </div>
-                `)
-                //显示文字目录
-                $('.artcle-toc').append($('.editormd-markdown-toc').html());
-                //菜单栏隐藏标题
-                let titleObj = $('.artcle-toc .markdown-toc-list > li:first-child');
-                $('.artcle-toc > div').html(`<em><strong>${titleObj.html()} 文章目录</strong></em>`);
-                titleObj.css('display', 'none');
+
+            //平板以上宽度  显示目录结构
+            if(width > 1024){
+                //存在目录增加目录结构  
+                if(category){
+                    //设置工具栏的宽度
+                    $('.toolBox').css('width', '25%');
+                    $('.right .content').css('width', '75%');
+                    //在toolBox下显示目录
+                    $('.fixedWrap').append(`
+                        <div class="artcle-toc markdown-body">
+                            <div style="background:#fff;padding:0.25rem 0.5rem;border-left: 5px solid #4d4d4d;"></div>
+                        </div>
+                    `)
+                    //显示文字目录
+                    $('.artcle-toc').append($('.editormd-markdown-toc').html());
+                    //菜单栏隐藏标题
+                    let titleObj = $('.artcle-toc .markdown-toc-list > li:first-child');
+                    $('.artcle-toc > div').html(`<em><strong>${titleObj.html()} 文章目录</strong></em>`);
+                    titleObj.css('display', 'none');
+                }
+                //隐藏正文的目录
+                $('.editormd-markdown-toc').css('display', 'none');
             }
-            //隐藏正文的目录
-            $('.editormd-markdown-toc').css('display', 'none');
         })
     </script>
 {{/block}}

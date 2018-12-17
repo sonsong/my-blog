@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{block 'title'}}{{/block}}
     <link rel="stylesheet" href="/css/reset.css">
@@ -94,10 +94,11 @@
             e_dist: 20000, 	//鼠标吸附加速距离
             max_conn: 10 	//点到点最大连接数
         }
-
+        
         //做移动端适配
         let width = window.innerWidth;
-        if(width > 414){
+
+        if(width > 1024){
             //手机屏幕不显示粒子特效
             CanvasParticle(config);
             //监听屏幕的滚动
@@ -114,6 +115,9 @@
                 scrolledSearch.css('top',  scrollDistance);
             });
         }else{
+            if(width > 414 && width <= 1024){
+                CanvasParticle(config);
+            }
             $('.inner-wrap').on('click', showOrHiddenNav);
             $('.category-icon').on('click', showOrHiddenNav);
         }
@@ -125,39 +129,40 @@
         //显示查询框
         $('.query').on('click', function(){
             flag = !flag;
-            if(width > 414){
+            if(width > 1024){
                 if(flag){
-                    $('.layout-wrap .search-wrap').css('display', 'block').animate({width:'25%'}, 1000);
-                    //没有目录
-                    if($('.artcle-toc').length === 0){
-                        $('.right .content').animate({width:'75%'}, 1000);
-                    }else{
-                        $('.right .content').animate({width:'55%'}, 1000);
-                    }
+                    $('.layout-wrap .search-wrap').animate({width:'25%'}, 1000).css('display', 'block');
                 }else{
                     $('.layout-wrap .search-wrap').animate({width:'0'}, 1000, function(){
                         $(this).css('display', 'none');
                     });
-                    //没有目录
-                    if($('.artcle-toc').length === 0){
-                        $('.right .content').animate({width:'100%'}, 1000);
-                    }else{
-                        $('.right .content').animate({width:'75%'}, 1000);
-                    }
                 }
+
+                //没有目录
+                if($('.artcle-toc').length === 0){
+                    $('.right .content').animate({width:flag ? '75%' : '100%'}, 1000);
+                }else{
+                    $('.right .content').animate({width:flag ? '55%' : '75%'}, 1000);
+                }
+                
+                return;
             }
             
             $('.left').css('display', 'none');
             $('.inner-wrap').css('display', 'none');
             $('.category-icon').css('display', 'none');
             $('.search-wrap').css('display', 'block');
+            $('.content').css('display', 'none');
+            $('.collapse').css('display', 'block');
         })
     })
 
     //点击收起按钮
     $('.collapse').on('click', () =>{
         $('.category-icon').css('display', '');
-        $('.search-wrap').css('display', 'none')
+        $('.search-wrap').css('display', 'none');
+        $('.content').css('display', 'block');
+        $(this).css('display', 'none');
     })
 
     // 手机屏下显现/隐藏侧边栏
@@ -168,6 +173,7 @@
         $('.left').css('display', bool ? 'block' : 'none');
         $('.inner-wrap').css('display', bool ? 'block' : 'none');
         $('.category-icon').css('display', bool ? 'none' : 'block');
+        $('.search-wrap').css('display', 'none');
     }
     //查询文章
     function search(){
@@ -186,7 +192,6 @@
                     if(data.length === 0){
                         $('.result').html('<li style="text-align:center;color: #fff">无结果</li>');
                     }else{
-                        console.log(res)
                         let html = '';
                         data.forEach(blog =>{
                             let title = blog.title;
