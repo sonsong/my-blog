@@ -144,10 +144,9 @@
     font-size: 0.6rem;
 }
 .artcle-toc{
-    width:calc(100% - 1.5rem);
     background: #fff;
-    border-radius: 5px;
     overflow-y: auto !important;
+    max-height: 50%;
 }
 .artcle-toc ul li{
     overflow: hidden;

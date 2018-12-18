@@ -375,11 +375,15 @@ router.get('user_info', async(ctx) =>{
             };
         }
     });
-    //计算简历的名字
+
     let resumeName = '';
-    let index = user.resume.lastIndexOf('/') === 2 ? 2 : user.resume.lastIndexOf('/');
-    if(index !== 2){
-        resumeName = user.resume.substring(index + 1);
+    if(user.resume){
+        //计算简历的名字
+        
+        let index = user.resume.lastIndexOf('/') === 2 ? 2 : user.resume.lastIndexOf('/');
+        if(index !== 2){
+            resumeName = user.resume.substring(index + 1);
+        }
     }
 
     ctx.render('admin/user/user_info', {user, resumeName});

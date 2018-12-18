@@ -1,5 +1,5 @@
 {{extend './layout.html'}}
-{{block 'title'}}<title>文章详情</title>{{/block}}
+{{block 'title'}}<title>jsong-一个不专业的前端程序员-</title>{{/block}}
 {{block 'content'}}
     <div class="preview">
         <div class="preview_content">
@@ -46,12 +46,11 @@
                             <div style="background:#fff;padding:0.25rem 0.5rem;border-left: 5px solid #4d4d4d;"></div>
                         </div>
                     `)
-                    //显示文字目录
+                    //显示文章目录
                     $('.artcle-toc').append($('.editormd-markdown-toc').html());
-                    //菜单栏隐藏标题
-                    let titleObj = $('.artcle-toc .markdown-toc-list > li:first-child');
-                    $('.artcle-toc > div').html(`<em><strong>${titleObj.html()} 文章目录</strong></em>`);
-                    titleObj.css('display', 'none');
+                    
+                    //设置目录标题
+                    $('.artcle-toc > div').html(`<em><strong>${title} 文章目录</strong></em>`);
                 }
                 //隐藏正文的目录
                 $('.editormd-markdown-toc').css('display', 'none');

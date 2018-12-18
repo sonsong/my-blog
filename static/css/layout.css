@@ -178,6 +178,7 @@ button a{
     bottom: 0;
     display   : flex;
     width     : calc(100% - 15rem);
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     background-image:url('../img//bg.png');
@@ -191,9 +192,13 @@ button a{
     box-sizing: border-box;
 }
 .layout-wrap .toolBox{
+    max-height: 100%;
     margin-top: 1.5rem;
 }
 .layout-wrap .toolBox .fixedWrap{
+    width: calc(100% - 1.5rem);
+    max-height: 92%;
+    overflow-y: auto;
     position: relative;
     top: 0;
     right: 0;

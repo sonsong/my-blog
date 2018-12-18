@@ -11,17 +11,34 @@ router.use(async(ctx, next) =>{
     //查询admin信息
     await Users.findOne({uname: 'admin'}, '_id uname nname email motto introd picture resume', (err, doc) =>{
         if(!err){
-            ctx.user = {
-                _id: doc._id.toString(),
-                uname: doc.uname,
-                nname: doc.nname,
-                email: doc.email,
-                introd: doc.introd,
-                motto: doc.motto,
-                picture: doc.picture,
-                resumePath: doc.resume,
-                resumeName: doc.resume.substring('/upload/file/'.length)
-            };
+            //没有内置账户 新增一个
+            if(doc === null){
+                Users.create({
+                    uname: 'admin',
+                    nname: '不专业的前端猿',
+                    passwd: '4a0cde71aee7158542d013fc0c9f5acfc735c612',
+                    role: '0'
+                }).then(res =>{
+                    ctx.user = {
+                        _id: res._id.toString(),
+                        uname: res.uname,
+                        nname: res.nname,
+                        picture: res.picture
+                    };
+                });
+            }else{
+                ctx.user = {
+                    _id: doc._id.toString(),
+                    uname: doc.uname,
+                    nname: doc.nname,
+                    email: doc.email,
+                    introd: doc.introd,
+                    motto: doc.motto,
+                    picture: doc.picture,
+                    resumePath: doc.resume,
+                    resumeName: doc.resume && doc.resume.substring('/upload/file/'.length)
+                };
+            }
         }
     })
 

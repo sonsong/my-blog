@@ -15,7 +15,10 @@ var usersSchema = mongoose.Schema({
     //简介
     introd: String,
     //头像
-    picture: String,
+    picture: {
+        type: String,
+        default: '/img/user.gif'
+    },
     //简历
     resume: String,
     //创建时间

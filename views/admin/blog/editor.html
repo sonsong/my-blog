@@ -34,7 +34,7 @@
                
             <div id="my-editormd">
                 <!-- md内容 -->
-                <textarea class="editormd-markdown-textarea" name="mdContent" style="display:none"></textarea>
+                <textarea class="editormd-markdown-textarea" name="mdContent" style="display:none">{{mdContent}}</textarea>
             </div>
         </form>
     </div>
@@ -123,9 +123,10 @@
 
                 //如果session中临时保存了编辑的内容，显示
                 let mdContent = sessionStorage.getItem('mdContent');
+
                 let textareObj = $('.editormd-markdown-textarea');
 
-                if(mdContent !== null || mdContent !== ''){
+                if(mdContent !== null && mdContent !== ''){
                     textareObj.text(mdContent);
                 }
 
@@ -133,7 +134,7 @@
                 interver = setInterval(() =>{
                     let content = textareObj.text();
                     sessionStorage.setItem('mdContent', content);
-                    layer.msg('编辑内容已暂时保存在本地~~~', {icon: 6});
+                    layer.msg('编辑的文章内容已暂存在本地~~~', {icon: 6});
                 },  5 * 60 * 1000);
             })
             
