@@ -42,15 +42,10 @@
                     $('.right .content').css('width', '75%');
                     //在toolBox下显示目录
                     $('.fixedWrap').append(`
-                        <div class="artcle-toc markdown-body">
-                            <div style="background:#fff;padding:0.25rem 0.5rem;border-left: 5px solid #4d4d4d;"></div>
-                        </div>
+                        <div class="artcle-toc markdown-body"></div>
                     `)
                     //显示文章目录
                     $('.artcle-toc').append($('.editormd-markdown-toc').html());
-                    
-                    //设置目录标题
-                    $('.artcle-toc > div').html(`<em><strong>${title} 文章目录</strong></em>`);
                 }
                 //隐藏正文的目录
                 $('.editormd-markdown-toc').css('display', 'none');

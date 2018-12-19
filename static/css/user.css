@@ -9,20 +9,19 @@
     margin-bottom: 1rem;
     border-radius: 5px;
     background   : #fff;
-    font-size: 0.8rem;
+    font-size    : 0.8rem;
 }
 .index-article .head{
-    height     : 3.5rem;
-    font-weight: 900;
-    text-align : center;
+    height    : 2.5rem;
+    text-align: center;
 }
 .index-article .detail{
-    width: 90%;
-    height  : 15rem;
-    margin  : 0 auto;
-    overflow: hidden;
+    width        : 90%;
+    height       : 15rem;
+    margin       : 0 auto;
+    overflow     : hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space  : nowrap;
     border-bottom: 2px solid #eaeaea;
 }
 .index-article .head .title{
@@ -31,14 +30,14 @@
     margin     : 1rem 0 0.5rem 0;
 }
 .index-article .head .sub-title{
-    height: 1rem;
+    height     : 1rem;
     line-height: 1rem;
-    font-size: 0.6rem;
+    font-size  : 0.7rem !important;
 }
 .index-article .hidden-block{
-   height: 3rem;
-   line-height: 3rem;
-   text-align: right;
+   height       : 3rem;
+   line-height  : 3rem;
+   text-align   : right;
    padding-right: 5%;
 }
 .index-article .read-btn{
@@ -57,10 +56,10 @@
 
 /* 简史样式 */
 .brief{
-    font-size : 0.8rem;
-    color     : #000;
-    background: #fff;
-    border-radius: 5px;
+    font-size     : 0.8rem;
+    color         : #000;
+    background    : #fff;
+    border-radius : 5px;
     padding-bottom: 1rem;
 }
 .brief .head{
@@ -69,15 +68,15 @@
     font-size   : 1.2rem;
     padding-left: 1.5rem;
     background  : #fff;
-    border-left: 5px solid #4d4d4d;
-    box-sizing: border-box;
-    font-style: italic;
+    border-left : 5px solid #4d4d4d;
+    box-sizing  : border-box;
+    font-style  : italic;
 }
 .brief .brief-content{
-    width      : 80%;
-    margin     : 0 auto;
+    width         : 80%;
+    margin        : 0 auto;
     padding-bottom: 1rem;
-    border-left: 2px solid #57dbec;
+    border-left   : 2px solid #57dbec;
 }
 
 .brief .time{
@@ -125,20 +124,21 @@
 .preview{
     margin-bottom: 2rem;
     border-radius: 5px;
-    background    : #fff;
+    background   : #fff;
 }
 .preview_content{
-    border: 1px solid #eaeaea;
+    border       : 1px solid #eaeaea;
+    border-radius: 5px;
 }
 .read-tips{
-    display: flex;
+    display        : flex;
     justify-content: space-between;
 }
 .read-tips > div{
     line-height: 2rem;
-    height: 2rem;
-    margin: 0 1rem;
-    font-size: 0.6rem;
+    height     : 2rem;
+    margin     : 0 1rem;
+    font-size  : 0.6rem;
 }
 .read-tips a{
     font-size: 0.6rem;
@@ -149,9 +149,9 @@
     max-height: 50%;
 }
 .artcle-toc ul li{
-    overflow: hidden;
+    overflow     : hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space  : nowrap;
 }
 .artcle-toc strong{
     font-size: 1rem;
@@ -162,19 +162,8 @@
 .artcle-toc .markdown-toc-list{
     padding: 0.5rem;
 }
-.artcle-toc .markdown-toc-list li::before{
-    content: '';
-    display: inline-block;
-    border: 3px solid #000;
-    margin: 0.1rem 0.5rem;
-    border-radius: 50%;
-}
 .artcle-toc .markdown-toc-list .toc-level-4, .toc-level-5, .toc-level-6{
-    color: #545050;
-}
-.artcle-toc .markdown-toc-list > li:first-child::before{
-    content: '';
-    border: 0;
+    color: #414040;
 }
 .artcle-toc .markdown-toc-list a{
     color: #000;
@@ -185,25 +174,25 @@
 
 /* 联系我 */
 .brief .about-content ul li{
-    display: flex;
+    display        : flex;
     justify-content: flex-start;
-    line-height: 1.5rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
+    line-height    : 1.5rem;
+    padding        : 0.5rem;
+    box-sizing     : border-box;
 }
 .brief .about-content span:first-child{
     font-weight: bold
 }
 .brief .about-content span{
-    display: block;
-    width: 10%;
+    display   : block;
+    width     : 10%;
     text-align: right;
-    font-size: 0.8rem;
+    font-size : 0.8rem;
 }
 .brief .about-content span:last-child{
-    width: 85%;
-    text-align: left;
-    border-bottom: 1px dashed #c2c0c0;    
+    width        : 85%;
+    text-align   : left;
+    border-bottom: 1px dashed #c2c0c0;
 }
 
 /* 分页样式 */
@@ -211,14 +200,14 @@
     display        : flex;
     justify-content: flex-end;
     margin         : 0.2rem 0 0.6rem 0;
-    color: #fff;
-    font-size: 0.6rem;
+    color          : #fff;
+    font-size      : 0.6rem;
 }
 .pager .total{
     padding: 0.2rem 0.75rem;
 }
 .pager .pagerWrap{
-    background: rgba(255, 255, 255, 0.6);
+    background   : rgba(255, 255, 255, 0.6);
     border-radius: 10px;
 }
 .pager .pagerWrap .icon{
@@ -228,28 +217,28 @@
 /* 文章的一些样式调整 */
 .markdown-body *{
     font-size: 0.8rem;
-    color: #000
+    color    : #000
 }
 abbr {
-    color: #fff;
-    border: none !important;
-    background: #f90 !important;
-    padding: 1px 3px;
+    color        : #fff;
+    border       : none !important;
+    background   : #f90 !important;
+    padding      : 1px 3px;
     border-radius: 3px;
 }
 
 p code{
-    color: #fff;
-    border: none !important;
-    background: #5A9600 !important;
-    padding: 1px 3px;
+    color        : #fff;
+    border       : none !important;
+    background   : #5A9600 !important;
+    padding      : 1px 3px;
     border-radius: 3px;
 }
 
 .editormd-html-preview, .editormd-preview-container{
-    padding: 2rem !important;
+    padding: 1rem !important;
 }
-.markdown-body ol, .markdown-body ul{
+.markdown-body ul{
     padding-left: 1rem !important;
 }
 

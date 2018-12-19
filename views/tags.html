@@ -5,7 +5,7 @@
         <div class="head">文章标签</div>
         <div class="tags-content">
             {{each tags}}
-               <button><a href="/?_id={{$value._ids}}">{{$value.tag}} ({{$value.sum}})</a></button>
+               <a href="/?_id={{$value._ids}}"><button>{{$value.tag}} ({{$value.sum}})</button></a>
             {{/each}}
         </div>
     </div>

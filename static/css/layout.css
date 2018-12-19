@@ -1,28 +1,25 @@
 html, body{
-    height: 100%;
+    height    : 100%;
     background: #eaeaea;
 }
 a{
-    font-size: 0.8rem;
+    font-size      : 0.7rem;
     text-decoration: none;
     color          : #000;
 }
 a:hover{
     text-decoration: underline;
-    color: #57dbec
+    color          : #57dbec
 }
 button{
     color        : #fff;
-    font-size    : 0.7rem;
+    font-size    : 0.7rem !important;
     height       : 1.75rem;
     line-height  : 1.6rem;
     min-width    : 4rem;
     border-radius: 0.5rem;
     cursor       : pointer;
     box-sizing   : border-box;
-}
-button a{
-    font-size: 0.7rem;
 }
 
 .default-btn{
@@ -79,11 +76,11 @@ button a{
     width: auto !important;
 }
 .layout-wrap{
-    display   : flex;
-    height    : 100%;
-    font-size : 0.6rem;
-    overflow  : hidden;
-    animation: changeColor 30s ease-in-out infinite;
+    display            : flex;
+    height             : 100%;
+    font-size          : 0.6rem;
+    overflow           : hidden;
+    animation          : changeColor 30s ease-in-out infinite;
     animation-fill-mode: both;
 }
 @keyframes changeColor {
@@ -91,27 +88,27 @@ button a{
     to {background: linear-gradient(to bottom,#000 0%,#ff6565 100%);}
 }
 .layout-wrap .left{
-    position: relative;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
+    position        : relative;
+    top             : 0;
+    right           : 0;
+    left            : 0;
+    bottom          : 0;
     height          : 100%;
     width           : 15rem;
     background-color: rgba(255, 255, 255, 1);
-    color: #696969;
-    z-index: 2;
+    color           : #696969;
+    z-index         : 2;
 }
 .layout-wrap .left .colorDiv{
-    width: 100%;
-    height: 9rem;
+    width           : 100%;
+    height          : 9rem;
     background-color: rgb(77, 77, 77);
 }
 .layout-wrap .uimg{
-    position: absolute;
-    top: 3.75rem;
-    left: 0;
-    right: 0;
+    position        : absolute;
+    top             : 3.75rem;
+    left            : 0;
+    right           : 0;
     width           : 7.5rem;
     height          : 7.5rem;
     border-radius   : 50%;
@@ -128,25 +125,25 @@ button a{
     margin-top: 4rem;
 }
 .layout-wrap .userinfo > div{
-    text-align : center;
+    text-align: center;
     font-style: italic;
-    font-size  : 0.7rem;
+    font-size : 0.7rem;
     word-break: break-all;
-    padding: 0.2rem 1rem;
+    padding   : 0.2rem 1rem;
 }
 .layout-wrap .userinfo > div:first-child{
-    font-size: 1rem;
-    padding: 1rem;
+    font-size : 1rem;
+    padding   : 1rem;
     font-style: normal;
-    cursor: pointer;
+    cursor    : pointer;
 }
 .layout-wrap .userinfo > div:first-child:hover{
     color: #b0a0aa
 }
 
 .layout-wrap .category{
-    width    : 100%;
-    font-size: 0.8rem;
+    width     : 100%;
+    font-size : 0.8rem;
     margin-top: -1rem;
 }
 .layout-wrap .category li{
@@ -160,31 +157,38 @@ button a{
     margin-top: 1rem;
 }
 .layout-wrap .category li:hover{
-    background: #c7c6c6;
-    border-left: 5px solid #686767; 
-    box-sizing: border-box;
+    background : #c7c6c6;
+    border-left: 5px solid #686767;
+    box-sizing : border-box;
 }
 
 .layout-wrap .category li:hover a{
-    color: #b0a0aa;
+    color          : #b0a0aa;
     text-decoration: none;
 }
-
-.layout-wrap .right{
+.layout-wrap #bg{
     position: relative;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    display   : flex;
-    width     : calc(100% - 15rem);
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-image:url('../img//bg.png');
+    top     : 0;
+    left    : 0;
+    right   : 0;
+    bottom  : 0;
+    z-index : 1;
+}
+.layout-wrap .right{
+    position           : relative;
+    top                : 0;
+    left               : 0;
+    right              : 0;
+    bottom             : 0;
+    display            : flex;
+    width              : calc(100% - 15rem);
+    height             : 100%;
+    overflow-y         : auto;
+    overflow-x         : hidden;
+    background-image   : url('../img//bg.png');
     background-position: center bottom;
-    background-repeat: repeat-x;
-    z-index:1;
+    background-repeat  : repeat-x;
+    z-index            : 2;
 }
 .layout-wrap .right .content{
     width     : 100%;
@@ -193,33 +197,33 @@ button a{
 }
 .layout-wrap .toolBox{
     max-height: 100%;
-    margin-top: 1.5rem;
+    margin    : 1.5rem 0;
 }
 .layout-wrap .toolBox .fixedWrap{
-    width: calc(100% - 1.5rem);
-    max-height: 92%;
+    width     : calc(100% - 1.5rem);
+    max-height: 100%;
     overflow-y: auto;
-    position: relative;
-    top: 0;
-    right: 0;
-    left: 0;
+    position  : relative;
+    top       : 0;
+    right     : 0;
+    left      : 0;
 }
 .layout-wrap .search-wrap{
-    position: relative;
-    display: none;
-    width: 0;
-    overflow: hidden;
-    margin:  1.5rem 0;
+    position   : relative;
+    display    : none;
+    width      : 0;
+    overflow   : hidden;
+    margin     : 1.5rem 0;
     margin-left: 1.5rem;
 }
 .layout-wrap .search-wrap input{
     border-radius: 5px;
     height       : 1.5rem;
-    width: 97%;
+    width        : 93%;
     padding-left : 1rem;
-    outline: none;
+    outline      : none;
     border       : none;
-    background: #fff;
+    background   : #fff;
 }
 .layout-wrap .result{
     width: 102%;
@@ -228,30 +232,30 @@ button a{
     height       : 2rem;
     border-radius: 0.25rem;
     line-height  : 2rem;
-    margin: 0.25rem 0;  
+    margin       : 0.25rem 0;
     cursor       : pointer;
     padding-left : 1rem;
-    background: rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-    overflow: hidden;
+    background   : rgba(0, 0, 0, 0.5);
+    white-space  : nowrap;
+    overflow     : hidden;
     text-overflow: ellipsis;
-    font-size: 0.7rem;
+    font-size    : 0.7rem;
 }
 .layout-wrap .result li:hover{
     background: rgba(167, 97, 97, 0.3);
 }
 .layout-wrap .result li a{
-    color: rgba(255, 255, 255, 0.8);
+    color          : rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size      : 0.7rem;
 }
 .layout-wrap .result li a:hover{
     text-decoration: underline;
-    color: rgba(255, 255, 255, 1);
+    color          : rgba(255, 255, 255, 1);
 }
 .layout-wrap .result .keyWord{
-    font-size: 0.7rem;
-    color: #f90;
+    font-size  : 0.7rem;
+    color      : #f90;
     font-weight: bold;
 }
 .layout-wrap .category-icon{
@@ -265,7 +269,7 @@ button a{
     fill          : currentColor;
     overflow      : hidden;
     padding-right : 0.8rem;
-    font-weight: bold;
+    font-weight   : bold;
 }
 .layout-wrap .collapse{
     display: none;
@@ -274,90 +278,90 @@ button a{
 @media only screen and (max-width: 1024px){
     .layout-wrap .left{
         position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        z-index: 999;
-        display: none;
+        top     : 0;
+        bottom  : 0;
+        right   : 0;
+        left    : 0;
+        z-index : 999;
+        display : none;
     }
     .layout-wrap .right{
         position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        width: 100%;
-        z-index: 995;
+        top     : 0;
+        bottom  : 0;
+        right   : 0;
+        left    : 0;
+        width   : 100%;
+        z-index : 995;
     }
     .layout-wrap .right .content{
         padding: 0.67rem;
-        width: 100% !important;
+        width  : 100% !important;
     }
     .layout-wrap .right .toolBox{
         display: none;
     }
     .layout-wrap .inner-wrap{
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
+        position        : absolute;
+        top             : 0;
+        bottom          : 0;
+        right           : 0;
+        left            : 0;
         background-color: rgba(0, 0, 0, 0.3);
-        z-index: 998;
-        display: none;
+        z-index         : 998;
+        display         : none;
     }
     .layout-wrap .category-icon{
-        position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
-        z-index: 997;
-        width: 3rem;
-        height: 3rem;
+        position     : absolute;
+        top          : 1.5rem;
+        right        : 1.5rem;
+        z-index      : 997;
+        width        : 3rem;
+        height       : 3rem;
         border-radius: 50%;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.3);
-        display: block;
+        text-align   : center;
+        background   : rgba(0, 0, 0, 0.3);
+        display      : block;
     }
     .layout-wrap .category-icon .icon{
-        width: 1.5rem;
-        height: 1.5rem;
-        margin-top: 0.75rem;
+        width        : 1.5rem;
+        height       : 1.5rem;
+        margin-top   : 0.75rem;
         padding-right: 0;
     }
     .layout-wrap .search-wrap{
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        width: 100%;
+        position  : absolute;
+        top       : 0;
+        right     : 0;
+        left      : 0;
+        bottom    : 0;
+        width     : 100%;
         background: rgba(0, 0, 0, 0.3);
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-        z-index: 996;
+        padding   : 0;
+        margin    : 0;
+        overflow  : hidden;
+        z-index   : 996;
     }
     .layout-wrap .search-wrap input{
-        width: 85%;
+        width : 85%;
         height: 2.5rem;
         margin: 2rem 2rem 0.2rem 2.5rem;
     }
     .layout-wrap .search-wrap .icon{
-        top: 2.9rem !important;
+        top  : 2.9rem !important;
         right: 5rem !important;
     }
     .layout-wrap .result{
-        width: 74%;
+        width      : 74%;
         margin-left: 2.5rem;
     }
     .layout-wrap .collapse{
         position: absolute;
-        top: 2.9rem;
-        right: 1.5rem;
-        color: #fff;
-        cursor: pointer;
-        display: block;
+        top     : 2.9rem;
+        right   : 1.5rem;
+        color   : #fff;
+        cursor  : pointer;
+        display : block;
     }
 }
 
@@ -365,5 +369,13 @@ button a{
 @media only screen and (max-width: 414px){
     .layout-wrap .search-wrap input{
         width: 70%;
+    }
+}
+
+/* 笔记本 */
+@media only screen and (max-width: 1440px) and (min-width: 1024px){
+    .layout-wrap .category li{
+        height     : 3rem;
+        line-height: 3rem;
     }
 }
