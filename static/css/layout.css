@@ -97,6 +97,8 @@ button{
     width           : 15rem;
     background-color: rgba(255, 255, 255, 1);
     color           : #696969;
+    overflow-y: auto;
+    overflow-x: hidden;
     z-index         : 2;
 }
 .layout-wrap .left .colorDiv{
@@ -226,7 +228,10 @@ button{
     background   : #fff;
 }
 .layout-wrap .result{
-    width: 102%;
+    width: 98%;
+    max-height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
 }
 .layout-wrap .result li{
     height       : 2rem;
@@ -282,6 +287,8 @@ button{
         bottom  : 0;
         right   : 0;
         left    : 0;
+        overflow-y: auto;
+        overflow-x: hidden;
         z-index : 999;
         display : none;
     }

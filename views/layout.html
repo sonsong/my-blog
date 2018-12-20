@@ -197,8 +197,10 @@
                         data.forEach(blog =>{
                             let title = blog.title;
                             let index = title.indexOf(search);
-                            //高亮标题中的关键字
-                            title = `${title.substring(0, index)}<span class="keyWord">${search}</span>${title.substring(index + search.length)}`
+                            //如果标题中存在查询的关键字，高亮显示
+                            if(title.indexOf(search) !== -1){
+                                title = `${title.substring(0, index)}<span class="keyWord">${search}</span>${title.substring(index + search.length)}`;
+                            }
                             html += `<li><a href="/preview?_id=${blog._id}">${title}</a></li>`;
                         })
                         $('.result').html(html);

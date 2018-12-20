@@ -47,10 +47,16 @@ router.use(async(ctx, next) =>{
 
 //根据关键字查询文章
 router.get('searchArtcleByTag', async(ctx) =>{
-    let tag = ctx.query.search;
+    let param = ctx.query.search;
 
     let blogs = [];
-    await Blogs.find({tags: {$regex: tag}}, (err, docs) =>{
+    //查询正则 忽略大小写
+    let reg = new RegExp(param, 'i');
+
+    await Blogs.find({$or: [
+        {tags: {$regex: reg}},
+        {title: {$regex: reg}}
+    ]}, '_id title', {sort: {'publishTime': -1}}, (err, docs) =>{
         if(!err){
             blogs = docs;
         }
