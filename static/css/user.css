@@ -143,6 +143,49 @@
 .read-tips a{
     font-size: 0.6rem;
 }
+.preview .comment{
+    position: relative;
+    width: 100%;
+    font-size: 0.8rem;
+    padding-bottom: 4rem;
+}
+.preview .comment > div{
+    display: flex;
+    margin-top: 1rem;
+}
+.preview .comment > div img{
+    width: 4rem;
+    height: 4rem;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 50%;
+}
+.preview .comment .textarea{
+    position: relative;
+    width: calc(100% - 12rem);
+    max-width: calc(100% - 12rem);
+    min-height: 10rem;
+    padding: 0.8rem;
+    box-sizing: border-box;
+}
+.preview .comment-btn{
+    position: absolute;
+    right: 6rem;
+    bottom: 1.125rem;
+}
+.preview .textarea-wrap{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 6rem;
+    right: 6rem;
+    width: calc(100% - 12rem);
+    height: 10rem;
+    background: rgba(0, 0, 0, 0.1);
+}
+.preview .textarea-wrap a{
+    
+    line-height: 10rem;
+}
 .artcle-toc{
     background: #fff;
     overflow-y: auto !important;

@@ -1,5 +1,8 @@
 //用户模块
 const router = require('koa-router')();
+//axios 发送http 请求
+const axios = require('axios');
+const URL = require('url');
 
 //博客实体
 const Blogs = require('../models/t-blog');
@@ -183,23 +186,65 @@ router.get('brief', async(ctx, next) =>{
 router.get('preview', async(ctx, next) =>{
     //解析参数
     let id = ctx.query._id;
+    //进行github登陆后返回的编码
+    let code = ctx.query.code;
+    
+    if(code === undefined){
+        ctx.cookies.set('artId', id, {
+            //cookie有效时长，单位：毫秒数
+            maxAge: 60 *1000,
+            path: "/",
+            secure: false,
+            httpOnly: false,
+            overwrite: true
+        });
+    }else{
+        //进行登录操作
+        let client_id = '9b581d4805df0fb0af16';
+        let client_secret = '7e0edf390634e7d7c00dedabeedca277f5889660';
+        let url = 'https://github.com/login/oauth/access_token';
+
+        await axios(url, {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                client_id,
+                client_secret,
+                code
+            }
+        }).then(res =>{
+            //获取access_token
+            console.log(res.access_token);
+        }, e =>{
+            console.log(e.message)   
+        });
+    }
+
 
     //查询到的文章信息
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: id}, '_id htmlContent title readNum', (err, doc) =>{
+    await Blogs.findById({_id: code === undefined ? id : ctx.cookies.get('artId')}, '_id htmlContent title readNum', (err, doc) =>{
         if(!err){
             blog = doc;
 
             //取出阅读次数，让其自增更新
-            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{});
+            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }else{
+            console.log(err)
         }
     });
 
     //查询上一篇文章
     let preA = {};
-    await Blogs.findOne({_id: {$lt: id}}, '_id title', (err, doc) =>{
+    await Blogs.findOne({_id: {$lt: code === undefined ? id : ctx.cookies.get('artId')}}, '_id title', (err, doc) =>{
         if(!err){
             if(doc === null){
                 preA._id   = '';
@@ -212,7 +257,7 @@ router.get('preview', async(ctx, next) =>{
     });
     //查询下一篇文章
     let nextA = {};
-    await Blogs.findOne({_id: {$gt: id}}, '_id title', (err, doc) =>{
+    await Blogs.findOne({_id: {$gt: code === undefined ? id : ctx.cookies.get('artId')}}, '_id title', (err, doc) =>{
         if(!err){
            if(doc === null){
                 nextA._id   = '';

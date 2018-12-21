@@ -21,6 +21,16 @@
                 {{/if}}
             </div>
         </div>
+        <div class="comment">
+            <div>
+                <img src="/img/gitHub.jpg" alt="gitHub logo">
+                <textarea name="comment" id="comment" class="textarea"></textarea>
+                <div class="textarea-wrap">
+                    <a><button class="danger-btn gitHub-login">请先登录</button></a>
+                </div>
+            </div>
+            <button class="primary-btn comment-btn">提交</button>
+        </div>
     </div>
 {{/block}}
 {{block 'js'}}
@@ -50,6 +60,11 @@
                 //隐藏正文的目录
                 $('.editormd-markdown-toc').css('display', 'none');
             }
+
+            //使用github账号登陆
+            $('.gitHub-login').on('click', function(){
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email`;
+            });
         })
     </script>
 {{/block}}
