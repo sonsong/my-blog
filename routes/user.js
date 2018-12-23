@@ -2,7 +2,7 @@
 const router = require('koa-router')();
 //axios 发送http 请求
 const axios = require('axios');
-const URL = require('url');
+const qs    = require('qs');
 
 //博客实体
 const Blogs = require('../models/t-blog');
@@ -17,27 +17,27 @@ router.use(async(ctx, next) =>{
             //没有内置账户 新增一个
             if(doc === null){
                 Users.create({
-                    uname: 'admin',
-                    nname: '不专业的前端猿',
+                    uname : 'admin',
+                    nname : '不专业的前端猿',
                     passwd: '4a0cde71aee7158542d013fc0c9f5acfc735c612',
-                    role: '0'
+                    role  : '0'
                 }).then(res =>{
                     ctx.user = {
-                        _id: res._id.toString(),
-                        uname: res.uname,
-                        nname: res.nname,
+                        _id    : res._id.toString(),
+                        uname  : res.uname,
+                        nname  : res.nname,
                         picture: res.picture
                     };
                 });
             }else{
                 ctx.user = {
-                    _id: doc._id.toString(),
-                    uname: doc.uname,
-                    nname: doc.nname,
-                    email: doc.email,
-                    introd: doc.introd,
-                    motto: doc.motto,
-                    picture: doc.picture,
+                    _id       : doc._id.toString(),
+                    uname     : doc.uname,
+                    nname     : doc.nname,
+                    email     : doc.email,
+                    introd    : doc.introd,
+                    motto     : doc.motto,
+                    picture   : doc.picture,
                     resumePath: doc.resume,
                     resumeName: doc.resume && doc.resume.substring('/upload/file/'.length)
                 };
@@ -182,52 +182,84 @@ router.get('brief', async(ctx, next) =>{
     ctx.render('brief', {blogs: blogs, user: ctx.user});
 });
 
+//github第三方登陆
+router.get('gitHub-login', async(ctx, next) =>{
+    //github登陆后返回的编码
+    let code = ctx.query.code;
+
+    //github用户信息
+    let gitHub_user = null;
+
+    //进行登录操作
+    let client_id     = '9b581d4805df0fb0af16';
+    let client_secret = '7e0edf390634e7d7c00dedabeedca277f5889660';
+    let url           = 'https://github.com/login/oauth/access_token';
+
+    let access_token = '';
+
+    await axios(url, {
+        method : 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: {
+            client_id,
+            client_secret,
+            code
+        }
+    }).then(res =>{
+        //获取access_token
+        access_token = qs.parse(res.data).access_token;
+    }, e =>{
+        console.log(e.message)   
+    });
+
+    //获取github的用户信息
+    url = `https://api.github.com/user?access_token=${access_token}`;
+    await axios.get(url).then(res =>{
+        gitHub_user = res.data;
+    }, e =>{
+        console.log(e.message);
+    });
+
+    //将获取到的用户信息存储到cookie中
+    ctx.cookies.set('gitHub_user', JSON.stringify({login:gitHub_user.login, avatar_url: gitHub_user.avatar_url}), {
+        //cookie有效时长，单位：毫秒数 1小时
+        maxAge   : 60 * 60 *1000,
+        path     : "/",
+        secure   : false,
+        httpOnly : false,
+        overwrite: true
+    });
+
+    let artId = ctx.cookies.get('artId');
+
+    //重定向到文章预览页面
+    ctx.redirect(`/preview?_id=${artId}`);
+})
 //跳转到预览页面
 router.get('preview', async(ctx, next) =>{
     //解析参数
     let id = ctx.query._id;
-    //进行github登陆后返回的编码
-    let code = ctx.query.code;
-    
-    if(code === undefined){
+
+    //获取cookie中的文章编码，没有保存，有，若是相同，跳过，不同覆盖
+    let artId = ctx.cookies.artId;
+    if(artId === undefined || _id !== artId){
         ctx.cookies.set('artId', id, {
-            //cookie有效时长，单位：毫秒数
-            maxAge: 60 *1000,
-            path: "/",
-            secure: false,
-            httpOnly: false,
+            //cookie有效时长，单位：毫秒数 1小时
+            maxAge   : 60 * 60 *1000,
+            path     : "/",
+            secure   : false,
+            httpOnly : false,
             overwrite: true
         });
-    }else{
-        //进行登录操作
-        let client_id = '9b581d4805df0fb0af16';
-        let client_secret = '7e0edf390634e7d7c00dedabeedca277f5889660';
-        let url = 'https://github.com/login/oauth/access_token';
-
-        await axios(url, {
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                client_id,
-                client_secret,
-                code
-            }
-        }).then(res =>{
-            //获取access_token
-            console.log(res.access_token);
-        }, e =>{
-            console.log(e.message)   
-        });
     }
-
-
+    
     //查询到的文章信息
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: code === undefined ? id : ctx.cookies.get('artId')}, '_id htmlContent title readNum', (err, doc) =>{
+    await Blogs.findById({_id: id}, '_id htmlContent title readNum', (err, doc) =>{
         if(!err){
             blog = doc;
 
@@ -244,7 +276,7 @@ router.get('preview', async(ctx, next) =>{
 
     //查询上一篇文章
     let preA = {};
-    await Blogs.findOne({_id: {$lt: code === undefined ? id : ctx.cookies.get('artId')}}, '_id title', (err, doc) =>{
+    await Blogs.findOne({_id: {$lt: id}}, '_id title', (err, doc) =>{
         if(!err){
             if(doc === null){
                 preA._id   = '';
@@ -257,7 +289,7 @@ router.get('preview', async(ctx, next) =>{
     });
     //查询下一篇文章
     let nextA = {};
-    await Blogs.findOne({_id: {$gt: code === undefined ? id : ctx.cookies.get('artId')}}, '_id title', (err, doc) =>{
+    await Blogs.findOne({_id: {$gt: id}}, '_id title', (err, doc) =>{
         if(!err){
            if(doc === null){
                 nextA._id   = '';

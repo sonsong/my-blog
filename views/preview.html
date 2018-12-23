@@ -23,13 +23,77 @@
         </div>
         <div class="comment">
             <div>
-                <img src="/img/gitHub.jpg" alt="gitHub logo">
-                <textarea name="comment" id="comment" class="textarea"></textarea>
-                <div class="textarea-wrap">
-                    <a><button class="danger-btn gitHub-login">请先登录</button></a>
+                <h5 class="comment-total">22条精彩评论</h5>
+                <div class="messes">
+
+                    <div class="mess">
+                        <div class="mess-wrap" id="2345_mess">
+                            <div class="mess-name">
+                                <div>
+                                    <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
+                                    <div>songsong</div>
+                                </div>
+                                <div>2018-12-12 13:11:11</div>
+                            </div>
+                            <div class="mess-content">
+                                啊打发角度上考虑反抗类毒素发贺卡的设备发大水发
+                            </div>
+                            <div class="mess-replay" id="2345_mess-replay">
+                                <span class="replay" id="2345_replay">回复</span>
+                            </div>
+                            <div class="comment-div" id="2345_textArea">
+                                <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
+                                    <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                                    <button class="primary-btn comment-btn">提交</button>
+                                    <div class="textarea-wrap">
+                                        <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sub-replay">
+                            <div class="mess">
+                                <div class="mess-wrap" id="1234_mess">
+                                    <div class="mess-name">
+                                        <div>
+                                            <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
+                                            <div>songsong回复songsng</div>
+                                        </div>
+                                        <div>2018-12-12 13:11:11</div>
+                                    </div>
+                                    <div class="mess-content">
+                                        啊打发角度上考虑反抗类毒素发贺卡的设备发大水发
+                                    </div>
+                                    <div class="mess-replay" id="1234_mess-replay">
+                                    <span class="replay" id="1234_replay">回复</span>
+                                    </div>
+                                    <div class="comment-div" id="1234_textArea">
+                                        <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
+                                            <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                                            <button class="primary-btn comment-btn">提交</button>
+                                            <div class="textarea-wrap">
+                                                <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="noData">暂无评论</div>
+            </div>
+            <div class="comment-div">
+                <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo">
+                <div class="commit-mess">
+                    <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                    <button class="primary-btn comment-btn">提交</button>
+                    <div class="textarea-wrap">
+                        <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                    </div>
                 </div>
             </div>
-            <button class="primary-btn comment-btn">提交</button>
         </div>
     </div>
 {{/block}}
@@ -65,6 +129,51 @@
             $('.gitHub-login').on('click', function(){
                 window.location.href = `https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email`;
             });
+
+            //获取cookie中的gitHub_user
+            let gitHub_user = $.cookie('gitHub_user');
+
+            if(gitHub_user !== undefined){
+                $('.textarea-wrap').css('display', 'none');
+                $('.comment-btn').css('display', 'block');
+                
+                //筛选想要的信息
+                gitHub_user = JSON.parse(gitHub_user);
+                //设置头像
+                $('.gitHub-logo').attr('src', gitHub_user.avatar_url);
+            }else{
+                $('.textarea-wrap').css('display', 'flex');
+                $('.comment-btn').css('display', 'none');
+            }
+
+            //显示回复按钮
+            $('.preview .mess .mess-wrap').on('mouseover', function(){
+                let id = $(this).attr('id').split('_')[0];
+                $(`#${id}_mess-replay`).css('display', 'block');
+            }).on('mouseleave', function(){
+                let id = $(this).attr('id').split('_')[0];
+                $(`#${id}_mess-replay`).css('display', 'none');
+            })
+
+            //点击回复显示输入框
+            let flag = false;
+            $('.preview .mess-replay .replay').on('click', function(){
+                let id = $(this).attr('id').split('_')[0];
+                //获取需要显示的输入框对象
+                flag = !flag;
+
+                //回复改为取消回复
+                $(`#${id}_replay`).text(flag ? '取消回复' : '回复');
+                //flag === true 显示输入框
+                $(`#${id}_textArea`).css('display', flag ? 'flex' : 'none');
+
+                //只能同时出现一个输入框
+                if(flag){
+                    $(`.comment-div:not(#${id}_textArea)`).css('display', 'none');
+                    $(`.replay:not(#${id}_replay)`).text('回复');
+                    flag = false;
+                }
+            })
         })
     </script>
 {{/block}}
