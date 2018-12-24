@@ -301,7 +301,7 @@ router.get('preview', async(ctx, next) =>{
         }
     });
 
-    ctx.render('preview', {htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user});
+    ctx.render('preview', {artId: id, htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user});
 });
 
 //进入标签页
@@ -343,5 +343,10 @@ router.get('tags', async(ctx, next) =>{
 router.get('about', async(ctx, next) =>{
     ctx.render('about', {user: ctx.user});
 });
+
+//导入文章评论路由
+const blog_comment_router = require('./blog-comment');
+
+router.use('', blog_comment_router.routes())
 
 module.exports = router;

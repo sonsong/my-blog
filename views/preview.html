@@ -26,71 +26,15 @@
                 <h5 class="comment-total">22条精彩评论</h5>
                 <div class="messes">
 
-                    <div class="mess">
-                        <div class="mess-wrap" id="2345_mess">
-                            <div class="mess-name">
-                                <div>
-                                    <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
-                                    <div>songsong</div>
-                                </div>
-                                <div>2018-12-12 13:11:11</div>
-                            </div>
-                            <div class="mess-content">
-                                啊打发角度上考虑反抗类毒素发贺卡的设备发大水发
-                            </div>
-                            <div class="mess-replay" id="2345_mess-replay">
-                                <span class="replay" id="2345_replay">回复</span>
-                            </div>
-                            <div class="comment-div" id="2345_textArea">
-                                <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
-                                    <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
-                                    <button class="primary-btn comment-btn">提交</button>
-                                    <div class="textarea-wrap">
-                                        <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sub-replay">
-                            <div class="mess">
-                                <div class="mess-wrap" id="1234_mess">
-                                    <div class="mess-name">
-                                        <div>
-                                            <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
-                                            <div>songsong回复songsng</div>
-                                        </div>
-                                        <div>2018-12-12 13:11:11</div>
-                                    </div>
-                                    <div class="mess-content">
-                                        啊打发角度上考虑反抗类毒素发贺卡的设备发大水发
-                                    </div>
-                                    <div class="mess-replay" id="1234_mess-replay">
-                                    <span class="replay" id="1234_replay">回复</span>
-                                    </div>
-                                    <div class="comment-div" id="1234_textArea">
-                                        <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
-                                            <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
-                                            <button class="primary-btn comment-btn">提交</button>
-                                            <div class="textarea-wrap">
-                                                <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-                <div class="noData">暂无评论</div>
             </div>
             <div class="comment-div">
-                <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo">
+                <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub_logo">
                 <div class="commit-mess">
                     <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
                     <button class="primary-btn comment-btn">提交</button>
                     <div class="textarea-wrap">
-                        <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                        <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
                     </div>
                 </div>
             </div>
@@ -126,9 +70,15 @@
             }
 
             //使用github账号登陆
-            $('.gitHub-login').on('click', function(){
+            $('.gitHub_logo').on('click', function(){
                 window.location.href = `https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email`;
             });
+
+
+            //获取文章的评论
+            let artId = '{{artId}}';
+            let page = 1;
+            getBlogAllCommentsByArtId(artId, page);
 
             //获取cookie中的gitHub_user
             let gitHub_user = $.cookie('gitHub_user');
@@ -176,5 +126,89 @@
                 }
             })
         })
+
+        //获取文章所有评论
+        function getBlogAllCommentsByArtId(artId, page){
+            $.ajax({
+                url: `/getAllCommentByArtId/${artId}`,
+                type: 'GET',
+                dataType: 'json',
+                data:{
+                    page
+                },
+                success(res){
+                    let data = res.comments;
+
+                    let html = '';
+                    if(data.length === 0){
+                        $('.comment > div:first-child').append(`<div class="noData">暂无评论内容</div>`);
+
+                        return;
+                    }else{
+                        data.forEach(dt =>{
+                            html += 
+                            `
+                                <div class="mess">
+                                    <div class="mess-wrap" id="${dt._id}_mess">
+                                        <div class="mess-name">
+                                            <div>
+                                                <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
+                                                <div>${dt.comment_name}</div>
+                                            </div>
+                                            <div>${dt.comment_time}</div>
+                                        </div>
+                                        <div class="mess-content">
+                                            ${dt.content}
+                                        </div>
+                                        <div class="mess-replay" id="${dt_id}_mess-replay">
+                                            <span class="replay" id="${dt_id}_replay">回复</span>
+                                        </div>
+                                        <div class="comment-div" id="${dt_id}_textArea">
+                                            <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
+                                                <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                                                <button class="primary-btn comment-btn">提交</button>
+                                                <div class="textarea-wrap">
+                                                    <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sub-replay">
+                                        <div class="mess">
+                                            <div class="mess-wrap" id="1234_mess">
+                                                <div class="mess-name">
+                                                    <div>
+                                                        <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
+                                                        <div>songsong回复songsng</div>
+                                                    </div>
+                                                    <div>2018-12-12 13:11:11</div>
+                                                </div>
+                                                <div class="mess-content">
+                                                    啊打发角度上考虑反抗类毒素发贺卡的设备发大水发
+                                                </div>
+                                                <div class="mess-replay" id="1234_mess-replay">
+                                                <span class="replay" id="1234_replay">回复</span>
+                                                </div>
+                                                <div class="comment-div" id="1234_textArea">
+                                                    <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
+                                                        <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                                                        <button class="primary-btn comment-btn">提交</button>
+                                                        <div class="textarea-wrap">
+                                                            <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            $('.comment .messes').append(html);
+                        })
+                    }
+                }
+            });
+        }
     </script>
 {{/block}}

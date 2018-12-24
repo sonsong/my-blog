@@ -156,12 +156,13 @@
     height       : 2rem;
     margin       : 0 1rem 1rem 1rem;
     border-radius: 50%;
+    cursor       : pointer;
 }
 .preview .comment > div{
     width: 100%;
 }
 .preview .comment .comment-div{
-    display: none;
+    display       : flex;
     padding-bottom: 1rem;
 }
 .preview .comment .commit-mess{
@@ -199,9 +200,7 @@
 .preview .textarea-wrap > div{
     line-height: 10rem;
 }
-.preview .gitHub-login{
-    color: red;
-}
+
 .preview .comment > div:first-child{
     width        : 100%;
     border       : 1px solid #eaeaea;
@@ -252,7 +251,6 @@
     color: #05d3ee
 }
 .preview .comment .noData{
-    display    : none;
     height     : 10rem;;
     line-height: 10rem;
     width      : 100%;
