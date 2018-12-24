@@ -147,7 +147,7 @@
 /* 评论样式 */
 .preview .comment{
     width     : 97%;
-    font-size : 0.8rem;
+    font-size : 0.1rem;
     margin    : 0.5rem auto;
     box-sizing: border-box;
 }
@@ -162,6 +162,7 @@
 }
 .preview .comment .comment-div{
     display: none;
+    padding-bottom: 1rem;
 }
 .preview .comment .commit-mess{
     position     : relative;

@@ -162,16 +162,17 @@
                 //获取需要显示的输入框对象
                 flag = !flag;
 
+                console.log(flag)
                 //回复改为取消回复
                 $(`#${id}_replay`).text(flag ? '取消回复' : '回复');
                 //flag === true 显示输入框
                 $(`#${id}_textArea`).css('display', flag ? 'flex' : 'none');
 
                 //只能同时出现一个输入框
-                if(flag){
+                if( flag && $(`.comment-div`).length !==1 ){
                     $(`.comment-div:not(#${id}_textArea)`).css('display', 'none');
                     $(`.replay:not(#${id}_replay)`).text('回复');
-                    flag = false;
+                    //flag = false;
                 }
             })
         })
