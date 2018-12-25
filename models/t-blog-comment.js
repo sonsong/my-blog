@@ -5,15 +5,19 @@ const mongoose = require('mongoose');
 var blogCommentsSchema = mongoose.Schema({
     //评论人
     comment_name: String,
+    //回复谁的评论
+    reply_name:String,
+    //评论人头像
+    comment_pic_url: String,
+    //评论人email
+    comment_email: String,
     //评论时间
     comment_time: Date,
-    //回复评论的人
-    reply_name: String,
     //评论的文章编码
     artId: String,
     //评论内容
-    content: String,
-    //回复评论的编码，指向文章评论表的主键
+    comment: String,
+    //评论的编码，指向文章评论表的主键
     blogComment: {type: mongoose.Schema.Types.ObjectId, ref: 'tBlogComment'},
 })
 

@@ -222,8 +222,11 @@ router.get('gitHub-login', async(ctx, next) =>{
         console.log(e.message);
     });
 
+    let {login, name, avatar_url, email} = gitHub_user;
+    let _name = name === null ? login : escape(name);
+
     //将获取到的用户信息存储到cookie中
-    ctx.cookies.set('gitHub_user', JSON.stringify({login:gitHub_user.login, avatar_url: gitHub_user.avatar_url}), {
+    ctx.cookies.set('gitHub_user', escape(JSON.stringify({_name, avatar_url, email})), {
         //cookie有效时长，单位：毫秒数 1小时
         maxAge   : 60 * 60 *1000,
         path     : "/",
@@ -232,7 +235,7 @@ router.get('gitHub-login', async(ctx, next) =>{
         overwrite: true
     });
 
-    let artId = ctx.cookies.get('artId');
+    let artId = await ctx.cookies.get('artId');
 
     //重定向到文章预览页面
     ctx.redirect(`/preview?_id=${artId}`);
