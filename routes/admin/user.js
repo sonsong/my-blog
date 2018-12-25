@@ -261,7 +261,7 @@ router.get('getAllUsers', async(ctx) =>{
                     let doc = {
                         _id       : item._id.toString(),
                         uname     : item.uname,
-                        nname: item.nname,
+                        nname     : item.nname,
                         email     : item.email,
                         motto     : item.motto,
                         introd    : item.introd,
@@ -282,14 +282,12 @@ router.get('getAllUsers', async(ctx) =>{
 
     //查询数据库的总记录数
     let total = 0;
-    await Users.countDocuments(params, (err, count) =>{
-        if(!err){
-            total = count - 1;
-        }
+    await Users.countDocuments(params).then(count =>{
+        total = count - 1;
     });
 
     ctx.result.count = total;
-    ctx.result.data = users;
+    ctx.result.data  = users;
 
     ctx.body = ctx.result;
 })
@@ -364,14 +362,14 @@ router.get('user_info', async(ctx) =>{
     await Users.findById({_id: ctx.state.user.id}, async(err, doc) =>{
         if(!err){
             user = {
-                _id: doc._id.toString(),
-                uname: doc.uname,
-                nname: doc.nname,
-                motto: doc.motto,
-                email: doc.email,
-                introd: doc.introd,
+                _id    : doc._id.toString(),
+                uname  : doc.uname,
+                nname  : doc.nname,
+                motto  : doc.motto,
+                email  : doc.email,
+                introd : doc.introd,
                 picture: doc.picture,
-                resume: doc.resume
+                resume : doc.resume
             };
         }
     });

@@ -124,7 +124,8 @@
 .preview{
     border-radius : 5px;
     background    : #fff;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.1rem;
+    margin-bottom : 1rem;
 }
 .preview_content{
     border       : 1px solid #eaeaea;
@@ -133,6 +134,7 @@
 .read-tips{
     display        : flex;
     justify-content: space-between;
+    border-bottom  : 1px solid #eaeaea
 }
 .read-tips > div{
     line-height: 2rem;
@@ -146,8 +148,8 @@
 
 /* 评论样式 */
 .preview .comment{
-    width     : 97%;
-    font-size : 0.1rem;
+    width: 97%;
+    /* font-size : 0.7rem; */
     margin    : 0.5rem auto;
     box-sizing: border-box;
 }
@@ -163,10 +165,10 @@
 }
 .preview .comment .comment-div{
     display       : none;
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
 }
 .preview .comment .always-show{
-    display       : flex;
+    display: flex;
 }
 .preview .comment .commit-mess{
     position     : relative;
@@ -177,7 +179,7 @@
 .preview .comment .textarea{
     width     : 100%;
     max-width : 100%;
-    min-height: 10rem;
+    min-height: 1rem;
     padding   : 0.8rem;
     box-sizing: border-box;
 }
@@ -194,17 +196,17 @@
     left           : 0;
     right          : 0;
     top            : 0;
-    height         : 10rem;
+    height         : 3.3rem;
     background     : rgba(0, 0, 0, 0.1);
 }
 .preview .textarea-wrap a{
     cursor: pointer;
 }
 .preview .textarea-wrap > div{
-    line-height: 10rem;
+    line-height: 3.3rem;
 }
 
-.preview .comment > div:first-child{
+.preview .comment > div:last-child{
     width        : 100%;
     border       : 1px solid #eaeaea;
     margin-bottom: 2rem;
@@ -234,8 +236,8 @@
 }
 .preview .mess .mess-content{
     margin     : 0  3rem;
-    line-height: 1.5rem;
-    height     : 1.5rem;
+    line-height: 2.5rem;
+    height     : 2.5rem;
     overflow   : hidden;
     word-break : break-all;
 }
@@ -254,8 +256,8 @@
     color: #05d3ee
 }
 .preview .comment .noData{
-    height     : 10rem;;
-    line-height: 10rem;
+    height     : 5rem;;
+    line-height: 5rem;
     width      : 100%;
     text-align : center;
 }   

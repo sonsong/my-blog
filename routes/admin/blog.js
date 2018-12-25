@@ -2,7 +2,7 @@ const router = require('koa-router')();
 //文件上传
 const multer = require('koa-multer');
 
-const fs = require('fs');
+const fs     = require('fs');
 const moment = require('moment');
 
 //博客实体
@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
     //文件保存路径
     async destination(req, file, cb) {
         let root = 'static/upload/blog-img/';
-        let dir = moment().format('YYYY-MM-DD');
+        let dir  = moment().format('YYYY-MM-DD');
 
         //图片保存的位置
         let path = root + dir;
@@ -210,14 +210,12 @@ router.get('getAllArtcles', async(ctx, next) =>{
 
     //查询数据库的总记录数
     let total = 0;
-    await Blogs.countDocuments(params, (err, count) =>{
-        if(!err){
-            total = count;
-        }
+    await Blogs.countDocuments(params).then(count =>{
+        total = count;
     });
 
     ctx.result.count = total;
-    ctx.result.data = blogs;
+    ctx.result.data  = blogs;
 
     ctx.body = ctx.result;
 });

@@ -1,7 +1,10 @@
 //文章评论路由
 const router = require('koa-router')();
 
-const tBlogComment = require('./../models/t-blog-comment');
+const tBlogComment = require('../models/t-blog-comment');
+
+//发送邮件方法
+const sendEmail = require('../utils//sendEmail');
 
 /** 
  * 新增文章评论
@@ -11,7 +14,7 @@ const tBlogComment = require('./../models/t-blog-comment');
 */
 router.post('addComment', async(ctx, next) =>{
     //artId 文章编码 comment 评论 commentId 评论编码 增加回复评论时需要用到
-    let {artId, comment, commentId, reply_name} = ctx.request.body;
+    let {artId, comment, commentId, reply_name, emails} = ctx.request.body;
 
     //从cookie中获取登陆人的信息
     let {_name, avatar_url, email} = JSON.parse(unescape(ctx.cookies.get('gitHub_user')));
@@ -20,10 +23,10 @@ router.post('addComment', async(ctx, next) =>{
     let commentObj = {
         artId,
         comment,
-        comment_name: unescape(_name),
+        comment_name   : unescape(_name),
         comment_pic_url: avatar_url,
-        comment_email: email,
-        comment_time: new Date()
+        comment_email  : email,
+        comment_time   : new Date()
     }
     //新增评论
     if(commentId !== ''){
@@ -36,12 +39,22 @@ router.post('addComment', async(ctx, next) =>{
     let mess = '';
     //新增
     await tBlogComment.create(commentObj).then(res =>{
+        //发送邮件通知
+        let template = {
+            emails: emails.toString(),
+            name  : unescape(_name),
+            email,
+            artURL: `http://127.0.0.1:3000`,
+            comment
+        };
+        sendEmail(template);
+
         mess = {code: 0, mess: "评论成功^_^_^_^"};
     }, e =>{
         mess = {code: -1, mess: `评论失败!!!, ${e.message}`};
     })
 
-    ctx.body  = mess;
+    ctx.body = mess;
 })
 
 //查询指定文章下的所有评论，分页显示 每页10条
@@ -52,15 +65,15 @@ router.get('getAllCommentByArtId/:artId', async(ctx, next) =>{
     //当前页码
     let page = ctx.query.page === undefined ? '1' : ctx.query.page;
     //每页显示条数
-    let limit = 20;
+    let limit = 5;
 
     let comments = [];
 
     //查询该文章下的评论数
     await tBlogComment.find()
         .where({artId, blogComment: {$eq: undefined}})
-        .skip((page-1) * limit)
-        .limit(limit)
+        /* .skip((page-1) * limit)
+        .limit(limit) */
         .sort({comment_time: 1})
         .exec().then(res =>{
             //数据加工
@@ -106,8 +119,21 @@ router.get('getAllCommentByArtId/:artId', async(ctx, next) =>{
             }
         })
     }
+
+    //查询数据库的总记录数
+    let total = 0;
+    await tBlogComment.countDocuments({artId, blogComment: {$eq: undefined}}).then(res =>{
+        total = res
+    });
+
+    let tPage = total % limit === 0 ?  total / limit : parseInt(total / limit) + 1;
+    let pager = {
+        page,
+        tPage,
+        total
+    }
     
-    ctx.body = {comments};
+    ctx.body = {comments,pager};
 })
 
 module.exports = router;

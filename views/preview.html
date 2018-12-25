@@ -22,20 +22,21 @@
             </div>
         </div>
         <div class="comment">
-            <div>
-                <h5 class="comment-total">22条精彩评论</h5>
-                <div class="messes">
-
-                </div>
-            </div>
             <div class="comment-div always-show">
                 <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub_logo">
                 <div class="commit-mess">
                     <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                    <input type="hidden" name="email" id="email"/>
                     <button class="primary-btn comment-btn">提交</button>
                     <div class="textarea-wrap">
                         <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
                     </div>
+                </div>
+            </div>
+            <div>
+                <h5 class="comment-total"><span class="comment_total"></span> 条精彩评论</h5>
+                <div class="messes">
+
                 </div>
             </div>
         </div>
@@ -69,6 +70,12 @@
                 $('.editormd-markdown-toc').css('display', 'none');
             }
 
+            $('.preview').on('focus', '.textarea', function(){
+                $(this).animate({minHeight:'10rem'}, 1000);
+            }).on('blur', '.textarea', function(){
+                $(this).animate({minHeight:'1rem'}, 1000);
+            });
+
             //获取cookie中的gitHub_user
             let gitHub_user = $.cookie('gitHub_user');
 
@@ -80,6 +87,7 @@
                 gitHub_user = JSON.parse(unescape(unescape(gitHub_user)));
                 //设置头像
                 $('.gitHub_logo').attr('src', gitHub_user.avatar_url);
+                $('#email').val(gitHub_user.email);
             }else{
                 $('.textarea-wrap').css('display', 'flex');
                 $('.comment-btn').css('display', 'none');
@@ -152,6 +160,8 @@
             let comment = commentId === '' ? $('#comment').val() : $(`#${commentId}_comment`).val();
             //回复谁的评论
             let reply_name = '';
+            //涉及到的人的邮件
+            let emails = [$('#email').val()];
 
             if(commentId !== ''){
                 let ids = commentId.split('_');
@@ -163,6 +173,7 @@
                     }else{
                         comment = $(`#${ids[0]}_comment`).val();
                         reply_name = $(`#${ids[0]}_name`).val();
+                        emails.push($(`#${ids[0]}_email`).val());
                     }
                     
                 }else if(ids.length === 2){
@@ -172,6 +183,7 @@
                     }else{
                         comment = $(`#${ids[1]}_comment`).val();
                         reply_name = $(`#${ids[1]}_name`).val();
+                        emails.push($(`#${ids[1]}_email`).val());
                     }
                 }
                 
@@ -193,6 +205,7 @@
                     artId,
                     commentId,
                     comment,
+                    emails,
                     reply_name
                 },
                 success(res){
@@ -222,11 +235,13 @@
                     page
                 },
                 success(res){
+                    $('.comment_total').text(res.pager.total);
+
                     let data = res.comments;
 
                     let html = '';
                     if(data.length === 0){
-                        $('.comment > div:first-child').append('<div class="noData">暂无评论内容</div>');
+                        $('.comment > div:last-child').append('<div class="noData">暂无评论内容</div>');
                     }else{
                         $('.comment .noData').remove();
 
@@ -252,9 +267,10 @@
                                             <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
                                                 <textarea name="comment" id="${dt._id}_comment" class="textarea" placeholder="请输入您的评论"></textarea>
                                                 <input type="hidden" id="${dt._id}_name" value="${dt.comment_name}"/>
+                                                <input type="hidden" id="${dt._id}_email" value="${dt.comment_email}"/>
                                                 <button class="primary-btn comment-btn" id="${dt._id}_btn">提交</button>
                                                 <div class="textarea-wrap">
-                                                    <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                                    <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,7 +286,7 @@
                                             <div class="mess-name">
                                                 <div>
                                                     <img src="${reply.comment_pic_url}" alt="gitHub logo" class="gitHub-logo" style="margin: 0 0.5rem">
-                                                    <div>${reply.comment_name}回复${reply.reply_name}</div>
+                                                    <div><span style="color:#05d3ee">${reply.comment_name}</span>回复<span style="color:#05d3ee">${reply.reply_name}</span></div>
                                                 </div>
                                                 <div>${reply.comment_time}</div>
                                             </div>
@@ -284,9 +300,10 @@
                                                 <div class="commit-mess" style="margin-left:2.5rem;width:calc(100% - 5rem)">
                                                     <textarea name="comment" id="${reply._id}_comment" class="textarea" placeholder="请输入您的评论"></textarea>
                                                     <input type="hidden" id="${reply._id}_name" value="${reply.comment_name}"/>
+                                                    <input type="hidden" id="${reply._id}_email" value="${reply.comment_email}"/>
                                                     <button class="primary-btn comment-btn" id="${dt._id}_btn_${reply._id}">提交</button>
                                                     <div class="textarea-wrap">
-                                                        <div>暂时无法评论，<a class="gitHub-login">请先登录</a></div>
+                                                        <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
                                                     </div>
                                                 </div>
                                             </div>

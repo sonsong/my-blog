@@ -109,13 +109,10 @@ router.get('/', async(ctx, next) =>{
 
     //查询数据库的总记录数
     let totalPage = 0;
-    await Blogs.countDocuments(condition, (err, count) =>{
-        if(!err){
-            let total     = count;
-                totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
-        }
-    });
-
+    await Blogs.countDocuments(condition).then(count =>{
+        let total     = count;
+            totalPage = total % pageSize === 0 ?  total / pageSize : parseInt(total / pageSize) + 1;
+    })
     //设置分页参数
     let pager = {
         pageCode,
@@ -223,7 +220,7 @@ router.get('gitHub-login', async(ctx, next) =>{
     });
 
     let {login, name, avatar_url, email} = gitHub_user;
-    let _name = name === null ? login : escape(name);
+    let _name                            = name === null ? login : escape(name);
 
     //将获取到的用户信息存储到cookie中
     ctx.cookies.set('gitHub_user', escape(JSON.stringify({_name, avatar_url, email})), {
@@ -245,7 +242,7 @@ router.get('preview', async(ctx, next) =>{
     //解析参数
     let id = ctx.query._id;
 
-    //获取cookie中的文章编码，没有保存，有，若是相同，跳过，不同覆盖
+    //获取cookie中的文章编码，没有,保存，有，若是相同，跳过，不同覆盖
     let artId = ctx.cookies.artId;
     if(artId === undefined || _id !== artId){
         ctx.cookies.set('artId', id, {
