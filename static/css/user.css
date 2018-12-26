@@ -152,6 +152,7 @@
     /* font-size : 0.7rem; */
     margin    : 0.5rem auto;
     box-sizing: border-box;
+    font-size: 0.7rem;
 }
 .preview .comment img{
     width        : 2rem;
@@ -175,6 +176,7 @@
     width        : calc(100% - 6rem);
     margin-right : 2rem;
     margin-bottom: 1.5rem;
+    font-size: 0.7rem;
 }
 .preview .comment .textarea{
     width     : 100%;
@@ -197,10 +199,12 @@
     right          : 0;
     top            : 0;
     height         : 3.3rem;
+    font-size: 0.7rem;
     background     : rgba(0, 0, 0, 0.1);
 }
 .preview .textarea-wrap a{
     cursor: pointer;
+    font-size: 0.7rem;
 }
 .preview .textarea-wrap > div{
     line-height: 3.3rem;
@@ -215,10 +219,12 @@
     height          : 2rem;
     line-height     : 2rem;
     padding-left    : 0.5rem;
+    font-size: 0.8rem;
     background-color: #eaeaea;
 }
 .preview .messes{
     margin: 1rem 0;
+    font-size: 0.7rem;
 }
 .preview .mess > div:hover{
     cursor: pointer;
@@ -227,6 +233,7 @@
     display        : flex;
     justify-content: space-between;
     line-height    : 2rem;
+    font-size: 0.6rem;
 }
 .preview .messes .mess-name > div:first-child{
     display: flex;
@@ -236,9 +243,8 @@
 }
 .preview .mess .mess-content{
     margin     : 0  3rem;
-    line-height: 2.5rem;
-    height     : 2.5rem;
-    overflow   : hidden;
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
     word-break : break-all;
 }
 .preview .mess .mess-replay{
@@ -248,6 +254,7 @@
     cursor      : pointer;
     line-height : 2rem;
     height      : 2rem;
+    font-size: 0.7rem;
 }
 .preview .comment .sub-replay{
     margin-left: 2rem;
@@ -259,6 +266,7 @@
     height     : 5rem;;
     line-height: 5rem;
     width      : 100%;
+    font-size: 0.8rem;
     text-align : center;
 }   
 
