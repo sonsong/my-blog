@@ -99,6 +99,7 @@ button{
     color           : #696969;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     z-index         : 2;
 }
 .layout-wrap .left .colorDiv{
@@ -187,6 +188,7 @@ button{
     height             : 100%;
     overflow-y         : auto;
     overflow-x         : hidden;
+    -webkit-overflow-scrolling: touch;
     background-image   : url('../img//bg.png');
     background-position: center bottom;
     background-repeat  : repeat-x;
@@ -202,13 +204,13 @@ button{
     margin    : 1.5rem 0;
 }
 .layout-wrap .toolBox .fixedWrap{
-    width     : calc(100% - 1.5rem);
-    max-height: 100%;
+    width     : 20%;
+    max-height: 94.5%;
     overflow-y: auto;
-    position  : relative;
-    top       : 0;
-    right     : 0;
-    left      : 0;
+    border-left: 1px solid #eaeaea;
+    -webkit-overflow-scrolling: touch;
+    position  : fixed;
+    right      : 2rem; 
 }
 .layout-wrap .search-wrap{
     position   : relative;
@@ -232,6 +234,7 @@ button{
     max-height: 100%;
     overflow: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .layout-wrap .result li{
     height       : 2rem;
@@ -289,6 +292,7 @@ button{
         left    : 0;
         overflow-y: auto;
         overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
         z-index : 999;
         display : none;
     }

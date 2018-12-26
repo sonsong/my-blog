@@ -1,11 +1,11 @@
 {{extend './layout.html'}}
-{{block 'title'}}<title>jsong,一个不专注的前端程序员-博客首页</title>{{/block}}
+{{block 'title'}}<title>jsong,一个不专注前端的程序员-博客首页</title>{{/block}}
 {{block 'css'}}
     <link rel="stylesheet" href="/css/index.css">
 {{/block}}
 {{block 'content'}}
     <div class="index-wrap">
-            {{each blogs}}
+        {{each blogs}}
             <div class="index-article">
                 <div class="head">
                     <div class="title">{{$value.title}}</div>

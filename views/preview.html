@@ -1,5 +1,5 @@
 {{extend './layout.html'}}
-{{block 'title'}}<title>jsong,一个不专注的前端程序员</title>{{/block}}
+{{block 'title'}}<title>jsong,一个不专注前端的程序员</title>{{/block}}
 {{block 'content'}}
     <div class="preview">
         <div class="preview_content">
@@ -26,7 +26,6 @@
                 <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub_logo">
                 <div class="commit-mess">
                     <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
-                    <input type="hidden" name="email" id="email"/>
                     <button class="primary-btn comment-btn">提交</button>
                     <div class="textarea-wrap">
                         <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
@@ -118,6 +117,7 @@
                     $('.textarea-wrap').css('display', 'none');
                     $('.comment-btn').css('display', 'block');
                 }
+
                 if(!flag){
                     $('.always-show').css('display', 'flex');
                 }
@@ -126,7 +126,6 @@
                 if( flag ){
                     $(`.comment-div:not(#${id}_textArea)`).css('display', 'none');
                     $(`.replay:not(#${id}_replay)`).text('回复');
-                    //flag = false;
                 }
             })
             
@@ -161,7 +160,7 @@
             //回复谁的评论
             let reply_name = '';
             //涉及到的人的邮件
-            let emails = [$('#email').val()];
+            let emails = [];
 
             if(commentId !== ''){
                 let ids = commentId.split('_');
@@ -213,9 +212,10 @@
                         //重新加载数据
                         getBlogAllCommentsByArtId(artId, page);
                         //清空文本框的数据
-                        $('#comment').val('');
+                        $('.textarea').val('');
+
                         //隐藏当前输入框
-                        commentId !== '' && $(`${commentId}_textArea`).css('display', 'none').val('');
+                        commentId !== '' && $(`${commentId}_textArea`).css('display', 'none');
 
                         //最外层的文本框显示
                         $('.always-show').css('display', 'flex');

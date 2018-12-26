@@ -5,6 +5,7 @@ const tBlogComment = require('../models/t-blog-comment');
 
 //发送邮件方法
 const sendEmail = require('../utils//sendEmail');
+const constant = require('../config/constant');
 
 /** 
  * 新增文章评论
@@ -28,7 +29,8 @@ router.post('addComment', async(ctx, next) =>{
         comment_email  : email,
         comment_time   : new Date()
     }
-    //新增评论
+
+    //回复评论
     if(commentId !== ''){
         Object.assign(commentObj, {
             blogComment: commentId,
@@ -39,14 +41,33 @@ router.post('addComment', async(ctx, next) =>{
     let mess = '';
     //新增
     await tBlogComment.create(commentObj).then(res =>{
-        //发送邮件通知
-        let template = {
-            emails: emails.toString(),
-            name  : unescape(_name),
-            email,
-            artURL: `http://127.0.0.1:3000`,
-            comment
-        };
+        //发送邮件通知我，被回复的人
+        let template = {};
+
+        //发送给不同用户的模板
+        let {sendTemplate_1, sendTemplate_2, auth} = constant.email;
+        sendTemplate_1.html = `
+            <p>${unescape(_name)}(${email})评论了你的<a href="http://127.0.0.1:3000/preview?_id=${artId}">文章</a></p>
+            <p>评论内容:</p>
+            <p>${comment}</p>
+        `;
+        //发送给我的模板
+        template = {
+            sendTemp: sendTemplate_1,
+            auth
+        }
+        sendEmail(template);
+
+        //发送给被回复的人的模板
+        if(emails !== undefined){
+            sendTemplate_2.html = `
+                <p>${unescape(_name)}(${email})回复了你评论的<a href="http://127.0.0.1:3000/preview?_id=${artId}">文章</a></p>
+                <p>评论内容:</p>
+                <p>${comment}</p>
+            `;
+            sendTemplate_2.to = emails.toString();
+        }
+        template.sendTemp = sendTemplate_2;
         sendEmail(template);
 
         mess = {code: 0, mess: "评论成功^_^_^_^"};
@@ -74,7 +95,7 @@ router.get('getAllCommentByArtId/:artId', async(ctx, next) =>{
         .where({artId, blogComment: {$eq: undefined}})
         /* .skip((page-1) * limit)
         .limit(limit) */
-        .sort({comment_time: 1})
+        .sort({comment_time: -1})
         .exec().then(res =>{
             //数据加工
             res.forEach(data =>{

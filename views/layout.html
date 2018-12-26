@@ -113,7 +113,11 @@
                 //计算滚动的距离
                 let scrollDistance = $(this).scrollTop() + 'px';
 
-                scrolled.css('top',  scrollDistance);
+                if(scrollDistance === '0px'){
+                    scrolled.css('top',  '1.5rem');
+                }else{
+                    scrolled.css('top',  '0');
+                }
                 scrolledSearch.css('top',  scrollDistance);
             });
         }else{
@@ -140,11 +144,10 @@
                     });
                 }
 
+                $('.right .content').animate({width: '75%'}, 1000);
                 //没有目录
-                if($('.artcle-toc').length === 0){
-                    $('.right .content').animate({width:flag ? '75%' : '100%'}, 1000);
-                }else{
-                    $('.right .content').animate({width:flag ? '55%' : '75%'}, 1000);
+                if($('.artcle-toc').length !== 0){
+                    $('.toolBox').css('display', flag ? 'none' : 'block');
                 }
                 
                 return;

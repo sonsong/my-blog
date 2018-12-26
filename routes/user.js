@@ -9,6 +9,8 @@ const Blogs = require('../models/t-blog');
 //用户实体
 const Users = require('../models/t-user');
 
+const constant = require('../config/constant');
+
 //查询用户信息
 router.use(async(ctx, next) =>{
     //查询admin信息
@@ -188,8 +190,7 @@ router.get('gitHub-login', async(ctx, next) =>{
     let gitHub_user = null;
 
     //进行登录操作
-    let client_id     = '9b581d4805df0fb0af16';
-    let client_secret = '7e0edf390634e7d7c00dedabeedca277f5889660';
+    let {client_id, client_secret}    = constant.gitHub;
     let url           = 'https://github.com/login/oauth/access_token';
 
     let access_token = '';
@@ -232,7 +233,7 @@ router.get('gitHub-login', async(ctx, next) =>{
         overwrite: true
     });
 
-    let artId = await ctx.cookies.get('artId');
+    let artId = ctx.cookies.get('artId');
 
     //重定向到文章预览页面
     ctx.redirect(`/preview?_id=${artId}`);
@@ -243,8 +244,8 @@ router.get('preview', async(ctx, next) =>{
     let id = ctx.query._id;
 
     //获取cookie中的文章编码，没有,保存，有，若是相同，跳过，不同覆盖
-    let artId = ctx.cookies.artId;
-    if(artId === undefined || _id !== artId){
+    let artId = ctx.cookies.get('artId');
+    if(artId === undefined || id !== artId){
         ctx.cookies.set('artId', id, {
             //cookie有效时长，单位：毫秒数 1小时
             maxAge   : 60 * 60 *1000,
