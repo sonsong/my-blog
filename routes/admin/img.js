@@ -2,7 +2,7 @@ const router = require('koa-router')();
 
 //博客图片实体
 const BlogImgs = require('../../models/t-blog-img');
-const fs = require('fs');
+const fs       = require('fs');
 
 //删除图片
 router.get('delImg/:ids', async(ctx) =>{
@@ -34,7 +34,7 @@ router.get('delImg/:ids', async(ctx) =>{
 //获取图片数据
 router.get('getAllImgs', async(ctx) =>{
     let query = ctx.query;
-    let user = ctx.state.user;
+    let user  = ctx.state.user;
 
     //当前页码
     let page = query.page === undefined ? 1 : parseInt(query.page);
@@ -47,8 +47,8 @@ router.get('getAllImgs', async(ctx) =>{
     Reflect.deleteProperty(query, 'page');
     Reflect.deleteProperty(query, 'limit');
 
-    params = query;
-    let where = {};
+            params = query;
+        let where  = {};
 
     //uname是用户的字段
     if(params.uname){
@@ -62,8 +62,8 @@ router.get('getAllImgs', async(ctx) =>{
 
     //处理时间查询
     if(params.createTime){
-        let times = params.createTime.split(' - ');
-        params.createTime = {$gte: new Date(times[0]), $lt: new Date(times[1])};
+        let times             = params.createTime.split(' - ');
+            params.createTime = {$gte: new Date(times[0]), $lt: new Date(times[1])};
     }
     
     let imgs = [];
@@ -79,7 +79,7 @@ router.get('getAllImgs', async(ctx) =>{
         .where(params)
         .skip((page-1) * limit)
         .limit(limit)
-        .sort({createTime: 1})
+        .sort({createTime: -1})
         .exec().then(res =>{
             if(res){
                 //对数据处理
@@ -88,10 +88,10 @@ router.get('getAllImgs', async(ctx) =>{
                     if(img.user !== null){
                         imgs.push(
                             {
-                                _id: img._id.toString(),
-                                uid: img.user._id.toString(),
-                                uname: img.user.uname,
-                                path: img.path,
+                                _id       : img._id.toString(),
+                                uid       : img.user._id.toString(),
+                                uname     : img.user.uname,
+                                path      : img.path,
                                 createTime: ctx.moment(img.createTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
                             }
                         );
@@ -108,7 +108,7 @@ router.get('getAllImgs', async(ctx) =>{
         .populate([{path: 'user', match: where}])
         .exec().then(count =>{
             ctx.result.count = count;
-            ctx.result.data = imgs;
+            ctx.result.data  = imgs;
 
             ctx.body = ctx.result;
         })

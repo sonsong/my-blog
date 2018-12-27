@@ -187,7 +187,7 @@ router.get('getAllArtcles', async(ctx, next) =>{
     let blogs = [];
 
     //查询数据库中的所有文章
-    await Blogs.find(params, '_id tags title publishTime', {skip: (page - 1) * limit, limit, sort: {'publishTime': 1}}, (err, docs) =>{
+    await Blogs.find(params, '_id tags title publishTime', {skip: (page - 1) * limit, limit, sort: {'publishTime': -1}}, (err, docs) =>{
         try {
             if(!err){
                 for (const item of docs) {

@@ -1,8 +1,8 @@
 .common-wrap{
-    width: 100%;
-    font-size     : 0.8rem;
-    color         : #000;
-    border-radius : 5px;
+    width        : 100%;
+    font-size    : 0.8rem;
+    color        : #000;
+    border-radius: 5px;
 }
 
 /* 首页样式 */
@@ -23,13 +23,12 @@
     text-align: center;
 }
 .index-article .detail{
-    width        : 90%;
+    width        : 95%;
     height       : 15rem;
     margin       : 0 auto;
     overflow     : hidden;
     text-overflow: ellipsis;
     white-space  : nowrap;
-    border-bottom: 2px solid #eaeaea;
 }
 .index-article .head .title{
     font-size  : 1.2rem;
@@ -73,9 +72,9 @@
     font-style  : italic;
 }
 .brief .brief-content{
-    width         : 80%;
-    margin: 0 auto;
-    border-left   : 2px solid #57dbec;
+    width      : 80%;
+    margin     : 0 auto;
+    border-left: 2px solid #57dbec;
 }
 
 .brief .time{
@@ -126,14 +125,14 @@
 .preview_content{
     border       : 1px solid #eaeaea;
     border-radius: 5px;
-    background: #fff;
+    background   : #fff;
     margin-bottom: 1rem;
 }
 .read-tips{
     display        : flex;
     justify-content: space-between;
     border-bottom  : 1px solid #eaeaea;
-    border-top  : 1px solid #eaeaea
+    border-top     : 1px solid #eaeaea
 }
 .read-tips > div{
     line-height: 2rem;
@@ -142,7 +141,7 @@
     font-size  : 0.6rem;
 }
 .read-tips a{
-    font-size: 0.7rem;  
+    font-size: 0.7rem;
 }
 
 /* 评论样式 */
@@ -150,7 +149,7 @@
     font-size: 0.7rem;
 }
 .preview .comment{
-    width: 97%;
+    width     : 97%;
     margin    : 0.5rem auto;
     box-sizing: border-box;
 }
@@ -180,7 +179,7 @@
 .preview .comment .textarea{
     width     : 100%;
     max-width : 100%;
-    height: 3rem;
+    height    : 3rem;
     padding   : 0.8rem;
     box-sizing: border-box;
 }
@@ -208,14 +207,14 @@
 }
 
 .preview .comment > div:last-child{
-    width        : 100%;
-    border       : 1px solid #eaeaea;
+    width : 100%;
+    border: 1px solid #eaeaea;
 }
 .preview .comment-total{
     height          : 2rem;
     line-height     : 2rem;
     padding-left    : 0.5rem;
-    font-size: 0.7rem;
+    font-size       : 0.7rem;
     background-color: #eaeaea;
 }
 .preview .messes{
@@ -237,7 +236,7 @@
 }
 .preview .mess .mess-content{
     margin     : 0  3rem;
-    padding: 0.5rem 0;
+    padding    : 0.5rem 0;
     line-height: 1.1rem;
     word-break : break-all;
 }
@@ -277,15 +276,15 @@
     font-size: 1rem;
 }
 .artcle-toc ul li a{
-    display: block;
-    position: relative;
+    display  : block;
+    position : relative;
     font-size: 0.7rem;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    padding: 0.1rem 0.5rem;
-    color: #000 !important;
+    top      : 0;
+    right    : 0;
+    left     : 0;
+    bottom   : 0;
+    padding  : 0.1rem 0.5rem;
+    color    : #000 !important;
 }
 .artcle-toc .toc-level-2{
     padding-left: 1rem;
@@ -306,16 +305,16 @@
     color: #414040;
 }
 .artcle-toc ul li a:hover{
-    text-decoration: none;
+    text-decoration : none;
     background-color: #eaeaea;
-    color: #05d3ee !important;
+    color           : #05d3ee !important;
 }
 
 /* 联系我 */
 .brief .brief-wrap{
-    width: 100%;
+    width     : 100%;
     background: #fff;
-    padding: 1rem 0;
+    padding   : 1rem 0;
 }
 .brief .about-content ul li{
     display        : flex;
@@ -386,6 +385,9 @@ p code{
     padding: 1rem !important;
 }
 .markdown-body ul{
+    padding-left: 0.5rem !important;
+}
+.artcle-toc ul{
     padding-left: 0 !important;
 }
 

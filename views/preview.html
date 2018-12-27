@@ -68,22 +68,27 @@
                     $('.artcle-toc').append($('.editormd-markdown-toc').html());
 
                     //获取所有锚点的位置
-                    //let aimArr = Array.from($('.preview .reference-link'));
-                    //屏幕滚动，定位锚点
-                    /* $('.content').scroll(function(){
-                        let scroller = $(this).scrollTop();
+                    let aimArr = Array.from($('.preview .reference-link'));
+
+                    //做节流，提高性能
+                    let fn = function(){
+                         let scroller = $(this).scrollTop();
 
                         aimArr.forEach((e, index) =>{
-                            if(scroller >= e.offsetTop){
+                            if(scroller >= $(e).offset().top){
                                 let name = $(aimArr[index]).attr('name');
                                 $('.artcle-toc a').removeClass('toc-active');
                                 $(`.artcle-toc a[href='#${name}']`).addClass('toc-active');
                             }
                         })
-                    }) */
+                    }
+                    
+                    //屏幕滚动，定位锚点
+                    $('.content').scroll(throttle(fn, 100)) 
                 }
+
                 //隐藏正文的目录
-                $('.editormd-markdown-toc').css('display', 'none');
+                $('.markdown-toc').css('display', 'none');
             }
 
             $('.preview').on('focus', '.textarea', function(){

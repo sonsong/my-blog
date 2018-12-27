@@ -253,7 +253,7 @@ router.get('getAllUsers', async(ctx) =>{
 
     let users = [];
     //查询数据库中的所有用户
-    await Users.find(params, '_id uname nname email motto introd picture createTime role', { skip: ((page - 1) * limit), limit, sort: {'createTime': 1} }, (err, docs) =>{
+    await Users.find(params, '_id uname nname email motto introd picture createTime role', { skip: ((page - 1) * limit), limit, sort: {createTime: -1} }, (err, docs) =>{
         try {
             if(!err){
                 for (const item of docs) {
