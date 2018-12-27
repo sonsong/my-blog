@@ -1,6 +1,13 @@
+.common-wrap{
+    width: 100%;
+    font-size     : 0.8rem;
+    color         : #000;
+    border-radius : 5px;
+}
+
 /* 首页样式 */
 .index-wrap{
-    padding-bottom: 1.5rem;
+    width: 100%;
 }
 .index-article{
     position     : relative;
@@ -55,27 +62,19 @@
 }
 
 /* 简史样式 */
-.brief{
-    font-size     : 0.8rem;
-    color         : #000;
-    background    : #fff;
-    border-radius : 5px;
-    padding-bottom: 1rem;
-}
 .brief .head{
-    height      : 4rem;
-    line-height : 4rem;
+    height      : 3rem;
+    line-height : 3rem;
     font-size   : 1.2rem;
     padding-left: 1.5rem;
-    background  : #fff;
+    background  : #eeeeee;
     border-left : 5px solid #4d4d4d;
     box-sizing  : border-box;
     font-style  : italic;
 }
 .brief .brief-content{
     width         : 80%;
-    margin        : 0 auto;
-    padding-bottom: 1rem;
+    margin: 0 auto;
     border-left   : 2px solid #57dbec;
 }
 
@@ -97,44 +96,44 @@
     border       : 4px solid rgb(101, 213, 228);
     cursor       : pointer;
 }
-.brief .part ul{
-    margin-left: 2rem;
+.brief .part .sub-item{
+    margin-left: 1.5rem;
 }
-.brief .part ul li{
-    height     : 2rem;
-    line-height: 2rem;
+.brief .part .sub-item > span{
+    display: inline-block;
+    padding: 0.5rem 0;
 }
-.brief .part ul li a:hover{
+.brief .part .sub-item > span a:hover{
     color: #05d3ee;
 }
-.brief .part ul li span{
+.brief .part .sub-item > span span{
     font-size   : 0.6rem;
     padding-left: 0.5rem;
 }
 
 /* 标签相关样式 */
+.brief .tags-content, .about-content{
+    background: #fff;
+}
 .brief .tags-content button{
-    margin: 1rem 0.5rem 0 1rem;
+    margin: 1rem 0.5rem;
 }
 .brief .tags-content button a{
     color: #fff;
 }
 
 /* 预览页面样式 */
-.preview{
-    border-radius : 5px;
-    background    : #fff;
-    padding-bottom: 0.1rem;
-    margin-bottom : 1rem;
-}
 .preview_content{
     border       : 1px solid #eaeaea;
     border-radius: 5px;
+    background: #fff;
+    margin-bottom: 1rem;
 }
 .read-tips{
     display        : flex;
     justify-content: space-between;
-    border-bottom  : 1px solid #eaeaea
+    border-bottom  : 1px solid #eaeaea;
+    border-top  : 1px solid #eaeaea
 }
 .read-tips > div{
     line-height: 2rem;
@@ -152,7 +151,6 @@
 }
 .preview .comment{
     width: 97%;
-    /* font-size : 0.7rem; */
     margin    : 0.5rem auto;
     box-sizing: border-box;
 }
@@ -212,7 +210,6 @@
 .preview .comment > div:last-child{
     width        : 100%;
     border       : 1px solid #eaeaea;
-    margin-bottom: 2rem;
 }
 .preview .comment-total{
     height          : 2rem;
@@ -264,12 +261,12 @@
     width      : 100%;
     text-align : center;
 }   
-
 .artcle-toc{
     background: #fff;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    max-height: 50%;
+}
+
+.artcle-toc .toc-active{
+    color: #05d3ee !important;
 }
 .artcle-toc ul li{
     overflow     : hidden;
@@ -280,22 +277,46 @@
     font-size: 1rem;
 }
 .artcle-toc ul li a{
+    display: block;
+    position: relative;
     font-size: 0.7rem;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0.1rem 0.5rem;
+    color: #000 !important;
 }
-.artcle-toc .markdown-toc-list{
-    padding: 0.5rem;
+.artcle-toc .toc-level-2{
+    padding-left: 1rem;
 }
-.artcle-toc .markdown-toc-list .toc-level-4, .toc-level-5, .toc-level-6{
+.artcle-toc .toc-level-3{
+    padding-left: 1.5rem;
+}
+.artcle-toc .toc-level-4{
+    padding-left: 2rem;
+}
+.artcle-toc .toc-level-5{
+    padding-left: 2.5rem;
+}
+.artcle-toc .toc-level-6{
+    padding-left: 3rem;
+}
+.artcle-toc .toc-level-4, .toc-level-5, .toc-level-6{
     color: #414040;
 }
-.artcle-toc .markdown-toc-list a{
-    color: #000;
-}
-.artcle-toc .markdown-toc-list a:hover{
-    color: #5788fe;
+.artcle-toc ul li a:hover{
+    text-decoration: none;
+    background-color: #eaeaea;
+    color: #05d3ee !important;
 }
 
 /* 联系我 */
+.brief .brief-wrap{
+    width: 100%;
+    background: #fff;
+    padding: 1rem 0;
+}
 .brief .about-content ul li{
     display        : flex;
     justify-content: flex-start;
@@ -342,6 +363,9 @@
     font-size: 0.8rem;
     color    : #000
 }
+.markdown-body a{
+    color: #05d3ee !important;
+}
 abbr {
     color        : #fff;
     border       : none !important;
@@ -362,7 +386,7 @@ p code{
     padding: 1rem !important;
 }
 .markdown-body ul{
-    padding-left: 1rem !important;
+    padding-left: 0 !important;
 }
 
 /* plus手机 平板*/
@@ -379,8 +403,4 @@ p code{
     .editormd-html-preview, .editormd-preview-container{
         overflow: hidden !important;
     }
-}
-/* iphonex小屏幕手机 */
-@media only screen and (max-width: 413px){
-    
 }

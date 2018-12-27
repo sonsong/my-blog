@@ -149,6 +149,10 @@ button{
     font-size : 0.8rem;
     margin-top: -1rem;
 }
+.layout-wrap .category .active{
+    background : #c7c6c6;
+    border-left: 5px solid #686767;
+}
 .layout-wrap .category li{
     height      : 4rem;
     line-height : 4rem;
@@ -186,39 +190,42 @@ button{
     display            : flex;
     width              : calc(100% - 15rem);
     height             : 100%;
-    overflow-y         : auto;
-    overflow-x         : hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     background-image   : url('../img//bg.png');
     background-position: center bottom;
     background-repeat  : repeat-x;
     z-index            : 2;
 }
 .layout-wrap .right .content{
+    display: flex;
+    justify-content: space-between;
     width     : 100%;
-    padding   : 1.5rem;
+    height: 100%;
+    padding: 1rem;
+    overflow-y         : auto;
+    overflow-x         : hidden;
+    -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
 }
 .layout-wrap .toolBox{
-    max-height: 100%;
-    margin    : 1.5rem 0;
+    position: fixed;
+    height: 100%;
+    right: -3.5rem;
 }
 .layout-wrap .toolBox .fixedWrap{
-    width     : 20%;
-    max-height: 94.5%;
+    width: 75%;
+    max-height: 90%;
     overflow-y: auto;
     border-left: 1px solid #eaeaea;
-    -webkit-overflow-scrolling: touch;
-    position  : fixed;
-    right      : 2rem; 
+    border-radius: 5px;
 }
 .layout-wrap .search-wrap{
     position   : relative;
     display    : none;
     width      : 0;
     overflow   : hidden;
-    margin     : 1.5rem 0;
-    margin-left: 1.5rem;
+    margin     : 1rem 0;
+    margin-left: 1rem;
 }
 .layout-wrap .search-wrap input{
     border-radius: 5px;
@@ -360,7 +367,7 @@ button{
     }
     .layout-wrap .search-wrap .icon{
         top  : 2.9rem !important;
-        right: 5rem !important;
+        right: 5.5rem !important;
     }
     .layout-wrap .result{
         width      : 74%;

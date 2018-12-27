@@ -1,41 +1,41 @@
 {{extend './layout.html'}}
 {{block 'title'}}<title>jsong,一个不专注前端的程序员</title>{{/block}}
 {{block 'content'}}
-    <div class="preview">
+    <div class="preview common-wrap">
         <div class="preview_content">
             {{@htmlContent}}
-        </div>
-        <div class="read-tips">
-            <div>上一篇：
-                {{if preA._id === ''}}
-                    <span style="cursor: pointer;">{{preA.title}}</span>
-                {{else}}
-                    <a href="/preview?_id={{preA._id}}">{{preA.title}}</a>
-                {{/if}}
-            </div>
-            <div>下一篇：
-                {{if nextA._id === ''}}
-                    <span style="cursor: pointer;">{{nextA.title}}</span>
-                {{else}}
-                    <a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a>
-                {{/if}}
-            </div>
-        </div>
-        <div class="comment">
-            <div class="comment-div always-show">
-                <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub_logo">
-                <div class="commit-mess">
-                    <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
-                    <button class="primary-btn comment-btn">提交</button>
-                    <div class="textarea-wrap">
-                        <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
-                    </div>
+            <div class="read-tips">
+                <div>上一篇：
+                    {{if preA._id === ''}}
+                        <span style="cursor: pointer;">{{preA.title}}</span>
+                    {{else}}
+                        <a href="/preview?_id={{preA._id}}">{{preA.title}}</a>
+                    {{/if}}
+                </div>
+                <div>下一篇：
+                    {{if nextA._id === ''}}
+                        <span style="cursor: pointer;">{{nextA.title}}</span>
+                    {{else}}
+                        <a href="/preview?_id={{nextA._id}}">{{nextA.title}}</a>
+                    {{/if}}
                 </div>
             </div>
-            <div>
-                <h5 class="comment-total"><span class="comment_total"></span> 条精彩评论</h5>
-                <div class="messes">
-
+            <div class="comment">
+                <div class="comment-div always-show">
+                    <img src="/img/gitHub.jpg" alt="gitHub logo" class="gitHub_logo">
+                    <div class="commit-mess">
+                        <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
+                        <button class="primary-btn comment-btn">提交</button>
+                        <div class="textarea-wrap">
+                            <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="comment-total"><span class="comment_total"></span> 条精彩评论</h5>
+                    <div class="messes">
+    
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,13 +57,30 @@
                 if(category){
                     //设置工具栏的宽度
                     $('.toolBox').css('width', '25%');
-                    $('.right .content').css('width', '75%');
+                    $('.right .content .common-wrap').css('width', '75%');
                     //在toolBox下显示目录
                     $('.fixedWrap').append(`
-                        <div class="artcle-toc markdown-body"></div>
+                        <div class="artcle-toc markdown-body">
+                            <div style="padding:0.5rem;background-color:#eaeaea">目录</div>
+                        </div>
                     `)
                     //显示文章目录
                     $('.artcle-toc').append($('.editormd-markdown-toc').html());
+
+                    //获取所有锚点的位置
+                    //let aimArr = Array.from($('.preview .reference-link'));
+                    //屏幕滚动，定位锚点
+                    /* $('.content').scroll(function(){
+                        let scroller = $(this).scrollTop();
+
+                        aimArr.forEach((e, index) =>{
+                            if(scroller >= e.offsetTop){
+                                let name = $(aimArr[index]).attr('name');
+                                $('.artcle-toc a').removeClass('toc-active');
+                                $(`.artcle-toc a[href='#${name}']`).addClass('toc-active');
+                            }
+                        })
+                    }) */
                 }
                 //隐藏正文的目录
                 $('.editormd-markdown-toc').css('display', 'none');

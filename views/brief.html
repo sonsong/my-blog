@@ -1,19 +1,21 @@
 {{extend './layout.html'}}
 {{block 'title'}}<title>jsong,一个不专注前端的程序员-文章简史</title>{{/block}}
 {{block 'content'}}
-    <div class="brief">
+    <div class="brief common-wrap">
         <div class="head">文章简史</div>
-        <div class="brief-content">
-            {{each blogs}}
-                <div class="part">
-                        <div class="time">{{$value.time}}({{$value.sum}})</div>
-                        <ul>
-                            {{each $value.detail}}
-                                <li><a href="/preview?_id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></li>
-                            {{/each}}
-                        </ul>
+        <div class="brief-wrap">
+            <div class="brief-content">
+                    {{each blogs}}
+                        <div class="part">
+                            <div class="time">{{$value.time}}({{$value.sum}})</div>
+                            <div class="sub-item">
+                                {{each $value.detail}}
+                                    <span><a href="/preview?_id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></span><br>
+                                {{/each}}
+                            </div>
+                        </div>
+                    {{/each}}
                 </div>
-            {{/each}}
         </div>
     </div>
 {{/block}}
