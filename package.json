@@ -4,11 +4,17 @@
   "description": "基于Koa2 + art-template模板的Blog系统",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pm2 start pm2.json --env test",
+    "start":  "pm2 start pm2.json --env production",
+    "dev":  "pm2 start pm2.json --env development"
   },
   "keywords": [
     "koa2",
-    "art-template"
+    "art-template",
+    "mongoDB",
+    "blog",
+    "node",
+    "pm2"
   ],
   "author": "huangss",
   "license": "ISC",

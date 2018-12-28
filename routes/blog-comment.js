@@ -5,7 +5,6 @@ const tBlogComment = require('../models/t-blog-comment');
 
 //发送邮件方法
 const sendEmail = require('../utils//sendEmail');
-const constant = require('../config/constant');
 
 /** 
  * 新增文章评论
@@ -45,7 +44,7 @@ router.post('addComment', async(ctx, next) =>{
         let template = {};
 
         //发送给不同用户的模板
-        let {sendTemplate_1, sendTemplate_2, auth} = constant.email;
+        let {sendTemplate_1, sendTemplate_2, auth} = ctx.email;
         sendTemplate_1.html = `
             <p>${unescape(_name)}(${email})评论了你的<a href="http://127.0.0.1:3000/preview?_id=${artId}">文章</a></p>
             <p>评论内容:</p>

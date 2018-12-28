@@ -9,8 +9,6 @@ const Blogs = require('../models/t-blog');
 //用户实体
 const Users = require('../models/t-user');
 
-const constant = require('../config/constant');
-
 //查询用户信息
 router.use(async(ctx, next) =>{
     //查询admin信息
@@ -190,7 +188,7 @@ router.get('gitHub-login', async(ctx, next) =>{
     let gitHub_user = null;
 
     //进行登录操作
-    let {client_id, client_secret}    = constant.gitHub;
+    let {client_id, client_secret}    = ctx.gitHubInfo;
     let url           = 'https://github.com/login/oauth/access_token';
 
     let access_token = '';
@@ -224,7 +222,7 @@ router.get('gitHub-login', async(ctx, next) =>{
     let _name                            = name === null ? login : escape(name);
 
     //将获取到的用户信息存储到cookie中
-    ctx.cookies.set('gitHub_user', escape(JSON.stringify({_name, avatar_url, email})), {
+    await ctx.cookies.set('gitHub_user', escape(JSON.stringify({_name, avatar_url, email})), {
         //cookie有效时长，单位：毫秒数 1小时
         maxAge   : 60 * 60 *1000,
         path     : "/",
@@ -233,10 +231,10 @@ router.get('gitHub-login', async(ctx, next) =>{
         overwrite: true
     });
 
-    let artId = ctx.cookies.get('artId');
+    let _artId = await ctx.cookies.get('artId');
 
     //重定向到文章预览页面
-    ctx.redirect(`/preview?_id=${artId}`);
+    ctx.redirect(`/preview?_id=${_artId}`);
 })
 //跳转到预览页面
 router.get('preview', async(ctx, next) =>{
@@ -246,7 +244,7 @@ router.get('preview', async(ctx, next) =>{
     //获取cookie中的文章编码，没有,保存，有，若是相同，跳过，不同覆盖
     let artId = ctx.cookies.get('artId');
     if(artId === undefined || id !== artId){
-        ctx.cookies.set('artId', id, {
+        await ctx.cookies.set('artId', id, {
             //cookie有效时长，单位：毫秒数 1小时
             maxAge   : 60 * 60 *1000,
             path     : "/",
@@ -302,7 +300,9 @@ router.get('preview', async(ctx, next) =>{
         }
     });
 
-    ctx.render('preview', {artId: id, htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user});
+    //告诉浏览器当前的运行环境
+    let {client_id}    = ctx.gitHubInfo;
+    ctx.render('preview', {artId: id, htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user, client_id});
 });
 
 //进入标签页

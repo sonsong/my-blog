@@ -19,10 +19,16 @@ const constant = {
             html   : ''
         }
     },
-    gitHub:{
+    //生产环境
+    gitHub_prod:{
         client_id     : '9b581d4805df0fb0af16',
         client_secret : '7e0edf390634e7d7c00dedabeedca277f5889660'
-    }
+    },
+    //开发环境
+    gitHub_dev:{
+        client_id     : 'e708d805bca65f1196a9',
+        client_secret : '744d975bf9c78b9cbcc906a060c642cccb9a9212'
+    },
 }
 
 module.exports = constant;

@@ -11,7 +11,8 @@ const Koa = require('koa'),
         JWT = require('jsonwebtoken'),
         //解析token
         koaJWT = require('koa-jwt'),
-        util   = require('util');
+        util   = require('util'),
+        conf = require('./config/conf');
 
 const app = new Koa();
 
@@ -65,6 +66,18 @@ app.use(async(ctx, next) =>{
     ctx.verify = verify;
     ctx.secret = secret;
     ctx.JWT    = JWT;
+
+    //发送邮件信息和第三方登陆信息
+    let {email, gitHub_dev, gitHub_prod} = conf;
+    ctx.email = email;
+    //判断当前的执行环境
+    let isProd = process.env.NODE_ENV === 'production';
+
+    if(isProd){
+        ctx.gitHubInfo = gitHub_prod;
+    }else{
+        ctx.gitHubInfo = gitHub_dev;
+    }
 
     //table所需的response
     ctx.result = {

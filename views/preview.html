@@ -27,7 +27,7 @@
                         <textarea name="comment" id="comment" class="textarea" placeholder="请输入您的评论"></textarea>
                         <button class="primary-btn comment-btn">提交</button>
                         <div class="textarea-wrap">
-                            <div>暂时无法评论，<a href="https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email" style="color:red">请先登录</a></div>
+                            <div>暂时无法评论，<a class="gitHub_logo" style="color:red">请先登录</a></div>
                         </div>
                     </div>
                 </div>
@@ -151,9 +151,10 @@
                 }
             })
             
+            let client_id = '{{client_id}}';
             //使用github账号登陆
             $('.gitHub_logo').on('click', function(){
-                window.location.href = `https://github.com/login/oauth/authorize?client_id=9b581d4805df0fb0af16&scope=user:email`;
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=user:email`;
             });
 
             //获取文章的评论
