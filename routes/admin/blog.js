@@ -225,14 +225,14 @@ router.get('/', async(ctx, next) =>{
 });
 
 //跳转到修改文章页面
-router.get('update_artcle', async(ctx, next) =>{
+router.get('update_artcle', async(ctx) =>{
     //解析参数
     let id = ctx.query._id;
     //查询到的文章信息
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: id}, 'tags title mdContent', (err, doc) =>{
+    await Blogs.findOne({_id: id}, 'tags title mdContent', (err, doc) =>{
         if(!err){
             blog = doc;
         }

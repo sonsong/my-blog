@@ -56,7 +56,6 @@
     margin: 0 0.5rem;
 }
 .index-article .tags span a{
-    color : sandybrown;
     cursor: pointer;
 }
 
@@ -363,8 +362,9 @@
     color    : #000
 }
 .markdown-body a{
-    color: #05d3ee !important;
+    color: #4183c4 !important
 }
+
 abbr {
     color        : #fff;
     border       : none !important;
@@ -390,7 +390,30 @@ p code{
 .artcle-toc ul{
     padding-left: 0 !important;
 }
-
+.editormd-html-preview pre.prettyprint, .editormd-preview-container pre.prettyprint, .linenums > li:nth-child(even){
+    background-color: #111;
+}
+.editormd-html-preview ol.linenums li, .editormd-preview-container ol.linenums li{
+    color: #999;
+}
+.editormd-preview-container .clo, .opn, .pun{
+    color: #660;
+}
+.editormd-preview-container .pln{
+    color: #999;
+}
+.editormd-preview-container .kwd, .tag{
+    color: #f90 !important;
+}
+.editormd-preview-container .com{
+    color: #444;
+}
+.editormd-preview-container .atn{
+    color: #6C95F5;
+}
+.editormd-preview-container .at-link{
+    color: #000 !important;
+}
 /* plus手机 平板*/
 @media only screen and (max-width: 1024px){
     .brief .about-content span{
