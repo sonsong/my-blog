@@ -27,8 +27,6 @@
     height       : 15rem;
     margin       : 0 auto;
     overflow     : hidden;
-    text-overflow: ellipsis;
-    white-space  : nowrap;
 }
 .index-article .head .title{
     font-size  : 1.2rem;
