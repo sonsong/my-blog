@@ -275,8 +275,7 @@ router.get('preview', async(ctx, next) =>{
 
     //查询上一篇文章
     let preA = {};
-    await Blogs.findOne({_id: {$lt: id}}, '_id title', (err, doc) =>{
-        if(!err){
+    await Blogs.findOne({_id: {$lt: id}}, '_id title').exec().then(doc =>{
             if(doc === null){
                 preA._id   = '';
                 preA.title = '没有了^_^_^_^';
@@ -284,21 +283,18 @@ router.get('preview', async(ctx, next) =>{
                 preA._id   = doc._id.toString();
                 preA.title = doc.title;
             }
-         }
-    });
+    })
     //查询下一篇文章
     let nextA = {};
-    await Blogs.findOne({_id: {$gt: id}}, '_id title', (err, doc) =>{
-        if(!err){
-           if(doc === null){
-                nextA._id   = '';
-                nextA.title = '没有了^_^_^_^';
-           }else{
-               nextA._id   = doc._id.toString();
-               nextA.title = doc.title;
-           }
-        }
-    });
+    await Blogs.findOne({_id: {$gt: id}}, '_id title').exec().then(doc =>{
+        if(doc === null){
+            nextA._id   = '';
+            nextA.title = '没有了^_^_^_^';
+       }else{
+           nextA._id   = doc._id.toString();
+           nextA.title = doc.title;
+       }
+    })
 
     //告诉浏览器当前的运行环境
     let {client_id}    = ctx.gitHubInfo;
