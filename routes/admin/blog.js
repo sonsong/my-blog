@@ -232,14 +232,12 @@ router.get('update_artcle', async(ctx) =>{
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findOne({_id: id}, 'tags title mdContent', (err, doc) =>{
-        if(!err){
-            blog = doc;
-        }
-    });
+    await Blogs.findOne({_id: id}, 'tags title mdContent').exec().then(res =>{
+        blog = res;
+    })
 
     //回到编辑页面
-    ctx.render('admin/blog/editor', {tags: blog.tags.toString(), title: blog.title, mdContent: blog.mdContent, id});
+    ctx.render('admin/blog/editor', {tags: (blog.tags).toString(), title: blog.title, mdContent: blog.mdContent, id});
 });
 
 //跳转到预览页面
