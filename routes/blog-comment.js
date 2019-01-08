@@ -45,9 +45,9 @@ router.post('addComment', async(ctx, next) =>{
 
         //发送给不同用户的模板
         let {sendTemplate_1, sendTemplate_2, auth} = ctx.email;
-        sendTemplate_1.html = `
+            sendTemplate_1.html                    = `
             <p>${unescape(_name)}(${email})评论了你的<a href="http://127.0.0.1:3000/preview?_id=${artId}">文章</a></p>
-            <p>评论内容:</p>
+            <p>评论内容: </p>
             <p>${comment}</p>
         `;
         //发送给我的模板
@@ -61,7 +61,7 @@ router.post('addComment', async(ctx, next) =>{
         if(emails !== undefined){
             sendTemplate_2.html = `
                 <p>${unescape(_name)}(${email})回复了你评论的<a href="http://127.0.0.1:3000/preview?_id=${artId}">文章</a></p>
-                <p>评论内容:</p>
+                <p>评论内容: </p>
                 <p>${comment}</p>
             `;
             sendTemplate_2.to = emails.toString();
@@ -118,26 +118,24 @@ router.get('getAllCommentByArtId/:artId', async(ctx, next) =>{
     for (const key in comments) {
         comments[key].replys = [];
 
-        await tBlogComment.find({artId, blogComment: comments[key]._id}, (err, docs) =>{
-            if(!err){
-                //数据加工
-                docs.forEach(data =>{
-                    let {_id, comment, comment_name, reply_name, comment_pic_url, comment_email, comment_time} = data;
+        await tBlogComment.find({artId, blogComment: comments[key]._id}).exec().then(docs =>{
+            //数据加工
+            docs.forEach(data =>{
+                let {_id, comment, comment_name, reply_name, comment_pic_url, comment_email, comment_time} = data;
 
-                    comments[key].replys.push({
-                        _id: _id.toString(),
-                        comment,
-                        comment_name,
-                        reply_name,
-                        comment_pic_url,
-                        comment_email,
-                        comment_time: ctx.moment(comment_time, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
-                    });
-                })
-            }else{
-                console.log(err)
-            }
-        })
+                comments[key].replys.push({
+                    _id: _id.toString(),
+                    comment,
+                    comment_name,
+                    reply_name,
+                    comment_pic_url,
+                    comment_email,
+                    comment_time: ctx.moment(comment_time, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
+                });
+            })
+        }, e =>{
+            console.log(e);
+        });
     }
 
     //查询数据库的总记录数

@@ -51,16 +51,14 @@ router.post('uploadImg', img_upload.single('file'), async(ctx) =>{
     //用户编码
     let _id = ctx.state.user.id;
     //查询用户信息
-    await Users.findById({_id}, (err, doc) =>{
-        try {
-            if(!err){
-                user = doc;
-            }else{
-                ctx.err_mess = '查询用户信息失败';
-            }
-        } catch (e) {
+    await Users.findById({_id}).exec().then(doc =>{
+        if(doc === null){
             ctx.err_mess = '查询用户信息失败';
+        }else{
+            user = doc;
         }
+    }, e =>{
+        ctx.err_mess = '查询用户信息失败';
     });
 
     //如果头像是初始头像，不管，否则删除
@@ -98,10 +96,15 @@ router.post('uploadResume', file_upload.single('file'), async(ctx) =>{
     //用户id
     let _id = ctx.state.user.id;
     //获取用户信息，删除旧简历
-    await Users.findById({_id}, (err, doc) =>{
-        if(!err){
+    await Users.findById({_id}).exec().then(doc =>{
+        if(doc !== null){
             user = doc;
+        }else{
+            ctx.err_mess = '查询用户信息失败';
         }
+    }, e =>{
+        console.log(e);
+        ctx.err_mess = '查询用户信息失败';
     })
 
     //如果之前上传了简历，删除
@@ -219,10 +222,15 @@ router.post('addUser', async(ctx) =>{
 router.get('verityUname', async(ctx) =>{
     let user = [];
 
-    await Users.find({uname: ctx.query.uname}, '_id uname', (err, docs) =>{
-        if(!err){
+    await Users.find({uname: ctx.query.uname}, '_id uname').exec().then(docs =>{
+        if(docs === null){
+            ctx.err_mess = '查询用户信息失败';
+        }else{
             user = docs;
         }
+    }, e =>{
+        console.log(e);
+        ctx.err_mess = '查询用户信息失败';
     })
 
     if(user.length === 0){
@@ -253,11 +261,11 @@ router.get('getAllUsers', async(ctx) =>{
 
     let users = [];
     //查询数据库中的所有用户
-    await Users.find(params, '_id uname nname email motto introd picture createTime role', { skip: ((page - 1) * limit), limit, sort: {createTime: -1} }, (err, docs) =>{
-        try {
-            if(!err){
+    await Users.find(params, '_id uname nname email motto introd picture createTime role', 
+        { skip: ((page - 1) * limit), limit, sort: {createTime: -1}}).exec().then(docs =>{
+            if(docs !== null){
                 for (const item of docs) {
-    
+
                     let doc = {
                         _id       : item._id.toString(),
                         uname     : item.uname,
@@ -274,10 +282,9 @@ router.get('getAllUsers', async(ctx) =>{
             }else{
                 ctx.body = ctx.result;
             }
-        } catch (e) {
-            console.log(e)
-            ctx.body = ctx.result;
-        }
+    }, e =>{
+        console.log(e)
+        ctx.body = ctx.result;
     });
 
     //查询数据库的总记录数
@@ -301,8 +308,8 @@ router.post('updatePasswd', async(ctx) =>{
     let {_id, passwd, newPasswd} = ctx.request.body;
 
     //简单做下后台校验
-    await Users.findById({_id}, 'passwd', (err, doc) =>{
-        if(!err){
+    await Users.findById({_id}, 'passwd').exec().then(doc =>{
+        if(doc !== null){
             if(doc.passwd !== passwd){
                 ctx.body = {message: '初始密码不正确', code: 2};
             }
@@ -312,7 +319,10 @@ router.post('updatePasswd', async(ctx) =>{
         }else{
             ctx.body = {message: '该用户不存在', code: 2};
         }
-    })
+    }, e =>{
+        ctx.body = {message: '该用户不存在', code: 2};
+        console.log(e);
+    });
 
     //修改密码
     await Users.updateOne({_id}, {$set: {passwd: newPasswd}}, (err, doc) =>{

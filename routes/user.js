@@ -12,37 +12,37 @@ const Users = require('../models/t-user');
 //查询用户信息
 router.use(async(ctx, next) =>{
     //查询admin信息
-    await Users.findOne({uname: 'admin'}, '_id uname nname email motto introd picture resume', (err, doc) =>{
-        if(!err){
-            //没有内置账户 新增一个
-            if(doc === null){
-                Users.create({
-                    uname : 'admin',
-                    nname : '不专业的前端猿',
-                    passwd: '4a0cde71aee7158542d013fc0c9f5acfc735c612',
-                    role  : '0'
-                }).then(res =>{
-                    ctx.user = {
-                        _id    : res._id.toString(),
-                        uname  : res.uname,
-                        nname  : res.nname,
-                        picture: res.picture
-                    };
-                });
-            }else{
+    await Users.findOne({uname: 'admin'}, '_id uname nname email motto introd picture resume').exec().then(doc =>{
+        //没有内置账户 新增一个
+        if(doc === null){
+            Users.create({
+                uname : 'admin',
+                nname : '不专业的前端猿',
+                passwd: '4a0cde71aee7158542d013fc0c9f5acfc735c612',
+                role  : '0'
+            }).then(res =>{
                 ctx.user = {
-                    _id       : doc._id.toString(),
-                    uname     : doc.uname,
-                    nname     : doc.nname,
-                    email     : doc.email,
-                    introd    : doc.introd,
-                    motto     : doc.motto,
-                    picture   : doc.picture,
-                    resumePath: doc.resume,
-                    resumeName: doc.resume && doc.resume.substring('/upload/file/'.length)
+                    _id    : res._id.toString(),
+                    uname  : res.uname,
+                    nname  : res.nname,
+                    picture: res.picture
                 };
-            }
+            });
+        }else{
+            ctx.user = {
+                _id       : doc._id.toString(),
+                uname     : doc.uname,
+                nname     : doc.nname,
+                email     : doc.email,
+                introd    : doc.introd,
+                motto     : doc.motto,
+                picture   : doc.picture,
+                resumePath: doc.resume,
+                resumeName: doc.resume && doc.resume.substring('/upload/file/'.length)
+            };
         }
+    }, e =>{
+        console.log(e);
     })
 
     await next()
@@ -59,10 +59,10 @@ router.get('searchArtcleByTag', async(ctx) =>{
     await Blogs.find({$or: [
         {tags: {$regex: reg}},
         {title: {$regex: reg}}
-    ]}, '_id title', {sort: {'publishTime': -1}}, (err, docs) =>{
-        if(!err){
-            blogs = docs;
-        }
+    ]}, '_id title', {sort: {'publishTime': -1}}).exec().then(docs =>{
+        blogs = docs;
+    }, e =>{
+        console.log(e);
     })
 
     ctx.body = {blogs};
@@ -88,24 +88,23 @@ router.get('/', async(ctx, next) =>{
 
     //加载数据库的文章, 进行分页， 每页显示10条 -1升序 1降序
     await Blogs.find(condition, '_id tags title publishTime htmlContent readNum', 
-        {skip: (pageCode - 1) * pageSize, limit: pageSize, sort: {'publishTime': -1}}, 
-        (err, docs) =>{
-            if(!err){
-                for (const item of docs) {
-                    let doc = {
-                        _id  : item._id.toString(),
-                        tags : item.tags,
-                        title: item.title,
-                        //moment()的第二个参数，指定时间的类型
-                        publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
-                        htmlContent: item.htmlContent,
-                        readNum    : item.readNum
-                    }
-
-                    blogs.push(doc);
+        {skip: (pageCode - 1) * pageSize, limit: pageSize, sort: {'publishTime': -1}}).exec().then(docs => {
+            for (const item of docs) {
+                let doc = {
+                    _id  : item._id.toString(),
+                    tags : item.tags,
+                    title: item.title,
+                    //moment()的第二个参数，指定时间的类型
+                    publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
+                    htmlContent: item.htmlContent,
+                    readNum    : item.readNum
                 }
+
+                blogs.push(doc);
             }
-    })
+        }, e =>{
+            console.log(e);
+        });
 
     //查询数据库的总记录数
     let totalPage = 0;
@@ -188,8 +187,8 @@ router.get('gitHub-login', async(ctx, next) =>{
     let gitHub_user = null;
 
     //进行登录操作
-    let {client_id, client_secret}    = ctx.gitHubInfo;
-    let url           = 'https://github.com/login/oauth/access_token';
+    let {client_id, client_secret} = ctx.gitHubInfo;
+    let url                        = 'https://github.com/login/oauth/access_token';
 
     let access_token = '';
 
@@ -217,6 +216,8 @@ router.get('gitHub-login', async(ctx, next) =>{
     }, e =>{
         console.log(e.message);
     });
+
+    console.log(gitHub_user)
 
     let {login, name, avatar_url, email} = gitHub_user;
     let _name                            = name === null ? login : escape(name);
@@ -258,20 +259,18 @@ router.get('preview', async(ctx, next) =>{
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findById({_id: id}, '_id htmlContent title readNum', (err, doc) =>{
-        if(!err){
-            blog = doc;
+    await Blogs.findById({_id: id}, '_id htmlContent title readNum').exec().then(doc => {
+        blog = doc;
 
-            //取出阅读次数，让其自增更新
-            blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{
-                if(err){
-                    console.log(err);
-                }
-            });
-        }else{
-            console.log(err)
-        }
-    });
+        //取出阅读次数，让其自增更新
+        blog.updateOne({$set: {readNum: ++blog.readNum}}, (err, doc) =>{
+            if(err){
+                console.log(err);
+            }
+        });
+    }, e =>{
+        console.log(e);
+    })
 
     //查询上一篇文章
     let preA = {};
@@ -297,7 +296,7 @@ router.get('preview', async(ctx, next) =>{
     })
 
     //告诉浏览器当前的运行环境
-    let {client_id}    = ctx.gitHubInfo;
+    let {client_id} = ctx.gitHubInfo;
     ctx.render('preview', {artId: id, htmlContent: blog.htmlContent, title: blog.title, preA, nextA, user: ctx.user, client_id});
 });
 
