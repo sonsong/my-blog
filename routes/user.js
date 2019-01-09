@@ -57,7 +57,7 @@ router.get('searchArtcleByTag', async(ctx) =>{
     let reg = new RegExp(param, 'i');
 
     await Blogs.find({$or: [
-        {tags: {$regex: reg}},
+        {tags: {$regex: reg, $options: 'i'}},
         {title: {$regex: reg}}
     ]}, '_id title', {sort: {'publishTime': -1}}).exec().then(docs =>{
         blogs = docs;

@@ -194,6 +194,7 @@
                         let html = '';
                         data.forEach(blog =>{
                             let title = blog.title;
+                            search = search.toLowerCase();
                             let index = title.indexOf(search);
                             //如果标题中存在查询的关键字，高亮显示
                             if(title.indexOf(search) !== -1){
