@@ -25,38 +25,32 @@
                     <li><a href="/">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-index"></use>
-                        </svg>首页</a>
+                        </svg><span>首页</span></a>
                     </li>
                     <li><a href="/brief">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-brief"></use>
-                        </svg>文章简史</a>
+                        </svg><span>文章简史</span></a>
                     </li>
                     <li><a href="/tags">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-tag"></use>
-                        </svg>文章标签</a>
-                    </li>
-                    <li><a href="javascript:" class="query">
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-search"></use>
-                        </svg>查询文章</a>
+                        </svg><span>文章标签</span></a>
                     </li>
                     <li><a href="/about">
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-about"></use>
-                        </svg>联系我</a>
+                        </svg><span>联系我</span></a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="right">
             <div class="search-wrap">
-                <input type="text" name="search" id="search" placeholder="文章标签">
-                <svg class="icon" aria-hidden="true" style="position:absolute;top:0.47rem;right:-0.3rem">
+                <input type="text" name="search" id="search" placeholder="">
+                <svg class="icon" aria-hidden="true" style="position:absolute;top:0.8rem;right:2.5rem;z-index:9998">
                     <use xlink:href="#icon-search"></use>
                 </svg>
-                <div class="collapse">收起</div>
                 <ul class="result"></ul>
             </div>
             <div class="content">
@@ -131,37 +125,19 @@
         //根据关键字查询文章
         $("#search").on('keyup', debounce(search, 500));
 
-        let flag = false;
         //显示查询框
-        $('.query').on('click', function(){
-            flag = !flag;
-            if(width > 1024){
-                if(flag){
-                    $('.layout-wrap .search-wrap').animate({width:'25%'}, 1000).css('display', 'block');
-                }else{
-                    $('.layout-wrap .search-wrap').animate({width:'0'}, 1000, function(){
-                        $(this).css('display', 'none');
-                    });
-                }
-
-                return;
+        $('#search').on('focus', function(){
+            $(this).animate({width: '20%'}, 1000, function(){
+                $(this).attr('placeholder', '请输入文章关键词');
+            });
+        }).on('blur', function(){
+            //如果输入框有值，不变化
+            if($(this).val() === ''){
+                $(this).animate({width: '3rem'}, 1000, function(){
+                    $(this).attr('placeholder', '');
+                });
             }
-            
-            $('.left').css('display', 'none');
-            $('.inner-wrap').css('display', 'none');
-            $('.category-icon').css('display', 'none');
-            $('.search-wrap').css('display', 'block');
-            $('.content').css('display', 'none');
-            $('.collapse').css('display', 'block');
-        })
-    })
-
-    //点击收起按钮
-    $('.collapse').on('click', () =>{
-        $('.category-icon').css('display', '');
-        $('.search-wrap').css('display', 'none');
-        $('.content').css('display', 'block');
-        $(this).css('display', 'none');
+        });
     })
 
     // 手机屏下显现/隐藏侧边栏
@@ -172,7 +148,7 @@
         $('.left').css('display', bool ? 'block' : 'none');
         $('.inner-wrap').css('display', bool ? 'block' : 'none');
         $('.category-icon').css('display', bool ? 'none' : 'block');
-        $('.search-wrap').css('display', 'none');
+        //$('.search-wrap').css('display', 'none');
     }
     //查询文章
     function search(){

@@ -7,12 +7,12 @@
             <div class="brief-content">
                     {{each blogs}}
                         <div class="part">
-                            <div class="time">{{$value.time}}({{$value.sum}})</div>
-                            <div class="sub-item">
+                            <div class="item">{{$value.time}}({{$value.sum}})</div>
+                            <ul class="sub-item">
                                 {{each $value.detail}}
-                                    <span><a href="/preview?_id={{$value._id}}">{{$value.title}}</a><span class="publishTime">{{$value.publishTime}}</span></span><br>
+                                    <li><span class="publishTime">{{$value.publishTime}}</span><a href="/preview?_id={{$value._id}}">{{$value.title}}</a></li>
                                 {{/each}}
-                            </div>
+                            </ul>
                         </div>
                     {{/each}}
                 </div>

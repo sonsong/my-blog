@@ -153,7 +153,7 @@ router.get('brief', async(ctx, next) =>{
         //进行数据处理
         for (const item of docs) {
             let breif = {
-                time  : item._id,
+                time  : ctx.moment(item._id, ctx.moment.ISO_8601).format("YYYY年MM月"),
                 sum   : item.sum,
                 detail: []
             };
@@ -165,7 +165,7 @@ router.get('brief', async(ctx, next) =>{
             for (const index in titles) {
                 _detail.push({
                     _id        : ids[index].toString(),
-                    publishTime: ctx.moment(publishTimes[index], ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
+                    publishTime: ctx.moment(publishTimes[index], ctx.moment.ISO_8601).format("DD日"),
                     title      : titles[index]
                 });
             }
@@ -175,7 +175,7 @@ router.get('brief', async(ctx, next) =>{
         }
     })
 
-    ctx.render('brief', {blogs: blogs, user: ctx.user});
+    ctx.render('brief', {blogs, user: ctx.user});
 });
 
 //github第三方登陆

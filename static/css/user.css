@@ -23,10 +23,10 @@
     text-align: center;
 }
 .index-article .detail{
-    width        : 95%;
-    height       : 14rem;
-    margin       : 0 auto;
-    overflow     : hidden;
+    width   : 95%;
+    height  : 14rem;
+    margin  : 0 auto;
+    overflow: hidden;
 }
 .index-article .head .title{
     font-size  : 1.2rem;
@@ -64,47 +64,38 @@
     font-size   : 1.2rem;
     padding-left: 1.5rem;
     background  : #eeeeee;
-    border-left : 5px solid #4d4d4d;
-    box-sizing  : border-box;
-    font-style  : italic;
+    color       : #05d3ee;
 }
 .brief .brief-content{
-    width      : 80%;
-    margin     : 0 auto;
-    border-left: 2px solid #57dbec;
+    width : 90%;
+    margin: 0 auto;
+}    
+.brief .brief-content .part, span{
+    font-size: 0.7rem;
+} 
+.brief .brief-content .item{
+    font-size    : 1rem !important;
+    height       : 3rem;
+    line-height  : 3rem;
+    border-bottom: 2px solid rgb(245, 245, 245);
 }
 
-.brief .time{
-    height     : 2.5rem;
-    line-height: 2.5rem;
-    font-size  : 0.9rem;
-    margin-left: -10px;
-}       
-.brief .time::before{
-    content      : '';
-    display      : inline-block;
-    width        : 6px;
-    height       : 6px;
-    background   : rgb(105, 240, 240);
-    border-radius: 50%;
-    margin-right : 0.75rem;
-    padding      : 0.1rem;
-    border       : 4px solid rgb(101, 213, 228);
-    cursor       : pointer;
+.brief .brief-content .sub-item{
+    list-style  : initial;
+    padding-left: 2rem;
 }
-.brief .part .sub-item{
-    margin-left: 1.5rem;
+.brief .brief-content .sub-item li{
+    line-height: 1.5rem;
+    height     : 1.5rem;
 }
-.brief .part .sub-item > span{
-    display: inline-block;
-    padding: 0.5rem 0;
+.brief .brief-content li a{
+    color: rgb(104, 179, 253);
 }
-.brief .part .sub-item > span a:hover{
+.brief .brief-content li a:hover{
     color: #05d3ee;
 }
-.brief .part .sub-item > span span{
-    font-size   : 0.6rem;
-    padding-left: 0.5rem;
+.brief .brief-content .publishTime{
+    padding-right: 1rem;
 }
 
 /* 标签相关样式 */
@@ -338,8 +329,8 @@
 /* 分页样式 */
 .pager{
     display        : flex;
-    justify-content: flex-end;
-    margin         : 0.2rem 0 0.6rem 0;
+    justify-content: space-between;
+    margin-bottom  : 0.6rem;
     color          : #fff;
     font-size      : 0.6rem;
 }
@@ -347,11 +338,17 @@
     padding: 0.2rem 0.75rem;
 }
 .pager .pagerWrap{
-    background   : rgba(255, 255, 255, 0.6);
-    border-radius: 10px;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    width          : 2rem;
+    height         : 2rem;
+    background     : rgba(255, 255, 255, 0.6);
+    border-radius  : 50%;
 }
 .pager .pagerWrap .icon{
-    padding: 0.2rem 0.25rem!important;
+    width : 1.2rem;
+    height: 1.2rem;
 }
 
 /* 文章的一些样式调整 */
