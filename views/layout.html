@@ -127,7 +127,7 @@
 
         //显示查询框
         $('#search').on('focus', function(){
-            $(this).animate({width: '20%'}, 1000, function(){
+            $(this).animate({width: '15rem'}, 1000, function(){
                 $(this).attr('placeholder', '请输入文章关键词');
             });
         }).on('blur', function(){
@@ -148,7 +148,6 @@
         $('.left').css('display', bool ? 'block' : 'none');
         $('.inner-wrap').css('display', bool ? 'block' : 'none');
         $('.category-icon').css('display', bool ? 'none' : 'block');
-        //$('.search-wrap').css('display', 'none');
     }
     //查询文章
     function search(){
