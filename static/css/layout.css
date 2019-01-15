@@ -97,7 +97,7 @@ button{
     left                      : 0;
     bottom                    : 0;
     height                    : 100%;
-    width                     : 15rem;
+    width                     : 13rem;
     background-color          : #fff;
     color                     : #696969;
     overflow-y                : auto;
@@ -107,21 +107,19 @@ button{
 }
 .layout-wrap .left .colorDiv{
     width           : 100%;
-    height          : 9rem;
+    height          : 8rem;
     background-color: rgb(77, 77, 77);
 }
 .layout-wrap .uimg{
     position        : absolute;
-    top             : 3.75rem;
-    left            : 0;
+    top             : 4.75rem;
+    left            : 3.25rem;
     right           : 0;
-    width           : 7.5rem;
-    height          : 7.5rem;
+    width           : 6.5rem;
+    height          : 6.5rem;
     border-radius   : 50%;
-    margin          : 1rem 3.75rem 0.25rem 3.75rem;
     background-color: #fff;
     cursor          : pointer;
-    transition      : transform 1s;
     border          : 5px solid #fff;
 }
 .layout-wrap .uimg:hover{
@@ -197,42 +195,40 @@ button{
     z-index : 1;
 }
 .layout-wrap .right{
-    position                  : relative;
-    top                       : 0;
-    left                      : 0;
-    right                     : 0;
-    bottom                    : 0;
-    width                     : calc(100% - 15rem);
-    height                    : 100%;
+    position           : relative;
+    top                : 0;
+    left               : 0;
+    right              : 0;
+    bottom             : 0;
+    width              : calc(100% - 13rem);
+    height             : 100%;
+    overflow           : hidden;
+    background-image   : url('../img//bg.png');
+    background-position: center bottom;
+    background-repeat  : repeat-x;
+    z-index            : 2;
+}
+.layout-wrap .right .content{
+    display                   : flex;
+    width                     : 100%;
+    height                    : calc(100% - 2.5rem);
     overflow                  : hidden;
     overflow-y                : auto;
     -webkit-overflow-scrolling: touch;
-    background-image          : url('../img//bg.png');
-    background-position       : center bottom;
-    background-repeat         : repeat-x;
-    z-index                   : 2;
-}
-.layout-wrap .right .content{
-    width      : 100%;
-    height     : 100%;
-    padding    : 1rem;
-    padding-top: 3.5rem;
+    padding                   : 1rem 0;
 }
 .layout-wrap .toolBox{
     position: fixed;
     height  : 100%;
-    right   : -3.5rem;
+    right   : 1.5rem;
 }
 .layout-wrap .toolBox .fixedWrap{
-    width        : 75%;
     max-height   : 90%;
     overflow-y   : auto;
     border-left  : 1px solid #eaeaea;
     border-radius: 5px;
 }
 .layout-wrap .search-wrap{
-    position        : fixed;
-    width           : calc(100% - 15rem);
     height          : 2.5rem;
     border          : 1px solid #eaeaea;
     line-height     : 2.5rem;
@@ -242,7 +238,7 @@ button{
 .layout-wrap .search-wrap input{
     position     : absolute;
     border-radius: 20px;
-    right        : 2rem;
+    right        : 1rem;
     top          : 0.25rem;
     width        : 3rem;
     height       : 2rem;
@@ -256,7 +252,7 @@ button{
 .layout-wrap .result{
     position                  : absolute;
     top                       : 2.5rem;
-    right                     : 2rem;
+    right                     : 1rem;
     width                     : 15rem;
     min-width                 : 150px;
     overflow                  : hidden;
@@ -301,7 +297,7 @@ button{
 .icon {
     width         : 1rem;
     height        : 1rem;
-    vertical-align: -0.15rem;
+    vertical-align: -0.28rem;
     fill          : currentColor;
     overflow      : hidden;
     font-weight   : bold;
@@ -357,18 +353,19 @@ button{
     .layout-wrap .search-wrap{
         width: 100%
     }
-    .layout-wrap .search-wrap input, .layout-wrap .result{
-        right: 1rem;
-    }
-    .layout-wrap .search-wrap .icon{
-        right: 1.5rem !important;
-    }
 }
 
-/* 笔记本 */
-@media only screen and (max-width: 1440px) and (min-width: 1024px){
+/* 笔记本以下*/
+@media only screen and (max-width: 1440px){
     .layout-wrap .category li{
         height     : 3rem;
         line-height: 3rem;
     }
 }
+@media only screen and (max-width: 1024px){
+    .index-wrap, .common-wrap{
+        width  : 100% !important;
+        padding: 0 1rem;
+    }
+}
+

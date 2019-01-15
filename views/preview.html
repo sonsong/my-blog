@@ -56,8 +56,8 @@
                 //存在目录增加目录结构  
                 if(category){
                     //设置工具栏的宽度
-                    $('.toolBox').css('width', '25%');
-                    $('.right .content .common-wrap').css('width', '75%');
+                    $('.toolBox').css('width', '20%');
+                    $('.right .content .common-wrap').css('margin', 'initial').css('padding', '0 1rem');
                     //在toolBox下显示目录
                     $('.fixedWrap').append(`
                         <div class="artcle-toc markdown-body">
@@ -67,8 +67,13 @@
                     //显示文章目录
                     $('.artcle-toc').append($('.editormd-markdown-toc').html());
 
+                    $('.artcle-toc a').on('click', function(){
+                        $('.artcle-toc a').removeClass('toc-active');
+                        $(this).addClass('toc-active');
+                    });
+
                     //获取所有锚点的位置
-                    let aimArr = Array.from($('.preview .reference-link'));
+                    /* let aimArr = Array.from($('.preview .reference-link'));
 
                     //做节流，提高性能
                     let fn = function(){
@@ -84,7 +89,7 @@
                     }
                     
                     //屏幕滚动，定位锚点
-                    $('.content').scroll(throttle(fn, 100)) 
+                    $('.content').scroll(throttle(fn, 100))  */
                 }
 
                 //隐藏正文的目录
