@@ -101,17 +101,24 @@ router.post('publish', async(ctx, next) =>{
     //所有的表单参数
     let params = ctx.request.body;
 
+    console.log(params)
+
     //文章编码
     let id = params['_id'];
     //文章标题
     let title = params['title'];
+    //文章描述
+    let desc = params['desc'];
+    //文章状态
+    let state = params['state'];
+
     //文章分类
     let tags = params['tags'].split(',');
     //通过set集合去重, 再转成数组
     tags = Array.from(new Set(tags));
 
     //作者
-    let author = "huangss";
+    let author = ctx.state.user.uname;
     //md格式的内容
     let mdContent = params['mdContent'];
     //html格式的内容
@@ -122,7 +129,9 @@ router.post('publish', async(ctx, next) =>{
         title,
         tags,
         mdContent,
-        htmlContent
+        htmlContent,
+        desc,
+        state
     };
 
     //生成时间函数
@@ -187,7 +196,7 @@ router.get('getAllArtcles', async(ctx, next) =>{
     let blogs = [];
 
     //查询数据库中的所有文章
-    await Blogs.find(params, '_id tags title publishTime', {skip: (page - 1) * limit, limit, sort: {'publishTime': -1}}, (err, docs) =>{
+    await Blogs.find(params, '_id tags title publishTime state', {skip: (page - 1) * limit, limit, sort: {'publishTime': -1}}, (err, docs) =>{
         try {
             if(!err){
                 for (const item of docs) {
@@ -195,6 +204,7 @@ router.get('getAllArtcles', async(ctx, next) =>{
                         _id        : item._id.toString(),
                         tags       : item.tags.toString(),
                         title      : item.title,
+                        state      : item.state,
                         publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
                     }
                     
@@ -232,12 +242,12 @@ router.get('update_artcle', async(ctx) =>{
     let blog = {};
 
     //查询该文章的所有信息
-    await Blogs.findOne({_id: id}, 'tags title mdContent').exec().then(res =>{
+    await Blogs.findOne({_id: id}, 'tags title desc mdContent').exec().then(res =>{
         blog = res;
     })
 
     //回到编辑页面
-    ctx.render('admin/blog/editor', {tags: (blog.tags).toString(), title: blog.title, mdContent: blog.mdContent, id});
+    ctx.render('admin/blog/editor', {tags: (blog.tags).toString(), title: blog.title, desc: blog.desc, mdContent: blog.mdContent, id});
 });
 
 //跳转到预览页面

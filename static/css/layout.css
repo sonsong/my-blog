@@ -137,7 +137,7 @@ button{
 }
 .layout-wrap .userinfo > div:first-child{
     font-size : 1rem;
-    padding   : 1rem;
+    padding   : 0.5rem 1rem;
     font-style: normal;
     cursor    : pointer;
 }
@@ -229,6 +229,7 @@ button{
     border-radius: 5px;
 }
 .layout-wrap .search-wrap{
+    display         : flex;
     height          : 2.5rem;
     border          : 1px solid #eaeaea;
     line-height     : 2.5rem;
@@ -238,7 +239,7 @@ button{
 .layout-wrap .search-wrap input{
     position     : absolute;
     border-radius: 20px;
-    right        : 1rem;
+    right        : 2rem;
     top          : 0.25rem;
     width        : 3rem;
     height       : 2rem;
@@ -252,7 +253,7 @@ button{
 .layout-wrap .result{
     position                  : absolute;
     top                       : 2.5rem;
-    right                     : 1rem;
+    right                     : 2rem;
     width                     : 15rem;
     min-width                 : 150px;
     overflow                  : hidden;
@@ -267,7 +268,7 @@ button{
     line-height  : 2rem;
     margin       : 0.25rem 0;
     cursor       : pointer;
-    padding-left : 1rem;
+    padding-left : 2rem;
     white-space  : nowrap;
     overflow     : hidden;
     text-overflow: ellipsis;
@@ -290,9 +291,6 @@ button{
     color      : #f90;
     font-weight: bold;
 }
-.layout-wrap .category-icon{
-    display: none;
-}
 
 .icon {
     width         : 1rem;
@@ -304,6 +302,26 @@ button{
 }
 .layout-wrap .collapse{
     display: none;
+}
+.layout-wrap .category-icon{
+    width     : 3rem;
+    height    : 2.5rem;
+    text-align: center;
+    display   : none;
+}
+.layout-wrap .search-wrap .tab{
+    width        : 5rem;
+    height       : 2.5rem;
+    line-height  : 2.5rem;
+    text-align   : center;
+    border-bottom: 2px solid #57dbec;
+}
+.layout-wrap .search-wrap .tab a{
+    display        : block;
+    width          : 5rem;
+    height         : 2.5rem;
+    color          : #000;
+    text-decoration: none;
 }
 /* 平板屏 */
 @media only screen and (max-width: 1024px){
@@ -342,13 +360,7 @@ button{
         display         : none;
     }
     .layout-wrap .category-icon{
-        position     : absolute;
-        top          : 0.75rem;
-        left         : 1rem;
-        z-index      : 9998;
-        border-radius: 50%;
-        text-align   : center;
-        display      : block;
+        display: block;
     }
     .layout-wrap .search-wrap{
         width: 100%

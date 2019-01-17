@@ -21,6 +21,9 @@ html, body{
 .editormd-preview-container, .editormd-html-preview{
     width: 97.5% !important;
 }
+.layui-inline{
+    padding: 5px 0;
+}
 
 /* 编辑器页面样式 */
 .editor{
@@ -44,7 +47,7 @@ html, body{
 
 /* 用户列表样式 */
 #addUser{
-    width: 90%;
+    width : 90%;
     margin: 20px auto;
 }
 
@@ -56,21 +59,21 @@ html, body{
 
 /* 用户信息页面 */
 .user-info{
-    width: 50%;
+    width : 50%;
     margin: 0 auto;
 }
 .user-info .top{
     display: flex;
-    margin: 20px 0;
+    margin : 20px 0;
 }
 
 .user-info .top-left{
-    width: 150px;
-    height: 150px;
-    border: 2px solid rgb(119, 118, 118);
+    width        : 150px;
+    height       : 150px;
+    border       : 2px solid rgb(119, 118, 118);
     border-radius: 50%;
-    margin-left: 100px;
-    box-sizing: border-box;
+    margin-left  : 100px;
+    box-sizing   : border-box;
 }
 .user-info .top-left:hover{
     cursor: pointer;
@@ -78,11 +81,11 @@ html, body{
 .user-info .top-right{
     line-height: 40px;
     margin-left: 50px;
-    margin-top: 40px;
+    margin-top : 40px;
 }
 .user-info .top-right .tip{
-    font-size: 12px;
-    color: #c7c4c4;
+    font-size   : 12px;
+    color       : #c7c4c4;
     padding-left: 10px;
 }
 fieldset {

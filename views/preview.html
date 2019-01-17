@@ -89,11 +89,11 @@
                     }
                     
                     //屏幕滚动，定位锚点
-                    $('.content').scroll(throttle(fn, 100))  */
+                    $('.content').scroll(throttle(fn, 100)); */
                 }
-
-                //隐藏正文的目录
-                $('.markdown-toc').css('display', 'none');
+            }else{
+                //显示正文的目录
+                $('.markdown-toc').css('display', 'block');
             }
 
             $('.preview').on('focus', '.textarea', function(){

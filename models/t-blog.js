@@ -16,9 +16,13 @@ var blogsSchema = mongoose.Schema({
     mdContent: String,
     //html内容
     htmlContent: String,
+    //文章描述
+    desc: String,
+    //文章保存状态
+    state: String,
     //浏览次数
     readNum: {
-        type: Number,
+        type   : Number,
         default: 0
     }
 })

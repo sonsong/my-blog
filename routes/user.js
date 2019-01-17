@@ -8,6 +8,8 @@ const qs    = require('qs');
 const Blogs = require('../models/t-blog');
 //用户实体
 const Users = require('../models/t-user');
+//评论实体
+const BlogComments = require('../models//t-blog-comment');
 
 //查询用户信息
 router.use(async(ctx, next) =>{
@@ -86,8 +88,11 @@ router.get('/', async(ctx, next) =>{
         condition = {_id: {$in: ids}};
     }
 
+    //只显示定稿的文章
+    condition.state = '1';
+
     //加载数据库的文章, 进行分页， 每页显示10条 -1升序 1降序
-    await Blogs.find(condition, '_id tags title publishTime htmlContent readNum', 
+    await Blogs.find(condition, '_id tags title publishTime desc readNum', 
         {skip: (pageCode - 1) * pageSize, limit: pageSize, sort: {'publishTime': -1}}).exec().then(docs => {
             for (const item of docs) {
                 let doc = {
@@ -96,16 +101,21 @@ router.get('/', async(ctx, next) =>{
                     title: item.title,
                     //moment()的第二个参数，指定时间的类型
                     publishTime: ctx.moment(item.publishTime, ctx.moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss"),
-                    htmlContent: item.htmlContent,
+                    desc       : item.desc,
                     readNum    : item.readNum
                 }
+
+                //查询该文章的总评论数量
+                BlogComments.countDocuments({artId: doc._id}).exec().then(count =>{
+                    doc.commentNum = count;
+                })
 
                 blogs.push(doc);
             }
         }, e =>{
             console.log(e);
         });
-
+    
     //查询数据库的总记录数
     let totalPage = 0;
     await Blogs.countDocuments(condition).then(count =>{
@@ -170,7 +180,7 @@ router.get('brief', async(ctx, next) =>{
                 });
             }
 
-            breif.detail = _detail;
+            breif.detail = _detail.reverse();
             blogs.push(breif);
         }
     })

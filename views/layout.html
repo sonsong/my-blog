@@ -47,11 +47,19 @@
         </div>
         <div class="right">
             <div class="search-wrap">
-                <input type="text" name="search" id="search" placeholder="">
-                <svg class="icon" aria-hidden="true" style="position:absolute;top:0.8rem;right:1.5rem;z-index:9998">
-                    <use xlink:href="#icon-search"></use>
-                </svg>
-                <ul class="result"></ul>
+                <div class="category-icon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-category"></use>
+                    </svg>
+                </div>
+                <div class="tab"><a href="/">最新文章</a></div>
+                <div>
+                    <input type="text" name="search" id="search" placeholder="">
+                    <svg class="icon" aria-hidden="true" style="position:absolute;top:0.8rem;right:2.5rem;z-index:9998">
+                        <use xlink:href="#icon-search"></use>
+                    </svg>
+                    <ul class="result"></ul>
+                </div>
             </div>
             <div class="content">
                 {{block 'content'}}{{/block}}
@@ -63,11 +71,6 @@
         </div>
         <div id="bg"></div>
         <div class="inner-wrap"></div>
-        <div class="category-icon">
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-category"></use>
-            </svg>
-        </div>
     </div>
 </body>
 <script src="/js/iconfont.js"></script>
@@ -133,9 +136,8 @@
         }).on('blur', function(){
             //如果输入框有值，不变化
             if($(this).val() === ''){
-                $(this).animate({width: '3rem'}, 1000, function(){
-                    $(this).attr('placeholder', '');
-                });
+                $(this).attr('placeholder', '');
+                $(this).animate({width: '3rem'}, 1000);
             }
         });
     })
@@ -188,14 +190,12 @@
     function debounce(fn, delay) {
         //定时器  子函数执行完，仍然存在
         let timer = null;
-        return function () {
-            let that = this;
+        return () =>{
             let args = arguments;
 
             clearTimeout(timer);
             timer = setTimeout(function () {
-                //执行函数
-                fn.apply(that, args);
+                fn.apply(this, args);
             }, delay);
         }
     }
@@ -204,14 +204,13 @@
     function throttle(fn, delay = 1000){
         let endTime = null;
 
-        return function(){
+        return () =>{
             let startTime = new Date();
-            let that = this;
 
             //如果时间差大于等待时间 || 第一次执行
             if (startTime - endTime > delay) {
                 //执行函数
-                fn.apply(that, arguments);
+                fn.apply(this, arguments);
                 //记录上次执行的事件
                 endTime = startTime
             }

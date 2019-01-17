@@ -8,6 +8,7 @@
                 <input type="hidden" name="_id" class="art_id" value="{{id}}">
                 <!-- 编译好的html -->
                 <input type="hidden" name="htmlContent" class="htmlContent">
+                <input type="hidden" name="state" id="state"/>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">文章标题: </label>
@@ -22,10 +23,17 @@
                         <input type="text" name="tags" id="tags" value="{{tags}}" required lay-verify="required" placeholder="多个标签请用英文 , 隔开" autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">描述：</label>
+                    <div class="layui-input-block">
+                      <textarea placeholder="请输入描述内容" name="desc" id="desc" required lay-verify="required" class="layui-textarea">{{desc}}</textarea>
+                    </div>
+                </div>
             </div>
             <div style="text-align: right">
                 <div class="layui-btn-group" style="margin-bottom: 8px;">
-                    <button class="layui-btn layui-btn-sm layui-btn-normal publish">发表</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary tempStorage">暂存文章</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-normal publish">发表文章</button>
                     <button class="layui-btn layui-btn-sm layui-btn-warm headHidden">
                         <i class="layui-icon layui-icon-up" style="cursor: pointer;" title="收起"></i>
                     </button>
@@ -87,42 +95,23 @@
             });
 
             layui.use('layer', function () {
+                let layer = layui.layer;
 
+                //暂存文章
+                $('.tempStorage').on('click', () =>{
+                    submit("0", layer);
+                    return false;
+                })
                 //发表文章
                 $(".publish").on('click', ()=>{
-                    //获取转化后的html
-                    let htmlContent = $('.editormd-preview').html();
-
-                    //赋值给隐藏表单域
-                    $(".htmlContent").val(htmlContent);
-                    if($(".editormd-markdown-textarea").val() === ''){
-                        layer.msg("请输入文章内容", {icon: 0});
-
-                        return false;
-                    }
-
-                    if($('#title') === ''){
-                        layer.msg("请输入文章标题", {icon: 0});
-
-                        return false;
-                    }
-
-                    if($('#tags') === ''){
-                        layer.msg("请输入文章标签", {icon: 0});
-                        
-                        return false;
-                    }
-                    
-                    //提交文章
-                    $('.artclePublish').submit();
-                    //清空session中保存的编辑内容
-                    sessionStorage.clear();
-                    //停止计时器
-                    interver = null;
+                    submit("1", layer);
+                    return false;
                 })
 
+                //文章编码
+                let artcle = $('.art_id').val();
                 //如果session中临时保存了编辑的内容，显示
-                let mdContent = sessionStorage.getItem('mdContent');
+                let mdContent = sessionStorage.getItem(artcle);
 
                 let textareObj = $('.editormd-markdown-textarea');
 
@@ -133,7 +122,8 @@
                 //编辑区域5分钟保存数据在session中，提交了清空session
                 interver = setInterval(() =>{
                     let content = textareObj.text();
-                    sessionStorage.setItem('mdContent', content);
+                    sessionStorage.setItem(artcle, content);
+
                     layer.msg('编辑的文章内容已暂存在本地~~~', {icon: 6});
                 },  5 * 60 * 1000);
             })
@@ -154,6 +144,48 @@
                 return false;
             })
         })
+
+        function submit(state, layer){
+
+            //设置存储状态
+            $('#state').val(state);
+            //获取转化后的html
+            let htmlContent = $('.editormd-preview').html();
+
+            //赋值给隐藏表单域
+            $(".htmlContent").val(htmlContent);
+            if($(".editormd-markdown-textarea").val() === ''){
+                layer.msg("请输入文章内容", {icon: 0});
+
+                return false;
+            }
+
+            if($('#title') === ''){
+                layer.msg("请输入文章标题", {icon: 0});
+
+                return false;
+            }
+
+            if($('#tags') === ''){
+                layer.msg("请输入文章标签", {icon: 0});
+                
+                return false;
+            }
+
+            if($('#desc') === ''){
+                layer.msg("请输入文章描述", {icon: 0});
+                
+                return false;
+            }
+
+            //提交文章
+            $('.artclePublish').submit();
+            //清空session中保存的编辑内容
+            sessionStorage.removeItem($('.art_id').val());
+            
+            //停止计时器
+            interver = null;
+        }
         
     </script>
 {{/block}}
