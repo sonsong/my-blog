@@ -30,6 +30,9 @@
 .index-article .detail::after{
     content: '......';
 }
+.index-wrap .head .title a{
+    font-size: 1.5rem !important;
+}
 .index-article .head .title{
     line-height: 2rem;
     font-size  : 1.2rem !important;
