@@ -1,5 +1,6 @@
 .common-wrap{
-    width        : 100%;
+    width        : 75%;
+    margin       : 0 auto;
     font-size    : 0.8rem;
     color        : #000;
     border-radius: 5px;
@@ -7,48 +8,43 @@
 
 /* 首页样式 */
 .index-wrap{
-    width: 100%;
+    padding: 0 1rem;
 }
 .index-article{
     position     : relative;
-    width        : 100%;
     border       : 1px solid #eaeaea;
+    padding      : 1rem 1rem 0 1rem;
     margin-bottom: 1rem;
     border-radius: 5px;
     background   : #fff;
     font-size    : 0.8rem;
 }
-.index-article .head{
-    height    : 2.6rem;
-    text-align: center;
+.index-article .head a{
+    color: #05d3ee;
 }
 .index-article .detail{
-    width   : 95%;
-    height  : 14rem;
-    margin  : 0 auto;
-    overflow: hidden;
+    font-size  : 0.7rem !important;
+    line-height: 1.2rem;
+    color      : #000;
 }
-.index-article .head .title a{
-    font-size: 1.2rem;
+.index-article .detail::after{
+    content: '......';
 }
 .index-wrap .head .title a{
     font-size: 1.5rem !important;
 }
 .index-article .head .title{
-    font-size  : 1.2rem;
-    font-weight: 700;
-    margin     : 1rem 0 0.5rem 0;
+    line-height: 2rem;
+    font-size  : 1.2rem !important;
 }
 .index-article .head .sub-title{
-    height     : 1rem;
-    line-height: 1rem;
-    font-size  : 0.7rem !important;
+    padding  : 0.5rem 0;
+    color    : rgba(0, 0, 0, 0.6);
+    font-size: 0.6rem !important;
 }
 .index-article .hidden-block{
-   height       : 3rem;
-   line-height  : 3rem;
-   text-align   : right;
-   padding-right: 5%;
+    line-height: 2.5rem;
+    text-align : left;
 }
 .index-article .read-btn{
     margin: 1rem 0 0.5rem 1.25rem;
@@ -56,7 +52,7 @@
 .index-article .read-btn a{
     color: #fff;
 }
-.index-article .sub-title span{
+.index-article .sub-title span:not(:first-child){
     margin: 0 0.5rem;
 }
 .index-article .tags span a{
@@ -109,7 +105,7 @@
     background: #fff;
 }
 .brief .tags-content button{
-    margin: 1rem 0.5rem;
+    margin: 0.5rem;
 }
 .brief .tags-content button a{
     color: #fff;
@@ -270,30 +266,33 @@
     font-size: 1rem;
 }
 .artcle-toc ul li a{
-    display  : block;
-    position : relative;
-    font-size: 0.7rem;
-    top      : 0;
-    right    : 0;
-    left     : 0;
-    bottom   : 0;
-    padding  : 0.1rem 0.5rem;
-    color    : #000 !important;
+    display      : block;
+    position     : relative;
+    font-size    : 0.7rem;
+    top          : 0;
+    right        : 0;
+    left         : 0;
+    bottom       : 0;
+    padding      : 0.1rem 0.5rem;
+    color        : #000 !important;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
 }
 .artcle-toc .toc-level-2{
-    padding-left: 1rem;
+    padding-left: 1.2rem;
 }
 .artcle-toc .toc-level-3{
-    padding-left: 1.5rem;
+    padding-left: 1.7rem;
 }
 .artcle-toc .toc-level-4{
-    padding-left: 2rem;
+    padding-left: 2.2rem;
 }
 .artcle-toc .toc-level-5{
-    padding-left: 2.5rem;
+    padding-left: 2.7rem;
 }
 .artcle-toc .toc-level-6{
-    padding-left: 3rem;
+    padding-left: 3.2rem;
 }
 .artcle-toc .toc-level-4, .toc-level-5, .toc-level-6{
     color: #414040;
@@ -336,7 +335,7 @@
 .pager{
     display        : flex;
     justify-content: space-between;
-    margin-bottom  : 0.6rem;
+    margin-bottom  : 1rem;
     color          : #fff;
     font-size      : 0.6rem;
 }
@@ -414,6 +413,9 @@ p code{
 }
 .editormd-preview-container .at-link{
     color: #000 !important;
+}
+.markdown-toc{
+    display: none;
 }
 /* plus手机 平板*/
 @media only screen and (max-width: 1024px){
