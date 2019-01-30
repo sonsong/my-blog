@@ -61,7 +61,7 @@ router.get('searchArtcleByTag', async(ctx) =>{
     await Blogs.find({$or: [
         {tags: {$regex: reg, $options: 'i'}},
         {title: {$regex: reg}}
-    ]}, '_id title', {sort: {'publishTime': -1}}).exec().then(docs =>{
+    ], state: '1'}, '_id title', {sort: {'publishTime': -1}}).exec().then(docs =>{
         blogs = docs;
     }, e =>{
         console.log(e);
@@ -137,6 +137,11 @@ router.get('brief', async(ctx, next) =>{
     //查询每个月所有文章
     let blogs = [];
     await Blogs.aggregate([
+        {
+            $match:{
+                state: '1'
+            }
+        },
         {
             $group: {
                 _id: {
@@ -319,6 +324,11 @@ router.get('tags', async(ctx, next) =>{
         {
             //将tags数组拆分成单独的一项
             $unwind: '$tags'
+        },
+        {
+            $match:{
+                state: '1'
+            }
         },
         {
             $group: {
