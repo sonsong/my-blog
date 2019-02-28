@@ -1,8 +1,8 @@
 {
     "apps": {
         "name": "app",                                  
-        "script": "app.js",                      
-        "cwd": "./",                                
+        "script": "/usr/my-blog/app.js",                      
+        "cwd": "/usr/my-blog",                                
         "args": "",                                 
         "interpreter": "",                          
         "interpreter_args": "",                     
@@ -15,8 +15,8 @@
         "exec_mode": "cluster_mode",                
         "instances": 4,                             
         "max_memory_restart": 8,                    
-        "error_file": "./logs/app-err.log",         
-        "out_file": "./logs/app-out.log",           
+        "error_file": "/usr/my-blog/logs/app-err.log",         
+        "out_file": "/usr/my-blog//logs/app-out.log",           
         "merge_logs": true,                         
         "log_date_format": "YYYY-MM-DD HH:mm:ss",   
         "min_uptime": "60s",                        
